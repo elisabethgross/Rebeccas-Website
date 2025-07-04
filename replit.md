@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a premium physical therapy practice website for Dr. Sarah Mitchell, built as a full-stack application with a React frontend and Express backend. The application serves as a marketing website and contact form submission system for a direct-pay physical therapy practice.
+This is a premium physical therapy practice website for Dr. Rebecca Kleiner, built as a full-stack application with a React frontend and Express backend. The application serves as a marketing website and contact form submission system for a direct-pay physical therapy practice.
 
 ## System Architecture
 

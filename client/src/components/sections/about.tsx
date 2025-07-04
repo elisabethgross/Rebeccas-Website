@@ -3,9 +3,9 @@ import { CheckCircle } from "lucide-react";
 
 export default function About() {
   const credentials = [
-    "Doctor of Physical Therapy, University of Southern California",
-    "Orthopedic Manual Therapy Certification",
-    "Functional Movement Specialist"
+    "TODO Doctor of Physical Therapy, University of Southern California",
+    "TODO Orthopedic Manual Therapy Certification",
+    "TODO Functional Movement Specialist"
   ];
 
   return (
@@ -35,7 +35,7 @@ export default function About() {
               Your Partner in Recovery
             </h2>
             <p className="text-xl text-charcoal-light mb-6 leading-relaxed">
-              I'm Dr. Sarah Mitchell, and I believe that every person deserves individualized care that addresses not just their pain, but their life goals. With over 15 years of experience, I've dedicated my practice to providing premium, personalized physical therapy that gets real results.
+              I'm Dr. Rebecca Kleiner, and I believe that every person deserves individualized care that addresses not just their pain, but their life goals. With over 15 years of experience, I've dedicated my practice to providing premium, personalized physical therapy that gets real results.
             </p>
             <p className="text-lg text-charcoal-light mb-8 leading-relaxed">
               My direct-pay practice model means I can spend the time you deserve—no rushing through appointments or dealing with insurance limitations. Just focused, expert care tailored specifically to help you return to the activities that bring you joy.

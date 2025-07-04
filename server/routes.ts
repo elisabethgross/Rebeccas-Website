@@ -55,13 +55,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const clientMailOptions = {
           from: process.env.SMTP_USER || process.env.EMAIL_USER,
           to: validatedData.email,
-          subject: "Thank you for your consultation request - Dr. Sarah Mitchell PT",
+          subject: "Thank you for your consultation request - Dr. Rebecca Kleiner PT",
           html: `
             <h2>Thank you for reaching out!</h2>
             <p>Dear ${validatedData.firstName},</p>
             <p>Thank you for your interest in premium physical therapy services. I have received your consultation request and will contact you within 24 hours to schedule your comprehensive evaluation.</p>
             <p>I look forward to helping you return to the activities you love!</p>
-            <p>Best regards,<br>Dr. Sarah Mitchell, PT</p>
+            <p>Best regards,<br>Dr. Rebecca Kleiner, PT</p>
             <hr>
             <p><small>This is an automated confirmation. Please do not reply to this email.</small></p>
           `,

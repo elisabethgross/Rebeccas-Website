@@ -13,7 +13,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">Dr. Sarah Mitchell, PT</h3>
+            <h3 className="text-xl font-bold mb-4">Dr. Rebecca Kleiner, PT</h3>
             <p className="text-white/80 mb-4">
               Premium physical therapy focused on getting you back to the activities you love through personalized, one-on-one care.
             </p>
@@ -83,7 +83,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-white/20 mt-8 pt-8 text-center text-white/60">
-          <p>&copy; 2024 Dr. Sarah Mitchell Physical Therapy. All rights reserved. | Privacy Policy | Terms of Service</p>
+          <p>&copy; 2024 Dr. Rebecca Kleiner Physical Therapy. All rights reserved. | Privacy Policy | Terms of Service</p>
         </div>
       </div>
     </footer>

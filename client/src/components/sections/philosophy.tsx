@@ -80,7 +80,7 @@ export default function Philosophy() {
               <p className="text-charcoal italic font-medium text-sm">
                 "Every person's body tells a unique story. My job is to listen, understand, and help you write the next chapter pain-free."
               </p>
-              <div className="text-coral font-semibold text-sm mt-2">- Dr. Sarah Mitchell</div>
+              <div className="text-coral font-semibold text-sm mt-2">- Dr. Rebecca Kleiner</div>
             </motion.div>
           </motion.div>
         </div>
