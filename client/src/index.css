@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(210, 11%, 21%);
+  --muted: hsl(60, 9%, 96%);
+  --muted-foreground: hsl(25, 5%, 45%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(210, 11%, 21%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(210, 11%, 21%);
+  --border: hsl(60, 9%, 89%);
+  --input: hsl(60, 9%, 89%);
+  --primary: hsl(120, 25%, 56%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(60, 9%, 96%);
+  --secondary-foreground: hsl(210, 11%, 21%);
+  --accent: hsl(60, 9%, 96%);
+  --accent-foreground: hsl(210, 11%, 21%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(210, 11%, 21%);
+  --radius: 0.5rem;
+  
+  /* Custom colors for the physical therapy theme */
+  --sage: hsl(120, 25%, 56%);
+  --sage-light: hsl(120, 25%, 66%);
+  --sage-dark: hsl(120, 25%, 46%);
+  --cream: hsl(60, 56%, 91%);
+  --cream-light: hsl(60, 67%, 97%);
+  --charcoal: hsl(210, 11%, 21%);
+  --charcoal-light: hsl(210, 11%, 31%);
+  --coral: hsl(0, 100%, 75%);
+  --coral-dark: hsl(0, 100%, 65%);
+}
+
+.dark {
+  --background: hsl(210, 11%, 4%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(210, 11%, 11%);
+  --muted-foreground: hsl(210, 5%, 65%);
+  --popover: hsl(210, 11%, 4%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(210, 11%, 4%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(210, 11%, 11%);
+  --input: hsl(210, 11%, 11%);
+  --primary: hsl(120, 25%, 56%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(210, 11%, 11%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(210, 11%, 11%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 63%, 31%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(210, 5%, 84%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .bg-sage {
+    background-color: var(--sage);
+  }
+  
+  .bg-sage-light {
+    background-color: var(--sage-light);
+  }
+  
+  .bg-sage-dark {
+    background-color: var(--sage-dark);
+  }
+  
+  .bg-cream {
+    background-color: var(--cream);
+  }
+  
+  .bg-cream-light {
+    background-color: var(--cream-light);
+  }
+  
+  .bg-charcoal {
+    background-color: var(--charcoal);
+  }
+  
+  .bg-charcoal-light {
+    background-color: var(--charcoal-light);
+  }
+  
+  .bg-coral {
+    background-color: var(--coral);
+  }
+  
+  .bg-coral-dark {
+    background-color: var(--coral-dark);
+  }
+  
+  .text-sage {
+    color: var(--sage);
+  }
+  
+  .text-sage-light {
+    color: var(--sage-light);
+  }
+  
+  .text-sage-dark {
+    color: var(--sage-dark);
+  }
+  
+  .text-cream {
+    color: var(--cream);
+  }
+  
+  .text-cream-light {
+    color: var(--cream-light);
+  }
+  
+  .text-charcoal {
+    color: var(--charcoal);
+  }
+  
+  .text-charcoal-light {
+    color: var(--charcoal-light);
+  }
+  
+  .text-coral {
+    color: var(--coral);
+  }
+  
+  .text-coral-dark {
+    color: var(--coral-dark);
+  }
+  
+  .border-sage {
+    border-color: var(--sage);
+  }
+  
+  .border-coral {
+    border-color: var(--coral);
+  }
+  
+  .hover\:bg-sage:hover {
+    background-color: var(--sage);
+  }
+  
+  .hover\:bg-sage-dark:hover {
+    background-color: var(--sage-dark);
+  }
+  
+  .hover\:bg-coral:hover {
+    background-color: var(--coral);
+  }
+  
+  .hover\:bg-coral-dark:hover {
+    background-color: var(--coral-dark);
+  }
+  
+  .hover\:text-sage:hover {
+    color: var(--sage);
+  }
+  
+  .gradient-sage {
+    background: linear-gradient(135deg, var(--sage) 0%, var(--sage-light) 100%);
+  }
+  
+  .gradient-cream {
+    background: linear-gradient(135deg, var(--cream) 0%, var(--cream-light) 100%);
+  }
+  
+  .gradient-subtle {
+    background: linear-gradient(to right, var(--cream), var(--cream-light), var(--cream));
+  }
+}
