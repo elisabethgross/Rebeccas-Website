@@ -4,10 +4,11 @@ import { storage } from "./storage";
 import { insertContactSubmissionSchema } from "@shared/schema";
 import { z } from "zod";
 import nodemailer from "nodemailer";
+import { googleReviewsService } from "./google-reviews";
 
 // Create transporter for sending emails
 const createTransporter = () => {
-  return nodemailer.createTransporter({
+  return nodemailer.createTransport({
     host: process.env.SMTP_HOST || "smtp.gmail.com",
     port: parseInt(process.env.SMTP_PORT || "587"),
     secure: false,
@@ -104,6 +105,93 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ 
         success: false, 
         message: "Failed to fetch contact submissions" 
+      });
+    }
+  });
+
+  // Get approved Google reviews for public display
+  app.get("/api/reviews", async (req, res) => {
+    try {
+      const reviews = await storage.getApprovedGoogleReviews();
+      res.json(reviews);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch reviews" 
+      });
+    }
+  });
+
+  // Admin endpoint to get all Google reviews
+  app.get("/api/admin/reviews", async (req, res) => {
+    try {
+      const reviews = await storage.getAllGoogleReviews();
+      res.json(reviews);
+    } catch (error) {
+      console.error("Error fetching all reviews:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to fetch all reviews" 
+      });
+    }
+  });
+
+  // Admin endpoint to approve/reject reviews
+  app.post("/api/admin/reviews/:reviewId/approval", async (req, res) => {
+    try {
+      const { reviewId } = req.params;
+      const { status } = req.body;
+      
+      if (!['approved', 'rejected', 'pending'].includes(status)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid status. Must be 'approved', 'rejected', or 'pending'"
+        });
+      }
+
+      const updatedReview = await storage.updateGoogleReviewApproval(reviewId, status);
+      
+      if (!updatedReview) {
+        return res.status(404).json({
+          success: false,
+          message: "Review not found"
+        });
+      }
+
+      res.json({
+        success: true,
+        message: `Review ${status} successfully`,
+        review: updatedReview
+      });
+    } catch (error) {
+      console.error("Error updating review approval:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to update review approval" 
+      });
+    }
+  });
+
+  // Simple redirect to Google Business Profile for leaving reviews
+  app.get("/api/leave-review", (req, res) => {
+    const googleBusinessUrl = googleReviewsService.getReviewUrl();
+    res.redirect(googleBusinessUrl);
+  });
+
+  // Initialize sample reviews on startup
+  app.get("/api/admin/seed-reviews", async (req, res) => {
+    try {
+      await googleReviewsService.seedSampleReviews();
+      res.json({ 
+        success: true, 
+        message: "Sample reviews seeded successfully" 
+      });
+    } catch (error) {
+      console.error("Error seeding reviews:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to seed reviews" 
       });
     }
   });

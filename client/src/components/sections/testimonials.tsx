@@ -1,8 +1,19 @@
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
-import { Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Star, ExternalLink, MessageSquare } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
 
 export default function Testimonials() {
+  // Fetch Google reviews from API
+  const { data: googleReviews, isLoading, error } = useQuery({
+    queryKey: ['/api/reviews'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
+    refetchInterval: 5 * 60 * 1000, // Refetch every 5 minutes
+  });
+
+  // Fallback testimonials if Google reviews are not available
   const testimonials = [
     {
       name: "Michael Chen",
@@ -66,8 +77,85 @@ export default function Testimonials() {
           </p>
         </motion.div>
 
+        {/* Call to Action for Reviews */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="mb-12 text-center"
+        >
+          <div className="inline-flex items-center gap-4 bg-white rounded-2xl p-6 shadow-lg">
+            <MessageSquare className="w-8 h-8 text-sage" />
+            <div className="text-left">
+              <h3 className="font-semibold text-charcoal mb-1">Have a success story to share?</h3>
+              <p className="text-charcoal-light text-sm">Help others discover quality care</p>
+            </div>
+            <Button
+              onClick={() => window.open("/api/leave-review", "_blank")}
+              className="bg-coral text-white hover:bg-coral-dark rounded-full px-6 py-2 flex items-center gap-2"
+            >
+              Leave a Review
+              <ExternalLink className="w-4 h-4" />
+            </Button>
+          </div>
+        </motion.div>
+
+        {/* Display Reviews */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
+          {/* Show Google Reviews if available, otherwise show fallback testimonials */}
+          {!isLoading && Array.isArray(googleReviews) && googleReviews.length > 0 ? (
+            googleReviews.map((review: any, index: number) => (
+              <motion.div
+                key={review.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card className="gradient-cream rounded-2xl shadow-lg h-full">
+                  <CardContent className="p-8 flex flex-col h-full">
+                    <div className="flex items-center mb-6">
+                      {review.reviewerProfilePhotoUrl ? (
+                        <img
+                          src={review.reviewerProfilePhotoUrl}
+                          alt={`${review.reviewerName} profile photo`}
+                          className="w-16 h-16 rounded-full object-cover mr-4"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 rounded-full bg-sage flex items-center justify-center mr-4">
+                          <span className="text-white font-semibold text-lg">
+                            {review.reviewerName.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                      )}
+                      <div>
+                        <div className="font-semibold text-charcoal">{review.reviewerName}</div>
+                        <div className="text-charcoal-light text-sm">Google Review</div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex text-coral mb-4">
+                      {[...Array(parseInt(review.starRating))].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-current" />
+                      ))}
+                    </div>
+                    
+                    {review.comment && (
+                      <p className="text-charcoal-light mb-4 flex-grow">
+                        "{review.comment}"
+                      </p>
+                    )}
+                    
+                    <div className="text-sage font-semibold text-sm">
+                      {new Date(review.createTime).toLocaleDateString()}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))
+          ) : (
+            testimonials.map((testimonial, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 50 }}
@@ -105,8 +193,39 @@ export default function Testimonials() {
                 </CardContent>
               </Card>
             </motion.div>
-          ))}
+          ))
+          )}
         </div>
+
+        {/* Loading state */}
+        {isLoading && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(3)].map((_, index) => (
+              <div key={index} className="animate-pulse">
+                <Card className="gradient-cream rounded-2xl shadow-lg h-full">
+                  <CardContent className="p-8">
+                    <div className="flex items-center mb-6">
+                      <div className="w-16 h-16 rounded-full bg-gray-300 mr-4"></div>
+                      <div>
+                        <div className="h-4 bg-gray-300 rounded w-24 mb-2"></div>
+                        <div className="h-3 bg-gray-300 rounded w-16"></div>
+                      </div>
+                    </div>
+                    <div className="flex mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <div key={i} className="w-4 h-4 bg-gray-300 rounded mr-1"></div>
+                      ))}
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-3 bg-gray-300 rounded"></div>
+                      <div className="h-3 bg-gray-300 rounded w-3/4"></div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
