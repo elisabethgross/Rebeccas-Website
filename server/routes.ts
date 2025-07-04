@@ -34,7 +34,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const transporter = createTransporter();
         
         const mailOptions = {
-          from: process.env.SMTP_USER || process.env.EMAIL_USER,
+          from: `"Elisabeth Gross" <${process.env.SMTP_USER || process.env.EMAIL_USER}>`,
           to: process.env.CONTACT_EMAIL || "sarah@mitchellpt.com",
           subject: `New Consultation Request from ${validatedData.firstName} ${validatedData.lastName}`,
           html: `
@@ -54,7 +54,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         // Send confirmation email to client
         const clientMailOptions = {
-          from: process.env.SMTP_USER || process.env.EMAIL_USER,
+          from: `"Elisabeth Gross" <${process.env.SMTP_USER || process.env.EMAIL_USER}>`,
           to: validatedData.email,
           subject: "Thank you for your consultation request - Dr. Rebecca Kleiner PT",
           html: `
