@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
-import useEmblaCarousel from "embla-carousel-react";
-import { useCallback, useEffect, useState } from "react";
 
 export default function Hero() {
   const scrollToSection = (sectionId: string) => {
@@ -11,56 +9,6 @@ export default function Hero() {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
-
-  const heroImages = [
-    {
-      src: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
-      alt: "Young woman stretching outdoors after physical therapy",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
-      alt: "Senior man walking confidently with improved mobility",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
-      alt: "Middle-aged woman doing physical therapy exercises",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1593810450967-f9c42742e326?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
-      alt: "Athletic man returning to sports after injury recovery",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1566492031773-4f4e44671d66?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
-      alt: "Diverse group participating in movement therapy session",
-    }
-  ];
-
-  const [emblaRef, emblaApi] = useEmblaCarousel({ 
-    loop: true,
-    duration: 30
-  });
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    onSelect();
-    emblaApi.on("select", onSelect);
-    
-    // Auto-play
-    const autoplay = setInterval(() => {
-      emblaApi.scrollNext();
-    }, 4000);
-
-    return () => {
-      clearInterval(autoplay);
-      emblaApi.off("select", onSelect);
-    };
-  }, [emblaApi, onSelect]);
 
   return (
     <section className="relative min-h-screen flex items-center bg-white overflow-hidden">
@@ -142,35 +90,14 @@ export default function Hero() {
             className="relative order-first lg:order-last"
           >
             <div className="relative">
-              {/* Image Carousel */}
+              {/* Main Image */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                <div className="embla" ref={emblaRef}>
-                  <div className="embla__container flex">
-                    {heroImages.map((image, index) => (
-                      <div key={index} className="embla__slide flex-none w-full">
-                        <img
-                          src={image.src}
-                          alt={image.alt}
-                          className="w-full h-[500px] lg:h-[600px] object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <img
+                  src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=900"
+                  alt="Physical therapist providing personalized one-on-one movement assessment"
+                  className="w-full h-[500px] lg:h-[600px] object-cover"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-blue/20 to-transparent"></div>
-                
-                {/* Carousel Dots */}
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                  {heroImages.map((_, index) => (
-                    <button
-                      key={index}
-                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                        index === selectedIndex ? 'bg-white scale-125' : 'bg-white/50'
-                      }`}
-                      onClick={() => emblaApi?.scrollTo(index)}
-                    />
-                  ))}
-                </div>
               </div>
               
               {/* Floating Card */}
