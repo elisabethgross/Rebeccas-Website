@@ -39,12 +39,12 @@ export default function Services() {
   ];
 
   const whatYouGet = [
-    "No rushed appointments - full dedicated time",
-    "Evidence-based manual therapy techniques",
-    "Personalized exercise programs",
-    "Education on injury prevention",
-    "Direct access to your therapist",
-    "Flexible scheduling around your life"
+    "Highly personalized care tailored to YOUR unique needs",
+    "Treatment plans designed specifically for your goals",
+    "Unrestricted time - no insurance-dictated session limits",
+    "Convenient care in your home, gym, or my clinic",
+    "Exceptional customer service and direct therapist access",
+    "Patient-centered approach focused on what YOU need"
   ];
 
   return (
@@ -132,8 +132,11 @@ export default function Services() {
               <h3 className="text-3xl font-bold text-charcoal mb-6">
                 Why Choose Direct-Pay Physical Therapy?
               </h3>
+              <p className="text-lg text-charcoal-light mb-6 leading-relaxed">
+                Your treatment should be about <strong className="text-charcoal">what you need</strong>, not what insurance dictates. I provide highly personalized care with treatment plans tailored specifically to your goals, lifestyle, and body.
+              </p>
               <p className="text-lg text-charcoal-light mb-8 leading-relaxed">
-                Unlike insurance-based practices, I can focus entirely on what you need without time constraints or coverage limitations. This means better outcomes and a more personalized experience.
+                No cookie-cutter protocols. No rushing through appointments. Just patient-centered care with exceptional customer service—whether in my clinic, your home, or your gym.
               </p>
               
               <Button 
