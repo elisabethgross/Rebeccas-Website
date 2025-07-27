@@ -26,15 +26,15 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mb-6"
             >
-              <span className="inline-block px-4 py-2 bg-sage/10 text-sage text-sm font-medium rounded-full">
+              <span className="inline-block px-4 py-2 bg-blue/10 text-blue text-sm font-medium rounded-full">
                 Premium Physical Therapy Experience
               </span>
             </motion.div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-charcoal">
               A physical therapy experience that will both{" "}
-              <span className="text-sage">educate</span> and{" "}
-              <span className="text-coral">inspire</span> you to{" "}
+              <span className="text-blue">educate</span> and{" "}
+              <span className="text-orange">inspire</span> you to{" "}
               <em className="italic">move like you</em>.
             </h1>
             
@@ -45,7 +45,7 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button
                 onClick={() => scrollToSection("contact")}
-                className="bg-sage text-white hover:bg-sage/90 px-8 py-4 text-lg font-semibold group"
+                className="bg-blue text-white hover:bg-blue/90 px-8 py-4 text-lg font-semibold group"
               >
                 Schedule Your Assessment
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -53,7 +53,7 @@ export default function Hero() {
               <Button
                 onClick={() => scrollToSection("about")}
                 variant="outline"
-                className="border-sage text-sage hover:bg-sage hover:text-white px-8 py-4 text-lg font-semibold group"
+                className="border-blue text-blue hover:bg-blue hover:text-white px-8 py-4 text-lg font-semibold group"
               >
                 <Play className="mr-2 h-5 w-5" />
                 Learn My Approach
@@ -67,17 +67,17 @@ export default function Hero() {
               className="mt-12 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-8"
             >
               <div className="text-center">
-                <div className="text-3xl font-bold text-sage">500+</div>
+                <div className="text-3xl font-bold text-blue">500+</div>
                 <div className="text-sm text-charcoal-light">Patients Helped</div>
               </div>
-              <div className="hidden sm:block w-px h-12 bg-sage/20"></div>
+              <div className="hidden sm:block w-px h-12 bg-blue/20"></div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-sage">15+</div>
+                <div className="text-3xl font-bold text-blue">15+</div>
                 <div className="text-sm text-charcoal-light">Years Experience</div>
               </div>
-              <div className="hidden sm:block w-px h-12 bg-sage/20"></div>
+              <div className="hidden sm:block w-px h-12 bg-blue/20"></div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-sage">98%</div>
+                <div className="text-3xl font-bold text-blue">98%</div>
                 <div className="text-sm text-charcoal-light">Success Rate</div>
               </div>
             </motion.div>
@@ -97,7 +97,7 @@ export default function Hero() {
                   alt="Physical therapist providing personalized one-on-one movement assessment"
                   className="w-full h-[500px] lg:h-[600px] object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-sage/20 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-blue/20 to-transparent"></div>
               </div>
               
               {/* Floating Card */}
@@ -105,11 +105,11 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
-                className="absolute -bottom-8 -left-8 bg-white p-6 rounded-2xl shadow-xl border border-sage/10"
+                className="absolute -bottom-8 -left-8 bg-white p-6 rounded-2xl shadow-xl border border-blue/10"
               >
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-sage/10 rounded-full flex items-center justify-center">
-                    <div className="w-6 h-6 bg-sage rounded-full"></div>
+                  <div className="w-12 h-12 bg-blue/10 rounded-full flex items-center justify-center">
+                    <div className="w-6 h-6 bg-blue rounded-full"></div>
                   </div>
                   <div>
                     <div className="text-lg font-bold text-charcoal">Dr. Rebecca Kleiner</div>
@@ -119,18 +119,9 @@ export default function Hero() {
               </motion.div>
               
               {/* Background Pattern */}
-              <div className="absolute -top-8 -right-8 w-32 h-32 bg-coral/10 rounded-full blur-3xl"></div>
-              <div className="absolute -bottom-16 -right-16 w-40 h-40 bg-sage/10 rounded-full blur-3xl"></div>
+              <div className="absolute -top-8 -right-8 w-32 h-32 bg-orange/10 rounded-full blur-3xl"></div>
+              <div className="absolute -bottom-16 -right-16 w-40 h-40 bg-blue/10 rounded-full blur-3xl"></div>
             </div>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-}
-                </div>
-              </div>
-            </motion.div>
           </motion.div>
         </div>
       </div>

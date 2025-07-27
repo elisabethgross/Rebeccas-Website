@@ -25,15 +25,19 @@
   --radius: 0.5rem;
   
   /* Custom colors for the physical therapy theme */
-  --sage: hsl(120, 25%, 56%);
-  --sage-light: hsl(120, 25%, 66%);
-  --sage-dark: hsl(120, 25%, 46%);
+  --blue: hsl(210, 100%, 45%);
+  --blue-light: hsl(210, 100%, 55%);
+  --blue-dark: hsl(210, 100%, 35%);
+  --orange: hsl(25, 100%, 55%);
+  --orange-light: hsl(25, 100%, 65%);
+  --orange-dark: hsl(25, 100%, 45%);
   --cream: hsl(60, 56%, 91%);
   --cream-light: hsl(60, 67%, 97%);
   --charcoal: hsl(210, 11%, 21%);
   --charcoal-light: hsl(210, 11%, 31%);
-  --coral: hsl(0, 100%, 75%);
-  --coral-dark: hsl(0, 100%, 65%);
+  /* Keep sage/coral for backwards compatibility */
+  --sage: hsl(210, 100%, 45%);
+  --coral: hsl(25, 100%, 55%);
 }
 
 .dark {
@@ -69,8 +73,55 @@
 }
 
 @layer components {
+  .bg-blue {
+    background-color: var(--blue);
+  }
+  .bg-blue-light {
+    background-color: var(--blue-light);
+  }
+  .bg-blue-dark {
+    background-color: var(--blue-dark);
+  }
+  .bg-orange {
+    background-color: var(--orange);
+  }
+  .bg-orange-light {
+    background-color: var(--orange-light);
+  }
+  .bg-orange-dark {
+    background-color: var(--orange-dark);
+  }
+  .text-blue {
+    color: var(--blue);
+  }
+  .text-orange {
+    color: var(--orange);
+  }
+  .text-charcoal {
+    color: var(--charcoal);
+  }
+  .text-charcoal-light {
+    color: var(--charcoal-light);
+  }
+  .border-blue {
+    border-color: var(--blue);
+  }
+  .border-orange {
+    border-color: var(--orange);
+  }
+  
+  /* Legacy sage/coral classes mapped to new colors */
   .bg-sage {
-    background-color: var(--sage);
+    background-color: var(--blue);
+  }
+  .bg-coral {
+    background-color: var(--orange);
+  }
+  .text-sage {
+    color: var(--blue);
+  }
+  .text-coral {
+    color: var(--orange);
   }
   
   .bg-sage-light {
