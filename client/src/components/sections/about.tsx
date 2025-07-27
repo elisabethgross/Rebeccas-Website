@@ -1,58 +1,100 @@
 import { motion } from "framer-motion";
-import { CheckCircle } from "lucide-react";
+import { GraduationCap, Award, Heart, Clock } from "lucide-react";
 
 export default function About() {
-  const credentials = [
-    "TODO Doctor of Physical Therapy, University of Southern California",
-    "TODO Orthopedic Manual Therapy Certification",
-    "TODO Functional Movement Specialist"
+  const highlights = [
+    {
+      icon: GraduationCap,
+      title: "Doctor of Physical Therapy",
+      description: "Advanced clinical training with 15+ years of experience"
+    },
+    {
+      icon: Award,
+      title: "Manual Therapy Specialist",
+      description: "Expert in hands-on treatment techniques"
+    },
+    {
+      icon: Heart,
+      title: "Patient-Centered Care",
+      description: "Focused on your individual goals and lifestyle"
+    },
+    {
+      icon: Clock,
+      title: "No Insurance Hassles",
+      description: "Direct-pay model for personalized attention"
+    }
   ];
 
   return (
-    <section id="about" className="py-20 bg-white">
+    <section id="about" className="py-20 bg-blue/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-charcoal mb-6">
+            Meet Dr. Rebecca Kleiner
+          </h2>
+          <p className="text-xl text-charcoal-light max-w-3xl mx-auto leading-relaxed">
+            Your dedicated physical therapist committed to helping you move better, feel stronger, and return to the activities you love through personalized, evidence-based care.
+          </p>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-2 gap-16 items-center mb-16">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <img
-              src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600"
-              alt="Active person enjoying outdoor activities after physical therapy treatment"
-              className="rounded-2xl shadow-2xl w-full h-96 object-cover"
-            />
+            <div className="relative">
+              <img
+                src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"
+                alt="Dr. Rebecca Kleiner, Physical Therapist"
+                className="rounded-2xl shadow-xl w-full h-[500px] object-cover"
+              />
+              <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-xl shadow-lg border border-blue/10">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue">15+</div>
+                  <div className="text-sm text-charcoal-light">Years Experience</div>
+                </div>
+              </div>
+            </div>
           </motion.div>
           
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-charcoal mb-6">
-              Your Partner in Recovery
-            </h2>
-            <p className="text-xl text-charcoal-light mb-6 leading-relaxed">
-              I'm Dr. Rebecca Kleiner, and I believe that every person deserves individualized care that addresses not just their pain, but their life goals. With over 15 years of experience, I've dedicated my practice to providing premium, personalized physical therapy that gets real results.
-            </p>
+            <h3 className="text-2xl font-bold text-charcoal mb-6">
+              Why Choose Direct-Pay Physical Therapy?
+            </h3>
             <p className="text-lg text-charcoal-light mb-8 leading-relaxed">
-              My direct-pay practice model means I can spend the time you deserve—no rushing through appointments or dealing with insurance limitations. Just focused, expert care tailored specifically to help you return to the activities that bring you joy.
+              Unlike traditional insurance-based practices, I provide unrushed, comprehensive care that puts your needs first. No 15-minute appointments or cookie-cutter treatments—just personalized therapy designed specifically for your goals.
             </p>
             
-            <div className="space-y-4">
-              {credentials.map((credential, index) => (
+            <div className="grid sm:grid-cols-2 gap-6">
+              {highlights.map((highlight, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
                   viewport={{ once: true }}
-                  className="flex items-center space-x-4"
+                  className="flex items-start space-x-3"
                 >
-                  <CheckCircle className="w-5 h-5 text-sage flex-shrink-0" />
-                  <span className="text-charcoal font-medium">{credential}</span>
+                  <div className="w-8 h-8 bg-blue/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                    <highlight.icon className="w-4 h-4 text-blue" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-charcoal mb-1">{highlight.title}</div>
+                    <div className="text-sm text-charcoal-light">{highlight.description}</div>
+                  </div>
                 </motion.div>
               ))}
             </div>
