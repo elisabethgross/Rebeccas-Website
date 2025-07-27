@@ -41,8 +41,8 @@ export default function Services() {
   const whatYouGet = [
     "Highly personalized care tailored to YOUR unique needs",
     "Treatment plans designed specifically for your goals",
-    "Unrestricted time - no insurance-dictated session limits",
-    "Convenient care in your home, gym, or my clinic",
+    "Unrestricted length of care - no insurance-dictated session limits",
+    "Convenient care in your home or gym",
     "Exceptional customer service and direct therapist access",
     "Patient-centered approach focused on what YOU need"
   ];
