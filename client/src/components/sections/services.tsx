@@ -125,22 +125,28 @@ export default function Services() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center bg-blue/5 rounded-3xl p-8 md:p-12"
+          className="text-center bg-gradient-to-r from-blue/10 to-orange/10 rounded-3xl p-12 md:p-16 border-2 border-blue/20 shadow-2xl"
         >
-          <h3 className="text-3xl font-bold text-charcoal mb-6">
+          <h3 className="text-4xl md:text-5xl font-black text-charcoal mb-8">
             Ready to Get Started?
           </h3>
-          <p className="text-xl text-charcoal-light mb-8 max-w-3xl mx-auto leading-relaxed">
-            Take the first step toward personalized care that puts your goals first. Schedule your comprehensive assessment and experience the difference of truly individualized physical therapy.
+          <p className="text-2xl text-charcoal-light mb-12 max-w-4xl mx-auto leading-relaxed font-medium">
+            Take the first step toward personalized care that puts <strong className="text-blue">your goals first</strong>. Schedule your comprehensive assessment and experience the difference of truly individualized physical therapy.
           </p>
           
           <Button 
             onClick={() => scrollToSection("contact")}
-            className="bg-blue hover:bg-blue-dark text-white px-8 py-4 text-lg"
+            className="bg-gradient-to-r from-blue to-blue-dark hover:from-blue-dark hover:to-blue text-white px-12 py-6 text-2xl font-bold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
           >
-            Schedule Your Assessment
-            <ArrowRight className="w-5 h-5 ml-2" />
+            Schedule Your Assessment Now
+            <ArrowRight className="w-6 h-6 ml-3" />
           </Button>
+          
+          <div className="mt-8 text-lg text-charcoal-light">
+            <span className="bg-orange/20 px-4 py-2 rounded-full">
+              ⏰ Usually responds within 24 hours
+            </span>
+          </div>
         </motion.div>
       </div>
     </section>
