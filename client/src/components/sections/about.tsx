@@ -71,47 +71,15 @@ export default function About() {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-xl font-bold text-blue mb-3 flex items-center">
-                  <GraduationCap className="w-5 h-5 mr-2" />
-                  My Education
-                </h3>
-                <p className="text-charcoal-light leading-relaxed">
-                  Doctor of Physical Therapy degree with specialized training in manual therapy and movement science. Continuing education in advanced orthopedic techniques and functional movement assessment.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-bold text-blue mb-3 flex items-center">
-                  <Heart className="w-5 h-5 mr-2" />
-                  My Philosophy
-                </h3>
-                <p className="text-charcoal-light leading-relaxed">
-                  Every person deserves individualized care that addresses root causes, not just symptoms. I believe in empowering you with knowledge and tools to maintain progress long after our sessions end.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-bold text-blue mb-3 flex items-center">
-                  <Award className="w-5 h-5 mr-2" />
-                  My Experience
-                </h3>
-                <p className="text-charcoal-light leading-relaxed">
-                  Over 15 years treating athletes, professionals, and everyday people. I've seen how transformative the right physical therapy approach can be when given proper time and attention.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-bold text-blue mb-3 flex items-center">
-                  <Clock className="w-5 h-5 mr-2" />
-                  My Approach
-                </h3>
-                <p className="text-charcoal-light leading-relaxed">
-                  Direct-pay model allows quality time to dive deep into movement patterns, lifestyle factors, and personal goals. This isn't just physical therapy—it's a partnership in your long-term wellness.
-                </p>
-              </div>
-            </div>
+            <h3 className="text-2xl font-bold text-charcoal mb-6">
+              About Dr. Rebecca Kleiner
+            </h3>
+            <p className="text-lg text-charcoal-light mb-6 leading-relaxed">
+              With over 15 years of experience treating athletes, professionals, and everyday people, I've seen how transformative the right physical therapy approach can be. My journey began with a simple belief: every person deserves individualized care that addresses not just symptoms, but root causes.
+            </p>
+            <p className="text-lg text-charcoal-light mb-8 leading-relaxed">
+              I earned my Doctor of Physical Therapy degree with a focus on manual therapy and movement science. What sets my practice apart is my commitment to education—I believe in empowering you with the knowledge and tools to maintain your progress long after our sessions end.
+            </p>
             
             <div className="grid sm:grid-cols-2 gap-6">
               {highlights.map((highlight, index) => (
