@@ -26,10 +26,10 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mb-8"
             >
-              <div className="bg-gradient-to-r from-blue to-orange bg-clip-text text-transparent text-3xl md:text-4xl font-bold mb-3">
+              <div className="text-4xl md:text-5xl lg:text-6xl font-black text-blue mb-2">
                 Dr. Rebecca Kleiner
               </div>
-              <div className="text-xl font-medium text-charcoal mb-4">Doctor of Physical Therapy</div>
+              <div className="text-xl md:text-2xl font-semibold text-orange mb-4">Doctor of Physical Therapy</div>
               <span className="inline-block px-4 py-2 bg-blue/10 text-blue text-sm font-medium rounded-full">
                 Premium Physical Therapy Experience
               </span>
