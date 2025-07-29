@@ -1,6 +1,7 @@
 import Navigation from "@/components/ui/navigation";
 import Hero from "@/components/sections/hero";
 import About from "@/components/sections/about";
+import DirectPayBenefits from "@/components/sections/direct-pay-benefits";
 import Services from "@/components/sections/services";
 import Testimonials from "@/components/sections/testimonials";
 import Philosophy from "@/components/sections/philosophy";
@@ -13,6 +14,7 @@ export default function Home() {
       <Navigation />
       <Hero />
       <About />
+      <DirectPayBenefits />
       <Services />
       <Testimonials />
       <Philosophy />

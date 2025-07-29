@@ -125,48 +125,22 @@ export default function Services() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="bg-blue/5 rounded-3xl p-8 md:p-12"
+          className="text-center bg-blue/5 rounded-3xl p-8 md:p-12"
         >
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-3xl font-bold text-charcoal mb-6">
-                Why Choose Direct-Pay Physical Therapy?
-              </h3>
-              <p className="text-lg text-charcoal-light mb-6 leading-relaxed">
-                Your treatment should be about <strong className="text-charcoal">what you need</strong>, not what insurance dictates. I provide highly personalized care with treatment plans tailored specifically to your goals, lifestyle, and body.
-              </p>
-              <p className="text-lg text-charcoal-light mb-8 leading-relaxed">
-                No cookie-cutter protocols. No rushing through appointments. Just patient-centered care with exceptional customer service—whether in my clinic, your home, or your gym.
-              </p>
-              
-              <Button 
-                onClick={() => scrollToSection("contact")}
-                className="bg-blue hover:bg-blue-dark text-white px-8 py-4 text-lg"
-              >
-                Schedule Your Assessment
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </div>
-            
-            <div>
-              <h4 className="text-xl font-bold text-charcoal mb-6">What You Get:</h4>
-              <div className="grid gap-4">
-                {whatYouGet.map((benefit, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="flex items-center space-x-3"
-                  >
-                    <CheckCircle className="w-5 h-5 text-blue flex-shrink-0" />
-                    <span className="text-charcoal-light">{benefit}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <h3 className="text-3xl font-bold text-charcoal mb-6">
+            Ready to Get Started?
+          </h3>
+          <p className="text-xl text-charcoal-light mb-8 max-w-3xl mx-auto leading-relaxed">
+            Take the first step toward personalized care that puts your goals first. Schedule your comprehensive assessment and experience the difference of truly individualized physical therapy.
+          </p>
+          
+          <Button 
+            onClick={() => scrollToSection("contact")}
+            className="bg-blue hover:bg-blue-dark text-white px-8 py-4 text-lg"
+          >
+            Schedule Your Assessment
+            <ArrowRight className="w-5 h-5 ml-2" />
+          </Button>
         </motion.div>
       </div>
     </section>
