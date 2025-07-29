@@ -24,9 +24,12 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mb-6"
+              className="mb-8"
             >
-              <div className="text-lg font-medium text-blue mb-2">Dr. Rebecca Kleiner, DPT</div>
+              <div className="bg-gradient-to-r from-blue to-orange bg-clip-text text-transparent text-3xl md:text-4xl font-bold mb-3">
+                Dr. Rebecca Kleiner
+              </div>
+              <div className="text-xl font-medium text-charcoal mb-4">Doctor of Physical Therapy</div>
               <span className="inline-block px-4 py-2 bg-blue/10 text-blue text-sm font-medium rounded-full">
                 Premium Physical Therapy Experience
               </span>
