@@ -72,10 +72,16 @@ export default function About() {
             viewport={{ once: true }}
           >
             <h3 className="text-2xl font-bold text-charcoal mb-6">
-              Why Choose Direct-Pay Physical Therapy?
+              My Background & Philosophy
             </h3>
+            <p className="text-lg text-charcoal-light mb-6 leading-relaxed">
+              With over 15 years of experience treating athletes, professionals, and everyday people, I've seen how transformative the right physical therapy approach can be. My journey began with a simple belief: every person deserves individualized care that addresses not just symptoms, but root causes.
+            </p>
+            <p className="text-lg text-charcoal-light mb-6 leading-relaxed">
+              I earned my Doctor of Physical Therapy degree with a focus on manual therapy and movement science. What sets my practice apart is my commitment to education—I believe in empowering you with the knowledge and tools to maintain your progress long after our sessions end.
+            </p>
             <p className="text-lg text-charcoal-light mb-8 leading-relaxed">
-              Unlike traditional insurance-based practices, I provide unrushed, comprehensive care that puts your needs first. No 15-minute appointments or cookie-cutter treatments—just personalized therapy designed specifically for your goals.
+              My direct-pay model allows me to spend quality time with each patient, diving deep into movement patterns, lifestyle factors, and personal goals. This isn't just physical therapy—it's a partnership in your long-term health and wellness.
             </p>
             
             <div className="grid sm:grid-cols-2 gap-6">
