@@ -2,28 +2,7 @@ import { motion } from "framer-motion";
 import { GraduationCap, Award, Heart, Clock } from "lucide-react";
 
 export default function About() {
-  const highlights = [
-    {
-      icon: GraduationCap,
-      title: "Doctor of Physical Therapy",
-      description: "Advanced clinical training with 15+ years of experience"
-    },
-    {
-      icon: Award,
-      title: "Manual Therapy Specialist",
-      description: "Expert in hands-on treatment techniques"
-    },
-    {
-      icon: Heart,
-      title: "Patient-Centered Care",
-      description: "Focused on your individual goals and lifestyle"
-    },
-    {
-      icon: Clock,
-      title: "No Insurance Hassles",
-      description: "Direct-pay model for personalized attention"
-    }
-  ];
+  
 
   return (
     <section id="about" className="py-20 bg-blue/5">
@@ -113,26 +92,7 @@ export default function About() {
               </div>
             </div>
             
-            <div className="grid sm:grid-cols-2 gap-6">
-              {highlights.map((highlight, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="flex items-start space-x-3"
-                >
-                  <div className="w-8 h-8 bg-blue/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                    <highlight.icon className="w-4 h-4 text-blue" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-charcoal mb-1">{highlight.title}</div>
-                    <div className="text-sm text-charcoal-light">{highlight.description}</div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+            
           </motion.div>
         </div>
       </div>
