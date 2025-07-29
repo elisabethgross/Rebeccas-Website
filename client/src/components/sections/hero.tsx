@@ -26,6 +26,7 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mb-6"
             >
+              <div className="text-lg font-medium text-blue mb-2">Dr. Rebecca Kleiner, DPT</div>
               <span className="inline-block px-4 py-2 bg-blue/10 text-blue text-sm font-medium rounded-full">
                 Premium Physical Therapy Experience
               </span>
@@ -100,22 +101,14 @@ export default function Hero() {
                 <div className="absolute inset-0 bg-gradient-to-t from-blue/20 to-transparent"></div>
               </div>
               
-              {/* Floating Card */}
+              {/* Subtle Badge */}
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
-                className="absolute -bottom-8 -left-8 bg-white p-6 rounded-2xl shadow-xl border border-blue/10"
+                className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm border border-blue/20"
               >
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-blue/10 rounded-full flex items-center justify-center">
-                    <div className="w-6 h-6 bg-blue rounded-full"></div>
-                  </div>
-                  <div>
-                    <div className="text-lg font-bold text-charcoal">Dr. Rebecca Kleiner</div>
-                    <div className="text-sm text-charcoal-light">Doctor of Physical Therapy</div>
-                  </div>
-                </div>
+                <div className="text-sm font-medium text-blue">15+ Years Experience</div>
               </motion.div>
               
               {/* Background Pattern */}
