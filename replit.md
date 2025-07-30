@@ -100,6 +100,8 @@ Changelog:
 - July 04, 2025. Initial setup
 - July 04, 2025. Added PostgreSQL database integration and migrated from MemStorage to DatabaseStorage
 - July 04, 2025. Implemented Google Reviews integration with database storage, API endpoints, and frontend display
+- July 30, 2025. Removed philosophy section and replaced all Dr Mitchell references with Dr Kleiner throughout codebase
+- July 30, 2025. Enhanced "Schedule Your Assessment" button prominence with larger size, gradient styling, and hover effects
 ```
 
 ## User Preferences

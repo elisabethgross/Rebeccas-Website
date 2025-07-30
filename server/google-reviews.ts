@@ -13,7 +13,7 @@ export class GoogleReviewsService {
         reviewerName: "Jennifer Martinez",
         reviewerProfilePhotoUrl: "https://images.unsplash.com/photo-1494790108755-2616b332c589?w=100&h=100&fit=crop&crop=face",
         starRating: "5",
-        comment: "Dr. Mitchell completely transformed my recovery experience. After months of chronic back pain, her personalized approach got me back to hiking and feeling like myself again. The one-on-one attention made all the difference!",
+        comment: "Dr. Kleiner completely transformed my recovery experience. After months of chronic back pain, her personalized approach got me back to hiking and feeling like myself again. The one-on-one attention made all the difference!",
         createTime: new Date("2024-12-15"),
         updateTime: new Date("2024-12-15"),
         isApproved: "approved"
@@ -23,7 +23,7 @@ export class GoogleReviewsService {
         reviewerName: "David Chen",
         reviewerProfilePhotoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
         starRating: "5",
-        comment: "Outstanding care! Dr. Mitchell's expertise in manual therapy helped me return to competitive cycling faster than I thought possible. Worth every penny for the premium service.",
+        comment: "Outstanding care! Dr. Kleiner's expertise in manual therapy helped me return to competitive cycling faster than I thought possible. Worth every penny for the premium service.",
         createTime: new Date("2024-12-10"),
         updateTime: new Date("2024-12-10"), 
         isApproved: "approved"
@@ -33,7 +33,7 @@ export class GoogleReviewsService {
         reviewerName: "Maria Rodriguez",
         reviewerProfilePhotoUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
         starRating: "5",
-        comment: "The personalized treatment plan Dr. Mitchell created for my shoulder injury was exactly what I needed. I'm back to playing tennis pain-free. Highly recommend!",
+        comment: "The personalized treatment plan Dr. Kleiner created for my shoulder injury was exactly what I needed. I'm back to playing tennis pain-free. Highly recommend!",
         createTime: new Date("2024-12-08"),
         updateTime: new Date("2024-12-08"),
         isApproved: "approved"
@@ -43,7 +43,7 @@ export class GoogleReviewsService {
         reviewerName: "Robert Thompson",
         reviewerProfilePhotoUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
         starRating: "5",
-        comment: "Dr. Mitchell's holistic approach to physical therapy is remarkable. She doesn't just treat symptoms but addresses the root cause. I feel stronger and more confident in my movement than I have in years.",
+        comment: "Dr. Kleiner's holistic approach to physical therapy is remarkable. She doesn't just treat symptoms but addresses the root cause. I feel stronger and more confident in my movement than I have in years.",
         createTime: new Date("2024-12-05"),
         updateTime: new Date("2024-12-05"),
         isApproved: "approved"

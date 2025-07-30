@@ -34,7 +34,7 @@ export default function Contact() {
   });
 
   const contactMutation = useMutation({
-    mutationFn: async (data: typeof form.getValues) => {
+    mutationFn: async (data: ReturnType<typeof form.getValues>) => {
       const response = await apiRequest("POST", "/api/contact", data);
       return response.json();
     },
@@ -42,7 +42,7 @@ export default function Contact() {
       setIsSubmitted(true);
       toast({
         title: "Message sent successfully!",
-        description: "Dr. Mitchell will contact you within 24 hours.",
+        description: "Dr. Kleiner will contact you within 24 hours.",
       });
       form.reset();
     },
@@ -56,7 +56,7 @@ export default function Contact() {
     },
   });
 
-  const onSubmit = (data: typeof form.getValues) => {
+  const onSubmit = (data: ReturnType<typeof form.getValues>) => {
     contactMutation.mutate(data);
   };
 
@@ -116,7 +116,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <div className="font-semibold text-charcoal">Email</div>
-                  <div className="text-charcoal-light">sarah@mitchellpt.com</div>
+                  <div className="text-charcoal-light">rebecca@kleinerpt.com</div>
                 </div>
               </div>
               
@@ -169,7 +169,7 @@ export default function Contact() {
                       Thank you for your message!
                     </h4>
                     <p className="text-charcoal-light">
-                      Dr. Mitchell will contact you within 24 hours to schedule your consultation.
+                      Dr. Kleiner will contact you within 24 hours to schedule your consultation.
                     </p>
                   </div>
                 ) : (
@@ -335,7 +335,7 @@ export default function Contact() {
                       </Button>
                       
                       <p className="text-sm text-charcoal-light text-center">
-                        By submitting this form, you agree to receive communication from Dr. Mitchell's office regarding your appointment and treatment.
+                        By submitting this form, you agree to receive communication from Dr. Kleiner's office regarding your appointment and treatment.
                       </p>
                     </form>
                   </Form>
