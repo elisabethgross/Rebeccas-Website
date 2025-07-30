@@ -35,7 +35,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         const mailOptions = {
           from: `"Rebecca Kleiner" <${process.env.SMTP_USER || process.env.EMAIL_USER}>`,
-          to: process.env.CONTACT_EMAIL || "sarah@mitchellpt.com",
+          to: process.env.CONTACT_EMAIL || "rebecca@kleinerpt.com",
           subject: `New Consultation Request from ${validatedData.firstName} ${validatedData.lastName}`,
           html: `
             <h2>New Consultation Request</h2>

@@ -34,7 +34,7 @@ export default function Contact() {
   });
 
   const contactMutation = useMutation({
-    mutationFn: async (data: ReturnType<typeof form.getValues>) => {
+    mutationFn: async (data: any) => {
       const response = await apiRequest("POST", "/api/contact", data);
       return response.json();
     },
@@ -56,7 +56,7 @@ export default function Contact() {
     },
   });
 
-  const onSubmit = (data: ReturnType<typeof form.getValues>) => {
+  const onSubmit = (data: any) => {
     contactMutation.mutate(data);
   };
 
