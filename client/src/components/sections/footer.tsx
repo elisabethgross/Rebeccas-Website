@@ -38,7 +38,7 @@ export default function Footer() {
                   onClick={() => scrollToSection("about")}
                   className="hover:text-white transition-colors"
                 >
-                  About Dr. Mitchell
+                  About Dr. Kleiner
                 </button>
               </li>
               <li>
@@ -72,7 +72,7 @@ export default function Footer() {
             <h3 className="text-xl font-bold mb-4">Contact Info</h3>
             <div className="space-y-2 text-white/80">
               <p>📞 (555) 123-4567</p>
-              <p>✉️ sarah@mitchellpt.com</p>
+              <p>✉️ rebecca@kleinerpt.com</p>
               <p>
                 📍 Downtown Medical Center<br />
                 123 Health Way, Suite 200<br />
