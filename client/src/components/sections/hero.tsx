@@ -99,22 +99,18 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.8 }}
           className="mt-8 md:mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
         >
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 justify-between">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 justify-items-center">
             <div className="text-center">
               <div className="text-3xl font-bold text-blue">500+</div>
               <div className="text-sm text-charcoal-light">Patients Helped</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl lg:text-3xl font-bold text-orange">Same-Week</div>
+              <div className="text-3xl font-bold text-orange">Same-Week</div>
               <div className="text-sm text-charcoal-light">Appointments</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl lg:text-3xl font-bold text-blue">Zero</div>
-              <div className="text-sm text-charcoal-light">Insurance Hassles</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl lg:text-3xl font-bold text-orange">Custom</div>
-              <div className="text-sm text-charcoal-light">Treatment Plans</div>
+              <div className="text-3xl font-bold text-blue">1-on-1</div>
+              <div className="text-sm text-charcoal-light">Care</div>
             </div>
           </div>
         </motion.div>
