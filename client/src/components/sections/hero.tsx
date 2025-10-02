@@ -75,15 +75,6 @@ export default function Hero() {
                 <div className="text-sm text-charcoal-light">Patients Helped</div>
               </div>
               <div className="hidden sm:block w-px h-12 bg-blue/20"></div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue">15+</div>
-                <div className="text-sm text-charcoal-light">Years Experience</div>
-              </div>
-              <div className="hidden sm:block w-px h-12 bg-blue/20"></div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue">98%</div>
-                <div className="text-sm text-charcoal-light">Success Rate</div>
-              </div>
             </motion.div>
           </motion.div>
           
@@ -103,16 +94,6 @@ export default function Hero() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-blue/20 to-transparent"></div>
               </div>
-              
-              {/* Subtle Badge */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.8 }}
-                className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm border border-blue/20"
-              >
-                <div className="text-sm font-medium text-blue">15+ Years Experience</div>
-              </motion.div>
               
               {/* Background Pattern */}
               <div className="absolute -top-8 -right-8 w-32 h-32 bg-orange/10 rounded-full blur-3xl"></div>

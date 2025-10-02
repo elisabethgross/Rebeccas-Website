@@ -35,12 +35,6 @@ export default function About() {
                 alt="Dr. Rebecca Kleiner, Physical Therapist"
                 className="rounded-2xl shadow-xl w-full h-[500px] object-cover"
               />
-              <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-xl shadow-lg border border-blue/10">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue">15+</div>
-                  <div className="text-sm text-charcoal-light">Years Experience</div>
-                </div>
-              </div>
             </div>
           </motion.div>
           
@@ -68,16 +62,6 @@ export default function About() {
                 </h3>
                 <p className="text-charcoal-light leading-relaxed">
                   Every person deserves individualized care that addresses root causes, not just symptoms. I believe in empowering you with knowledge and tools to maintain progress long after our sessions end.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-bold text-blue mb-3 flex items-center">
-                  <Award className="w-5 h-5 mr-2" />
-                  My Experience
-                </h3>
-                <p className="text-charcoal-light leading-relaxed">
-                  Over 15 years treating athletes, professionals, and everyday people. I've seen how transformative the right physical therapy approach can be when given proper time and attention.
                 </p>
               </div>
 
