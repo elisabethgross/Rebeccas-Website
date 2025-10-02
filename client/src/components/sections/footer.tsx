@@ -71,7 +71,7 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4">Contact Info</h3>
             <div className="space-y-2 text-white/80">
-              <p>📞 (555) 123-4567</p>
+              <p>📞 (201) 566-1406‬</p>
               <p>✉️ rebecca@kleinerpt.com</p>
               <p>
                 📍 Downtown Medical Center<br />

@@ -85,13 +85,13 @@ export default function Services() {
                     </span>
                   </div>
                 )}
-                <CardContent className="p-8">
+                <CardContent className="p-8 flex flex-col h-full">
                   <div className="w-12 h-12 bg-blue/10 rounded-xl flex items-center justify-center mb-6">
                     <service.icon className="w-6 h-6 text-blue" />
                   </div>
                   
                   <h3 className="text-xl font-bold text-charcoal mb-4">{service.title}</h3>
-                  <p className="text-charcoal-light mb-6 leading-relaxed">{service.description}</p>
+                  <p className="text-charcoal-light mb-6 leading-relaxed flex-grow">{service.description}</p>
                   
                   <div className="flex items-center justify-between mb-6">
                     <div>

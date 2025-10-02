@@ -106,7 +106,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <div className="font-semibold text-charcoal">Call or Text</div>
-                  <div className="text-charcoal-light">(555) 123-4567</div>
+                  <div className="text-charcoal-light">(201) 566-1406</div>
                 </div>
               </div>
               
@@ -127,9 +127,7 @@ export default function Contact() {
                 <div>
                   <div className="font-semibold text-charcoal">Location</div>
                   <div className="text-charcoal-light">
-                    Downtown Medical Center<br />
-                    123 Health Way, Suite 200<br />
-                    City, State 12345
+                    New York, NY
                   </div>
                 </div>
               </div>
