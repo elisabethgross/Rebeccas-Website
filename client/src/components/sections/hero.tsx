@@ -12,7 +12,7 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center bg-white overflow-hidden">
-      <div className="w-full py-16 md:py-20">
+      <div className="w-full py-14 md:py-18">
         {/* Hero Content Grid */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-y-12 xl:gap-x-20 items-center">
@@ -48,10 +48,10 @@ export default function Hero() {
                 Personalized one-on-one care that combines evidence-based treatment with movement education to get you back to the activities you love.
               </p>
               
-              <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center lg:justify-start">
+              <div className="flex flex-row gap-3 md:gap-4 justify-center lg:justify-start">
                 <Button
                   onClick={() => scrollToSection("contact")}
-                  className="bg-blue text-white hover:bg-blue/90 px-8 py-4 text-lg font-semibold group"
+                  className="bg-blue text-white hover:bg-blue/90 px-6 md:px-8 py-4 text-lg font-semibold group whitespace-nowrap"
                 >
                   Schedule Your Assessment
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -59,7 +59,7 @@ export default function Hero() {
                 <Button
                   onClick={() => scrollToSection("about")}
                   variant="outline"
-                  className="border-blue text-blue hover:bg-blue hover:text-white px-8 py-4 text-lg font-semibold group"
+                  className="border-blue text-blue hover:bg-blue hover:text-white px-6 md:px-8 py-4 text-lg font-semibold group whitespace-nowrap"
                 >
                   <Play className="mr-2 h-5 w-5" />
                   Learn My Approach
@@ -97,7 +97,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="mt-14 md:mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+          className="mt-8 md:mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
         >
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 justify-between">
             <div className="text-center">
