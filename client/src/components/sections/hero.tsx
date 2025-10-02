@@ -102,15 +102,15 @@ export default function Hero() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 justify-items-center">
             <div className="text-center">
               <div className="text-3xl font-bold text-blue">500+</div>
-              <div className="text-sm text-charcoal-light">Patients Helped</div>
+              <div className="text-base md:text-lg text-charcoal-light">Patients Helped</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-orange">Same-Week</div>
-              <div className="text-sm text-charcoal-light">Appointments</div>
+              <div className="text-base md:text-lg text-charcoal-light">Appointments</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-blue">1-on-1</div>
-              <div className="text-sm text-charcoal-light">Care</div>
+              <div className="text-base md:text-lg text-charcoal-light">Care</div>
             </div>
           </div>
         </motion.div>
