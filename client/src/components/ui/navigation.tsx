@@ -50,12 +50,12 @@ export default function Navigation() {
             >
               Services
             </button>
-            <button
+            {/* <button
               onClick={() => scrollToSection("testimonials")}
               className="text-charcoal hover:text-sage transition-colors duration-200"
             >
               Testimonials
-            </button>
+            </button> */}
             <Button
               onClick={() => scrollToSection("contact")}
               className="bg-sage text-white hover:bg-sage-dark rounded-full px-6 py-2"
@@ -100,12 +100,12 @@ export default function Navigation() {
               >
                 Services
               </button>
-              <button
+              {/* <button
                 onClick={() => scrollToSection("testimonials")}
                 className="block w-full text-left text-charcoal hover:text-sage transition-colors duration-200"
               >
                 Testimonials
-              </button>
+              </button> */}
               <Button
                 onClick={() => scrollToSection("contact")}
                 className="w-full bg-sage text-white hover:bg-sage-dark rounded-full"
