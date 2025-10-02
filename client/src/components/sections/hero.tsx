@@ -68,13 +68,24 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
-              className="mt-12 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-8"
+              className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8"
             >
-              <div className="text-center">
+              <div className="text-center lg:text-left">
                 <div className="text-3xl font-bold text-blue">500+</div>
                 <div className="text-sm text-charcoal-light">Patients Helped</div>
               </div>
-              <div className="hidden sm:block w-px h-12 bg-blue/20"></div>
+              <div className="text-center lg:text-left">
+                <div className="text-2xl lg:text-3xl font-bold text-orange">Same-Week</div>
+                <div className="text-sm text-charcoal-light">Appointments</div>
+              </div>
+              <div className="text-center lg:text-left">
+                <div className="text-2xl lg:text-3xl font-bold text-blue">Zero</div>
+                <div className="text-sm text-charcoal-light">Insurance Hassles</div>
+              </div>
+              <div className="text-center lg:text-left">
+                <div className="text-2xl lg:text-3xl font-bold text-orange">Custom</div>
+                <div className="text-sm text-charcoal-light">Treatment Plans</div>
+              </div>
             </motion.div>
           </motion.div>
           
