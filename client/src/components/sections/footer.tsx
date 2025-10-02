@@ -11,10 +11,10 @@ export default function Footer() {
   return (
     <footer className="bg-charcoal text-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="flex flex-col items-center md:items-start text-center md:text-left px-4">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-8">
+          <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <h3 className="text-xl font-bold mb-4">Dr. Rebecca Kleiner, PT</h3>
-            <p className="text-white/80 mb-4">
+            <p className="text-white/80 mb-4 max-w-sm">
               Premium physical therapy focused on getting you back to the
               activities you love through personalized, one-on-one care.
             </p>
@@ -40,45 +40,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="flex flex-col items-center md:items-start text-center md:text-left px-4">
-            <h3 className="text-xl font-bold mb-4">Quick Links</h3>
-            <ul className="space-y-2 text-white/80">
-              <li>
-                <button
-                  onClick={() => scrollToSection("about")}
-                  className="hover:text-white transition-colors"
-                >
-                  About Dr. Kleiner
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => scrollToSection("services")}
-                  className="hover:text-white transition-colors"
-                >
-                  Services & Pricing
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => scrollToSection("testimonials")}
-                  className="hover:text-white transition-colors"
-                >
-                  Client Success Stories
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => scrollToSection("contact")}
-                  className="hover:text-white transition-colors"
-                >
-                  Schedule Consultation
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          <div className="flex flex-col items-center md:items-start text-center md:text-left px-4">
+          <div className="flex flex-col items-center md:items-end text-center md:text-right">
             <h3 className="text-xl font-bold mb-4">Contact Info</h3>
             <div className="space-y-2 text-white/80">
               <p>📞 (201) 566-1406‬</p>
