@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { GraduationCap, Award, Heart, Clock } from "lucide-react";
+import rebeccaImage from "@assets/rebecca_1759421337072.jpeg";
 
 export default function About() {
   
@@ -31,7 +32,7 @@ export default function About() {
           >
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"
+                src={rebeccaImage}
                 alt="Dr. Rebecca Kleiner, Physical Therapist"
                 className="rounded-2xl shadow-xl w-full h-[500px] object-cover"
               />
