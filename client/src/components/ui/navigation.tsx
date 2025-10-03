@@ -31,22 +31,27 @@ export default function Navigation() {
       } border-b border-sage/20`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-14 sm:h-16">
           <div className="flex items-center">
-            <span className="text-xl font-bold text-sage">Dr. Rebecca Kleiner, PT</span>
+            <span className="text-base sm:text-lg md:text-xl font-bold text-sage">
+              <span className="hidden sm:inline">Dr. Rebecca Kleiner, PT</span>
+              <span className="sm:hidden">Dr. R. Kleiner, PT</span>
+            </span>
           </div>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
             <button
               onClick={() => scrollToSection("about")}
-              className="text-charcoal hover:text-sage transition-colors duration-200"
+              className="text-sm lg:text-base text-charcoal hover:text-sage transition-colors duration-200"
+              data-testid="link-about"
             >
               About
             </button>
             <button
               onClick={() => scrollToSection("services")}
-              className="text-charcoal hover:text-sage transition-colors duration-200"
+              className="text-sm lg:text-base text-charcoal hover:text-sage transition-colors duration-200"
+              data-testid="link-services"
             >
               Services
             </button>
@@ -58,7 +63,8 @@ export default function Navigation() {
             </button> */}
             <Button
               onClick={() => scrollToSection("contact")}
-              className="bg-sage text-white hover:bg-sage-dark rounded-full px-6 py-2"
+              className="bg-sage text-white hover:bg-sage-dark rounded-full px-4 py-2 text-sm lg:px-6 lg:text-base"
+              data-testid="button-contact-nav"
             >
               Contact
             </Button>
@@ -70,9 +76,10 @@ export default function Navigation() {
               variant="ghost"
               size="icon"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-charcoal hover:text-sage"
+              className="text-charcoal hover:text-sage h-9 w-9"
+              data-testid="button-mobile-menu"
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </Button>
           </div>
         </div>
@@ -87,16 +94,18 @@ export default function Navigation() {
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden bg-white border-b border-sage/20"
           >
-            <div className="px-4 py-4 space-y-4">
+            <div className="px-4 py-3 space-y-3">
               <button
                 onClick={() => scrollToSection("about")}
-                className="block w-full text-left text-charcoal hover:text-sage transition-colors duration-200"
+                className="block w-full text-left text-charcoal hover:text-sage transition-colors duration-200 py-2"
+                data-testid="link-mobile-about"
               >
                 About
               </button>
               <button
                 onClick={() => scrollToSection("services")}
-                className="block w-full text-left text-charcoal hover:text-sage transition-colors duration-200"
+                className="block w-full text-left text-charcoal hover:text-sage transition-colors duration-200 py-2"
+                data-testid="link-mobile-services"
               >
                 Services
               </button>
@@ -108,7 +117,8 @@ export default function Navigation() {
               </button> */}
               <Button
                 onClick={() => scrollToSection("contact")}
-                className="w-full bg-sage text-white hover:bg-sage-dark rounded-full"
+                className="w-full bg-sage text-white hover:bg-sage-dark rounded-full py-2.5"
+                data-testid="button-mobile-contact"
               >
                 Contact
               </Button>
