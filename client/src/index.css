@@ -31,12 +31,14 @@
   --orange: hsl(25, 100%, 55%);
   --orange-light: hsl(25, 100%, 65%);
   --orange-dark: hsl(25, 100%, 45%);
+  --sage: hsl(150, 35%, 45%);
+  --sage-light: hsl(150, 35%, 55%);
+  --sage-dark: hsl(150, 35%, 35%);
   --cream: hsl(60, 56%, 91%);
   --cream-light: hsl(60, 67%, 97%);
   --charcoal: hsl(210, 11%, 21%);
   --charcoal-light: hsl(210, 11%, 31%);
-  /* Keep sage/coral for backwards compatibility */
-  --sage: hsl(210, 100%, 45%);
+  /* Keep coral for backwards compatibility */
   --coral: hsl(25, 100%, 55%);
 }
 
@@ -110,26 +112,28 @@
     border-color: var(--orange);
   }
   
-  /* Legacy sage/coral classes mapped to new colors */
   .bg-sage {
-    background-color: var(--blue);
+    background-color: var(--sage);
   }
-  .bg-coral {
-    background-color: var(--orange);
-  }
-  .text-sage {
-    color: var(--blue);
-  }
-  .text-coral {
-    color: var(--orange);
-  }
-  
   .bg-sage-light {
     background-color: var(--sage-light);
   }
-  
   .bg-sage-dark {
     background-color: var(--sage-dark);
+  }
+  .text-sage {
+    color: var(--sage);
+  }
+  .border-sage {
+    border-color: var(--sage);
+  }
+  
+  /* Legacy coral classes mapped to orange */
+  .bg-coral {
+    background-color: var(--orange);
+  }
+  .text-coral {
+    color: var(--orange);
   }
   
   .bg-cream {
@@ -156,17 +160,6 @@
     background-color: var(--coral-dark);
   }
   
-  .text-sage {
-    color: var(--sage);
-  }
-  
-  .text-sage-light {
-    color: var(--sage-light);
-  }
-  
-  .text-sage-dark {
-    color: var(--sage-dark);
-  }
   
   .text-cream {
     color: var(--cream);
@@ -190,18 +183,6 @@
   
   .text-coral-dark {
     color: var(--coral-dark);
-  }
-  
-  .border-sage {
-    border-color: var(--sage);
-  }
-  
-  .border-coral {
-    border-color: var(--coral);
-  }
-  
-  .hover\:bg-sage:hover {
-    background-color: var(--sage);
   }
   
   .hover\:bg-sage-dark:hover {
