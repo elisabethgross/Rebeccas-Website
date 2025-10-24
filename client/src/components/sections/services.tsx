@@ -16,19 +16,31 @@ export default function Services() {
       icon: UserCheck,
       title: "Comprehensive Assessment",
       description: "Initial evaluation to understand your unique movement patterns, pain points, and goals. We'll create a personalized treatment plan just for you.",
-      duration: "50 minutes"
+      duration: "50 minutes",
+      color: "blue",
+      borderColor: "border-blue",
+      iconBg: "bg-blue",
+      buttonClass: "bg-blue hover:bg-blue-dark"
     },
     {
       icon: HandHeart,
       title: "Wellness Session",
       description: "Hands-on manual therapy, movement re-education, and personalized exercise prescription. Dedicated one-on-one attention focused on your goals.",
-      duration: "50 minutes"
+      duration: "50 minutes",
+      color: "orange",
+      borderColor: "border-orange",
+      iconBg: "bg-orange",
+      buttonClass: "bg-orange hover:bg-orange-dark"
     },
     {
       icon: Activity,
       title: "Movement Coaching",
       description: "Learn proper movement patterns and preventive strategies to maintain your progress and prevent future injuries.",
-      duration: "50 minutes"
+      duration: "50 minutes",
+      color: "sage",
+      borderColor: "border-sage",
+      iconBg: "bg-sage",
+      buttonClass: "bg-sage hover:bg-sage-dark"
     }
   ];
 
@@ -68,27 +80,27 @@ export default function Services() {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className="relative h-full hover:shadow-xl transition-all duration-300 border-gray-200" data-testid={`card-service-${index}`}>
+              <Card className={`relative h-full hover:shadow-2xl transition-all duration-300 border-2 ${service.borderColor} hover:scale-105`} data-testid={`card-service-${index}`}>
                 <CardContent className="p-5 sm:p-6 md:p-8 flex flex-col h-full">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-blue/10 rounded-xl flex items-center justify-center mb-4 md:mb-6">
-                    <service.icon className="w-5 h-5 md:w-6 md:h-6 text-blue" />
+                  <div className={`w-14 h-14 md:w-16 md:h-16 ${service.iconBg} rounded-2xl flex items-center justify-center mb-4 md:mb-6 shadow-lg`}>
+                    <service.icon className="w-7 h-7 md:w-8 md:h-8 text-white" />
                   </div>
                   
-                  <h3 className="text-lg md:text-xl font-bold text-charcoal mb-3 md:mb-4">{service.title}</h3>
+                  <h3 className="text-xl md:text-2xl font-bold text-charcoal mb-3 md:mb-4">{service.title}</h3>
                   <p className="text-sm md:text-base text-charcoal-light mb-4 md:mb-6 leading-relaxed flex-grow">{service.description}</p>
                   
                   <div className="text-xs md:text-sm text-charcoal-light flex items-center mb-4 md:mb-6">
-                    <Clock className="w-3 h-3 md:w-4 md:h-4 mr-1" />
+                    <Clock className="w-4 h-4 md:w-5 md:h-5 mr-2" />
                     {service.duration}
                   </div>
                   
                   <Button 
                     onClick={() => scrollToSection("contact")}
-                    className="w-full text-sm md:text-base bg-blue hover:bg-blue-dark text-white"
+                    className={`w-full text-sm md:text-base ${service.buttonClass} text-white shadow-lg`}
                     data-testid={`button-book-service-${index}`}
                   >
                     Book This Service
-                    <ArrowRight className="w-3 h-3 md:w-4 md:h-4 ml-2" />
+                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5 ml-2" />
                   </Button>
                 </CardContent>
               </Card>
