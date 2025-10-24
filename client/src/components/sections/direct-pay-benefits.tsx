@@ -54,23 +54,52 @@ export default function DirectPayBenefits() {
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-10 sm:mb-12 md:mb-16">
-          {benefits.map((benefit, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="bg-white rounded-xl md:rounded-2xl p-5 sm:p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-blue/10 rounded-xl flex items-center justify-center mb-4 md:mb-6">
-                <benefit.icon className="w-5 h-5 md:w-6 md:h-6 text-blue" />
-              </div>
-              <h3 className="text-lg md:text-xl font-bold text-charcoal mb-3 md:mb-4">{benefit.title}</h3>
-              <p className="text-sm md:text-base text-charcoal-light leading-relaxed">{benefit.description}</p>
-            </motion.div>
-          ))}
+        {/* Mobile: Horizontal Scroll, Desktop: Grid */}
+        <div className="mb-10 sm:mb-12 md:mb-16">
+          {/* Mobile Horizontal Scroll */}
+          <div className="sm:hidden flex overflow-x-auto gap-4 pb-4 px-4 -mx-4 snap-x snap-mandatory scrollbar-hide">
+            {benefits.map((benefit, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-white rounded-xl p-5 shadow-lg flex-shrink-0 w-[280px] snap-center"
+              >
+                <div className="w-10 h-10 bg-blue/10 rounded-xl flex items-center justify-center mb-4">
+                  <benefit.icon className="w-5 h-5 text-blue" />
+                </div>
+                <h3 className="text-lg font-bold text-charcoal mb-3">{benefit.title}</h3>
+                <p className="text-sm text-charcoal-light leading-relaxed">{benefit.description}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Desktop Grid */}
+          <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {benefits.map((benefit, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-white rounded-xl md:rounded-2xl p-5 sm:p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-blue/10 rounded-xl flex items-center justify-center mb-4 md:mb-6">
+                  <benefit.icon className="w-5 h-5 md:w-6 md:h-6 text-blue" />
+                </div>
+                <h3 className="text-lg md:text-xl font-bold text-charcoal mb-3 md:mb-4">{benefit.title}</h3>
+                <p className="text-sm md:text-base text-charcoal-light leading-relaxed">{benefit.description}</p>
+              </motion.div>
+            ))}
+          </div>
+          
+          {/* Scroll hint for mobile */}
+          <div className="sm:hidden text-center mt-4 text-xs text-charcoal-light">
+            ← Swipe to see all benefits →
+          </div>
         </div>
 
         <motion.div
@@ -83,7 +112,33 @@ export default function DirectPayBenefits() {
           <h3 className="text-2xl sm:text-3xl font-bold text-charcoal mb-6 md:mb-8">
             The Direct-Pay Difference
           </h3>
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 text-left">
+          
+          {/* Mobile: Simplified Version */}
+          <div className="md:hidden text-left space-y-4">
+            <div className="bg-blue/5 rounded-xl p-4">
+              <h4 className="text-base font-bold text-blue mb-3 flex items-center">
+                <CheckCircle className="w-5 h-5 mr-2" />
+                Direct-Pay Benefits
+              </h4>
+              <ul className="space-y-2 text-sm text-charcoal-light">
+                <li className="flex items-start">
+                  <span className="text-blue mr-2 flex-shrink-0">✓</span>
+                  <span>60-90 min sessions (vs 15-30 min)</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue mr-2 flex-shrink-0">✓</span>
+                  <span>Personalized care (vs cookie-cutter)</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue mr-2 flex-shrink-0">✓</span>
+                  <span>No insurance limitations</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Desktop: Full Comparison */}
+          <div className="hidden md:grid md:grid-cols-2 gap-8 md:gap-12 text-left">
             <div>
               <h4 className="text-lg sm:text-xl font-bold text-orange mb-3 md:mb-4">Traditional Insurance-Based PT:</h4>
               <ul className="space-y-2 md:space-y-3 text-sm md:text-base text-charcoal-light">
