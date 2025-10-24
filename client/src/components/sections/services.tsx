@@ -15,26 +15,20 @@ export default function Services() {
     {
       icon: UserCheck,
       title: "Comprehensive Assessment",
-      description: "90-minute initial evaluation to understand your unique movement patterns, pain points, and goals. We'll create a personalized treatment plan just for you.",
-      price: "$250",
-      duration: "90 minutes",
-      popular: false
+      description: "Initial evaluation to understand your unique movement patterns, pain points, and goals. We'll create a personalized treatment plan just for you.",
+      duration: "50 minutes"
     },
     {
       icon: HandHeart,
-      title: "One-on-One Treatment",
-      description: "Hands-on manual therapy, movement re-education, and personalized exercise prescription. Full hour of dedicated attention.",
-      price: "$175",
-      duration: "60 minutes",
-      popular: true
+      title: "Wellness Session",
+      description: "Hands-on manual therapy, movement re-education, and personalized exercise prescription. Dedicated one-on-one attention focused on your goals.",
+      duration: "50 minutes"
     },
     {
       icon: Activity,
       title: "Movement Coaching",
       description: "Learn proper movement patterns and preventive strategies to maintain your progress and prevent future injuries.",
-      price: "$150",
-      duration: "45 minutes",
-      popular: false
+      duration: "50 minutes"
     }
   ];
 
@@ -65,7 +59,7 @@ export default function Services() {
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mb-10 sm:mb-12 md:mb-16">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mb-8 sm:mb-10 md:mb-12">
           {coreServices.map((service, index) => (
             <motion.div
               key={index}
@@ -74,17 +68,7 @@ export default function Services() {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className={`relative h-full hover:shadow-xl transition-all duration-300 ${
-                service.popular ? 'border-orange border-2' : 'border-gray-200'
-              }`} data-testid={`card-service-${index}`}>
-                {service.popular && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
-                    <span className="bg-orange text-white px-3 py-1 md:px-4 md:py-1 rounded-full text-xs md:text-sm font-medium flex items-center whitespace-nowrap">
-                      <Star className="w-3 h-3 md:w-4 md:h-4 mr-1" />
-                      Most Popular
-                    </span>
-                  </div>
-                )}
+              <Card className="relative h-full hover:shadow-xl transition-all duration-300 border-gray-200" data-testid={`card-service-${index}`}>
                 <CardContent className="p-5 sm:p-6 md:p-8 flex flex-col h-full">
                   <div className="w-10 h-10 md:w-12 md:h-12 bg-blue/10 rounded-xl flex items-center justify-center mb-4 md:mb-6">
                     <service.icon className="w-5 h-5 md:w-6 md:h-6 text-blue" />
@@ -93,23 +77,14 @@ export default function Services() {
                   <h3 className="text-lg md:text-xl font-bold text-charcoal mb-3 md:mb-4">{service.title}</h3>
                   <p className="text-sm md:text-base text-charcoal-light mb-4 md:mb-6 leading-relaxed flex-grow">{service.description}</p>
                   
-                  <div className="flex items-center justify-between mb-4 md:mb-6">
-                    <div>
-                      <div className="text-xl md:text-2xl font-bold text-blue">{service.price}</div>
-                      <div className="text-xs md:text-sm text-charcoal-light flex items-center">
-                        <Clock className="w-3 h-3 md:w-4 md:h-4 mr-1" />
-                        {service.duration}
-                      </div>
-                    </div>
+                  <div className="text-xs md:text-sm text-charcoal-light flex items-center mb-4 md:mb-6">
+                    <Clock className="w-3 h-3 md:w-4 md:h-4 mr-1" />
+                    {service.duration}
                   </div>
                   
                   <Button 
                     onClick={() => scrollToSection("contact")}
-                    className={`w-full text-sm md:text-base ${
-                      service.popular 
-                        ? 'bg-orange hover:bg-orange-dark text-white' 
-                        : 'bg-blue hover:bg-blue-dark text-white'
-                    }`}
+                    className="w-full text-sm md:text-base bg-blue hover:bg-blue-dark text-white"
                     data-testid={`button-book-service-${index}`}
                   >
                     Book This Service
@@ -120,6 +95,17 @@ export default function Services() {
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center bg-gradient-to-r from-blue/10 to-sage/10 rounded-xl md:rounded-2xl p-6 md:p-8 mb-10 sm:mb-12 md:mb-16 border-2 border-blue/20"
+        >
+          <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue mb-2">$250</div>
+          <div className="text-base sm:text-lg md:text-xl text-charcoal-light font-medium">All Sessions / 50 Minutes</div>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
