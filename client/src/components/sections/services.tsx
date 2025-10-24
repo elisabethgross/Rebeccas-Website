@@ -71,41 +71,89 @@ export default function Services() {
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mb-8 sm:mb-10 md:mb-12">
-          {coreServices.map((service, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <Card className={`relative h-full hover:shadow-2xl transition-all duration-300 border-2 ${service.borderColor} hover:scale-105`} data-testid={`card-service-${index}`}>
-                <CardContent className="p-5 sm:p-6 md:p-8 flex flex-col h-full">
-                  <div className={`w-14 h-14 md:w-16 md:h-16 ${service.iconBg} rounded-2xl flex items-center justify-center mb-4 md:mb-6 shadow-lg`}>
-                    <service.icon className="w-7 h-7 md:w-8 md:h-8 text-white" />
-                  </div>
-                  
-                  <h3 className="text-xl md:text-2xl font-bold text-charcoal mb-3 md:mb-4">{service.title}</h3>
-                  <p className="text-sm md:text-base text-charcoal-light mb-4 md:mb-6 leading-relaxed flex-grow">{service.description}</p>
-                  
-                  <div className="text-xs md:text-sm text-charcoal-light flex items-center mb-4 md:mb-6">
-                    <Clock className="w-4 h-4 md:w-5 md:h-5 mr-2" />
-                    {service.duration}
-                  </div>
-                  
-                  <Button 
-                    onClick={() => scrollToSection("contact")}
-                    className={`w-full text-sm md:text-base ${service.buttonClass} text-white shadow-lg`}
-                    data-testid={`button-book-service-${index}`}
-                  >
-                    Book This Service
-                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5 ml-2" />
-                  </Button>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+        {/* Mobile: Horizontal Scroll, Desktop: Grid */}
+        <div className="mb-8 sm:mb-10 md:mb-12">
+          {/* Mobile Horizontal Scroll */}
+          <div className="sm:hidden flex overflow-x-auto gap-4 pb-4 px-4 -mx-4 snap-x snap-mandatory scrollbar-hide">
+            {coreServices.map((service, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="flex-shrink-0 w-[300px] snap-center"
+              >
+                <Card className={`relative h-full border-2 ${service.borderColor} shadow-xl`} data-testid={`card-service-${index}`}>
+                  <CardContent className="p-5 flex flex-col h-full">
+                    <div className={`w-14 h-14 ${service.iconBg} rounded-2xl flex items-center justify-center mb-4 shadow-lg`}>
+                      <service.icon className="w-7 h-7 text-white" />
+                    </div>
+                    
+                    <h3 className="text-xl font-bold text-charcoal mb-3">{service.title}</h3>
+                    <p className="text-sm text-charcoal-light mb-4 leading-relaxed flex-grow">{service.description}</p>
+                    
+                    <div className="text-xs text-charcoal-light flex items-center mb-4">
+                      <Clock className="w-4 h-4 mr-2" />
+                      {service.duration}
+                    </div>
+                    
+                    <Button 
+                      onClick={() => scrollToSection("contact")}
+                      className={`w-full text-sm ${service.buttonClass} text-white shadow-lg`}
+                      data-testid={`button-book-service-${index}`}
+                    >
+                      Book This Service
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Desktop Grid */}
+          <div className="hidden sm:grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+            {coreServices.map((service, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card className={`relative h-full hover:shadow-2xl transition-all duration-300 border-2 ${service.borderColor} hover:scale-105`} data-testid={`card-service-${index}`}>
+                  <CardContent className="p-5 sm:p-6 md:p-8 flex flex-col h-full">
+                    <div className={`w-14 h-14 md:w-16 md:h-16 ${service.iconBg} rounded-2xl flex items-center justify-center mb-4 md:mb-6 shadow-lg`}>
+                      <service.icon className="w-7 h-7 md:w-8 md:h-8 text-white" />
+                    </div>
+                    
+                    <h3 className="text-xl md:text-2xl font-bold text-charcoal mb-3 md:mb-4">{service.title}</h3>
+                    <p className="text-sm md:text-base text-charcoal-light mb-4 md:mb-6 leading-relaxed flex-grow">{service.description}</p>
+                    
+                    <div className="text-xs md:text-sm text-charcoal-light flex items-center mb-4 md:mb-6">
+                      <Clock className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+                      {service.duration}
+                    </div>
+                    
+                    <Button 
+                      onClick={() => scrollToSection("contact")}
+                      className={`w-full text-sm md:text-base ${service.buttonClass} text-white shadow-lg`}
+                      data-testid={`button-book-service-${index}`}
+                    >
+                      Book This Service
+                      <ArrowRight className="w-4 h-4 md:w-5 md:h-5 ml-2" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Scroll hint for mobile */}
+          <div className="sm:hidden text-center mt-4 text-xs text-charcoal-light">
+            ← Swipe to explore services →
+          </div>
         </div>
 
         <motion.div
