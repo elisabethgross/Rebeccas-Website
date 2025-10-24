@@ -116,7 +116,7 @@ export default function Contact() {
                 </div>
                 <div className="break-all">
                   <div className="font-semibold text-charcoal text-sm md:text-base">Email</div>
-                  <div className="text-charcoal-light text-sm md:text-base">rebecca@kleinerpt.com</div>
+                  <div className="text-charcoal-light text-sm md:text-base">kleinerDPT@gmail.com</div>
                 </div>
               </div>
               

@@ -47,7 +47,7 @@ export default function Footer() {
             <h3 className="text-lg sm:text-xl font-bold mb-3 md:mb-4">Contact Info</h3>
             <div className="space-y-1 sm:space-y-2 text-sm sm:text-base text-white/80">
               <p>📞 646-600-8599</p>
-              <p className="break-all">✉️ rebecca@kleinerpt.com</p>
+              <p className="break-all">✉️ kleinerDPT@gmail.com</p>
               <p>New York, NY</p>
             </div>
           </div>
