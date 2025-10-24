@@ -37,10 +37,10 @@ export default function Services() {
       title: "Movement Coaching",
       description: "Learn proper movement patterns and preventive strategies to maintain your progress and prevent future injuries.",
       duration: "50 minutes",
-      color: "sage",
-      borderColor: "border-sage",
-      iconBg: "bg-sage",
-      buttonClass: "bg-sage hover:bg-sage-dark"
+      color: "blue-light",
+      borderColor: "border-blue-light",
+      iconBg: "bg-blue-light",
+      buttonClass: "bg-blue-light hover:bg-blue"
     }
   ];
 

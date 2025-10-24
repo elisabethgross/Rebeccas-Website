@@ -111,6 +111,12 @@
   .border-orange {
     border-color: var(--orange);
   }
+  .border-blue-light {
+    border-color: var(--blue-light);
+  }
+  .hover\:bg-blue:hover {
+    background-color: var(--blue);
+  }
   
   .bg-sage {
     background-color: var(--sage);
