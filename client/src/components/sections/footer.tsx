@@ -46,7 +46,7 @@ export default function Footer() {
           <div className="flex flex-col items-center md:items-end text-center md:text-right">
             <h3 className="text-lg sm:text-xl font-bold mb-3 md:mb-4">Contact Info</h3>
             <div className="space-y-1 sm:space-y-2 text-sm sm:text-base text-white/80">
-              <p>📞 (201) 566-1406‬</p>
+              <p>📞 646-600-8599</p>
               <p className="break-all">✉️ rebecca@kleinerpt.com</p>
               <p>New York, NY</p>
             </div>

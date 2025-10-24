@@ -106,7 +106,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <div className="font-semibold text-charcoal text-sm md:text-base">Call or Text</div>
-                  <div className="text-charcoal-light text-sm md:text-base">(201) 566-1406</div>
+                  <div className="text-charcoal-light text-sm md:text-base">646-600-8599</div>
                 </div>
               </div>
               
