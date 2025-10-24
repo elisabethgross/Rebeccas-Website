@@ -6,7 +6,7 @@ export default function DirectPayBenefits() {
     {
       icon: Clock,
       title: "Unrestricted Time",
-      description: "60-90 minute sessions vs typical 15-30 minute insurance visits. No rushing through your care."
+      description: "50 minute sessions vs typical 15-30 minute insurance visits. No rushing through your care."
     },
     {
       icon: Heart,
@@ -123,7 +123,7 @@ export default function DirectPayBenefits() {
               <ul className="space-y-2 text-sm text-charcoal-light">
                 <li className="flex items-start">
                   <span className="text-blue mr-2 flex-shrink-0">✓</span>
-                  <span>60-90 min sessions (vs 15-30 min)</span>
+                  <span>50 min sessions (vs 15-30 min)</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-blue mr-2 flex-shrink-0">✓</span>
@@ -169,7 +169,7 @@ export default function DirectPayBenefits() {
               <ul className="space-y-2 md:space-y-3 text-sm md:text-base text-charcoal-light">
                 <li className="flex items-start">
                   <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-blue mr-2 md:mr-3 mt-0.5 flex-shrink-0" />
-                  <span>60-90 minute comprehensive sessions</span>
+                  <span>50 minute comprehensive sessions</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-blue mr-2 md:mr-3 mt-0.5 flex-shrink-0" />
