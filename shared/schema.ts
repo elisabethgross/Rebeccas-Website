@@ -14,8 +14,8 @@ export const contactSubmissions = pgTable("contact_submissions", {
   lastName: text("last_name").notNull(),
   email: text("email").notNull(),
   phone: text("phone").notNull(),
-  howDidYouHear: text("how_did_you_hear"),
-  activities: text("activities"),
+  howDidYouHear: text("how_did_you_hear").notNull(),
+  activities: text("activities").notNull(),
   contactMethod: text("contact_method").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
@@ -46,6 +46,14 @@ export const insertContactSubmissionSchema = createInsertSchema(contactSubmissio
   howDidYouHear: true,
   activities: true,
   contactMethod: true,
+}).extend({
+  firstName: z.string().min(2, "First name must be at least 2 characters"),
+  lastName: z.string().min(2, "Last name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(10, "Please enter a valid phone number"),
+  howDidYouHear: z.string().min(1, "Please select how you heard about us"),
+  activities: z.string().min(10, "Please tell us more about your goals (at least 10 characters)"),
+  contactMethod: z.string().min(1, "Please select your preferred contact method"),
 });
 
 export const insertGoogleReviewSchema = createInsertSchema(googleReviews).pick({
