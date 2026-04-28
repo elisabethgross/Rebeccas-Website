@@ -125,11 +125,14 @@ export const adminCreateTestimonialSchema = submitTestimonialSchema
       .default("approved"),
   });
 
+// Admin updates intentionally exclude `quote` — patient words must not be
+// rewritten. To correct or remove a quote, contact the patient and re-collect,
+// or delete and re-add the entry. Status changes go through the dedicated
+// approve/reject/hide actions.
 export const adminUpdateTestimonialSchema = z.object({
   firstName: z.string().min(1).max(40).optional(),
   lastInitial: z.string().max(2).optional().nullable(),
   activityRole: z.string().max(80).optional().nullable(),
-  quote: z.string().min(20).max(1500).optional(),
   rating: z.number().int().min(1).max(5).optional().nullable(),
   status: z.enum(["pending", "approved", "rejected", "hidden"]).optional(),
 });

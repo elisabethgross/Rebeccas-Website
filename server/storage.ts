@@ -29,7 +29,6 @@ export type UpdateTestimonialInput = {
   firstName?: string;
   lastInitial?: string | null;
   activityRole?: string | null;
-  quote?: string;
   rating?: number | null;
   status?: string;
 };
@@ -205,7 +204,6 @@ export class DatabaseStorage implements IStorage {
     if (input.firstName !== undefined) update.firstName = input.firstName;
     if (input.lastInitial !== undefined) update.lastInitial = input.lastInitial;
     if (input.activityRole !== undefined) update.activityRole = input.activityRole;
-    if (input.quote !== undefined) update.quote = input.quote;
     if (input.rating !== undefined) update.rating = input.rating;
     if (input.status !== undefined) {
       update.status = input.status;

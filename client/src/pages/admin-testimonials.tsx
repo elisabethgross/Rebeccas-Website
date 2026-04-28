@@ -129,7 +129,6 @@ export default function AdminTestimonials() {
       firstName: "",
       lastInitial: "",
       activityRole: "",
-      quote: "",
       rating: undefined,
     },
   });
@@ -140,7 +139,6 @@ export default function AdminTestimonials() {
         firstName: editing.firstName,
         lastInitial: editing.lastInitial ?? "",
         activityRole: editing.activityRole ?? "",
-        quote: editing.quote,
         rating: editing.rating ?? undefined,
       });
     }
@@ -711,24 +709,19 @@ export default function AdminTestimonials() {
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={editForm.control}
-                    name="quote"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Testimonial</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            rows={5}
-                            {...field}
-                            value={field.value ?? ""}
-                            data-testid="input-edit-quote"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="rounded-md bg-amber-50 border border-amber-200 p-3 space-y-2">
+                    <p className="text-xs font-semibold text-amber-900 uppercase tracking-wide">
+                      Patient's words — read-only
+                    </p>
+                    <p className="text-sm text-amber-950 whitespace-pre-wrap leading-relaxed">
+                      {editing.quote}
+                    </p>
+                    <p className="text-xs text-amber-800">
+                      To change wording, contact the patient and have them
+                      re-submit, or delete this entry and add a new one. We
+                      don't edit a patient's words on their behalf.
+                    </p>
+                  </div>
                   <FormField
                     control={editForm.control}
                     name="rating"
