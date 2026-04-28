@@ -62,7 +62,7 @@ export default function Contact() {
 
   const expectations = [
     "Initial phone consultation to discuss your goals",
-    "Comprehensive 50-minute evaluation session",
+    "Comprehensive 60-minute evaluation session",
     "Personalized treatment plan presentation",
     "Flexible scheduling to fit your lifestyle"
   ];
