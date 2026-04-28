@@ -10,12 +10,10 @@ export function scrollToSectionId(sectionId: string) {
   if (!element) return;
 
   const navHeight = 80; // Fixed nav bar height
-  const isMobile = window.innerWidth < 768;
-  // Push section down a bit so it sits closer to middle of screen.
-  // Use a smaller offset on mobile so taps land predictably and never overshoot.
-  const verticalCenterOffset = isMobile
-    ? Math.min(window.innerHeight * 0.1, 80)
-    : Math.min(window.innerHeight * 0.18, 180);
+  // Land the top of the section roughly one third of the viewport height
+  // from the top of the screen (i.e. in the upper third of the page).
+  // Ensure the offset still clears the fixed nav bar.
+  const topThirdOffset = Math.max(window.innerHeight / 3, navHeight + 16);
 
   const elementTop =
     element.getBoundingClientRect().top + (window.scrollY || window.pageYOffset);
@@ -24,7 +22,7 @@ export function scrollToSectionId(sectionId: string) {
     document.documentElement.scrollHeight - window.innerHeight
   );
   const target = Math.min(
-    Math.max(0, elementTop - navHeight - verticalCenterOffset),
+    Math.max(0, elementTop - topThirdOffset),
     maxScroll
   );
 
