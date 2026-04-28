@@ -1,10 +1,26 @@
-import type { Express } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSubmissionSchema } from "@shared/schema";
+import {
+  insertContactSubmissionSchema,
+  submitTestimonialSchema,
+  adminCreateTestimonialSchema,
+  adminUpdateTestimonialSchema,
+} from "@shared/schema";
 import { z } from "zod";
 import nodemailer from "nodemailer";
 import { googleReviewsService } from "./google-reviews";
+
+function requireAdminAuth(req: Request, res: Response, next: NextFunction) {
+  const provided = (req.headers["x-admin-password"] as string) || "";
+  const expected = process.env.ADMIN_PASSWORD || "admin123";
+  if (!provided || provided !== expected) {
+    return res
+      .status(401)
+      .json({ success: false, message: "Unauthorized" });
+  }
+  next();
+}
 
 // Create transporter for sending emails
 const createTransporter = () => {
@@ -192,6 +208,155 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: false, 
         message: "Failed to seed reviews" 
       });
+    }
+  });
+
+  // ===== Patient testimonials =====
+
+  // Public: list approved testimonials
+  app.get("/api/testimonials", async (_req, res) => {
+    try {
+      const items = await storage.getApprovedTestimonials();
+      res.json(items);
+    } catch (error) {
+      console.error("Error fetching testimonials:", error);
+      res
+        .status(500)
+        .json({ success: false, message: "Failed to fetch testimonials" });
+    }
+  });
+
+  // Public: submit a testimonial (always lands as 'pending')
+  app.post("/api/testimonials", async (req, res) => {
+    try {
+      const data = submitTestimonialSchema.parse(req.body);
+      const created = await storage.createTestimonial({
+        firstName: data.firstName.trim(),
+        lastInitial: data.lastInitial?.trim() || null,
+        activityRole: data.activityRole?.trim() || null,
+        quote: data.quote.trim(),
+        rating: data.rating ?? null,
+        consentGiven: data.consentGiven,
+        status: "pending",
+        source: "website",
+      });
+      res.json({
+        success: true,
+        message:
+          "Thank you for sharing! Your testimonial will appear once Dr. Kleiner reviews it.",
+        id: created.id,
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid submission",
+          errors: error.errors,
+        });
+      }
+      console.error("Error submitting testimonial:", error);
+      res
+        .status(500)
+        .json({ success: false, message: "Failed to submit testimonial" });
+    }
+  });
+
+  // Admin: list all testimonials (any status)
+  app.get("/api/admin/testimonials", requireAdminAuth, async (_req, res) => {
+    try {
+      const items = await storage.getAllTestimonials();
+      res.json(items);
+    } catch (error) {
+      console.error("Error fetching all testimonials:", error);
+      res
+        .status(500)
+        .json({ success: false, message: "Failed to fetch testimonials" });
+    }
+  });
+
+  // Admin: create a testimonial directly (defaults to approved)
+  app.post("/api/admin/testimonials", requireAdminAuth, async (req, res) => {
+    try {
+      const data = adminCreateTestimonialSchema.parse(req.body);
+      const created = await storage.createTestimonial({
+        firstName: data.firstName.trim(),
+        lastInitial: data.lastInitial?.trim() || null,
+        activityRole: data.activityRole?.trim() || null,
+        quote: data.quote.trim(),
+        rating: data.rating ?? null,
+        consentGiven: data.consentGiven,
+        status: data.status ?? "approved",
+        source: "manual",
+      });
+      res.json({ success: true, testimonial: created });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid testimonial",
+          errors: error.errors,
+        });
+      }
+      console.error("Error creating testimonial:", error);
+      res
+        .status(500)
+        .json({ success: false, message: "Failed to create testimonial" });
+    }
+  });
+
+  // Admin: update a testimonial (status, fields)
+  app.patch("/api/admin/testimonials/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (Number.isNaN(id)) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid id" });
+      }
+      const data = adminUpdateTestimonialSchema.parse(req.body);
+      const updated = await storage.updateTestimonial(id, data);
+      if (!updated) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Testimonial not found" });
+      }
+      res.json({ success: true, testimonial: updated });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid update",
+          errors: error.errors,
+        });
+      }
+      console.error("Error updating testimonial:", error);
+      res
+        .status(500)
+        .json({ success: false, message: "Failed to update testimonial" });
+    }
+  });
+
+  // Admin: delete a testimonial
+  app.delete("/api/admin/testimonials/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (Number.isNaN(id)) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid id" });
+      }
+      const ok = await storage.deleteTestimonial(id);
+      if (!ok) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Testimonial not found" });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting testimonial:", error);
+      res
+        .status(500)
+        .json({ success: false, message: "Failed to delete testimonial" });
     }
   });
 

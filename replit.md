@@ -28,6 +28,16 @@ This is a premium physical therapy practice website for Dr. Rebecca Kleiner, bui
 3. **Email Notifications**: Automated emails for new submissions
 4. **Responsive Design**: Mobile-first approach with Tailwind CSS
 5. **Component Library**: shadcn/ui for consistent UI components
+6. **Patient Testimonials**: HIPAA-conscious review-style section. Patients can submit via a consent-gated form (`POST /api/testimonials`); Dr. Kleiner curates submissions in the admin panel before they appear publicly. Real patient photos are never used — cards display initials and a first name + last initial.
+
+### Testimonials feature — operating notes
+- **Public API**: `GET /api/testimonials` returns approved testimonials only.
+- **Submission API**: `POST /api/testimonials` always lands as `status='pending'` and requires `consentGiven=true`.
+- **Admin panel**: `/admin/testimonials` — password-gated (sends `x-admin-password` header). Tabs for Pending / Approved / Rejected+Hidden, plus an "Add Manually" form Rebecca can use for testimonials she received outside the form (email, in person). The password is stored in `localStorage` after a successful sign-in.
+- **Admin password**: read from the `ADMIN_PASSWORD` environment variable (falls back to `admin123` in development). Set this secret in production.
+- **Preview page**: `/preview/testimonials` renders the section with mock testimonials from `client/src/lib/mock-testimonials.ts`. The mock data lives entirely in the frontend bundle — it is never seeded to the database, so it cannot leak to the live site.
+- **Hidden on home page intentionally**: the Testimonials section is currently NOT mounted in `client/src/pages/home.tsx` (and the navbar/footer links to `#testimonials` are commented out) so the live site stays clean until enough real, consented testimonials have been collected. To turn it on, import `Testimonials` in `home.tsx` and render `<Testimonials />` (no props = fetches real approved entries from the API), then re-enable the nav links.
+- **Disclosure**: every render of the section includes the line "Testimonials are shared with each patient's written permission. Individual results vary."
 
 ## Data Flow
 
@@ -102,6 +112,7 @@ Changelog:
 - July 04, 2025. Implemented Google Reviews integration with database storage, API endpoints, and frontend display
 - July 30, 2025. Removed philosophy section and replaced all Dr Mitchell references with Dr Kleiner throughout codebase
 - July 30, 2025. Enhanced "Schedule Your Assessment" button prominence with larger size, gradient styling, and hover effects
+- April 28, 2026. Built ethical patient testimonials feature: consent-gated submission form, password-protected /admin/testimonials curation panel, and /preview/testimonials design preview using local mock data. Section intentionally hidden on the live home page until real approved entries exist.
 ```
 
 ## User Preferences

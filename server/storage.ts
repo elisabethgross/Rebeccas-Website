@@ -1,6 +1,38 @@
-import { users, contactSubmissions, googleReviews, type User, type InsertUser, type ContactSubmission, type InsertContactSubmission, type GoogleReview, type InsertGoogleReview } from "@shared/schema";
+import {
+  users,
+  contactSubmissions,
+  googleReviews,
+  testimonials,
+  type User,
+  type InsertUser,
+  type ContactSubmission,
+  type InsertContactSubmission,
+  type GoogleReview,
+  type InsertGoogleReview,
+  type Testimonial,
+} from "@shared/schema";
 import { db } from "./db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
+
+export type CreateTestimonialInput = {
+  firstName: string;
+  lastInitial?: string | null;
+  activityRole?: string | null;
+  quote: string;
+  rating?: number | null;
+  consentGiven: boolean;
+  status?: string;
+  source?: string;
+};
+
+export type UpdateTestimonialInput = {
+  firstName?: string;
+  lastInitial?: string | null;
+  activityRole?: string | null;
+  quote?: string;
+  rating?: number | null;
+  status?: string;
+};
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -12,9 +44,14 @@ export interface IStorage {
   getApprovedGoogleReviews(): Promise<GoogleReview[]>;
   getAllGoogleReviews(): Promise<GoogleReview[]>;
   updateGoogleReviewApproval(reviewId: string, status: string): Promise<GoogleReview | undefined>;
+  createTestimonial(input: CreateTestimonialInput): Promise<Testimonial>;
+  getApprovedTestimonials(): Promise<Testimonial[]>;
+  getAllTestimonials(): Promise<Testimonial[]>;
+  updateTestimonial(id: number, input: UpdateTestimonialInput): Promise<Testimonial | undefined>;
+  deleteTestimonial(id: number): Promise<boolean>;
 }
 
-export class MemStorage implements IStorage {
+export class MemStorage {
   private users: Map<number, User>;
   private contactSubmissions: Map<number, ContactSubmission>;
   private currentUserId: number;
@@ -124,6 +161,79 @@ export class DatabaseStorage implements IStorage {
       .where(eq(googleReviews.reviewId, reviewId))
       .returning();
     return review || undefined;
+  }
+
+  async createTestimonial(input: CreateTestimonialInput): Promise<Testimonial> {
+    const status = input.status ?? "pending";
+    const [t] = await db
+      .insert(testimonials)
+      .values({
+        firstName: input.firstName,
+        lastInitial: input.lastInitial ?? null,
+        activityRole: input.activityRole ?? null,
+        quote: input.quote,
+        rating: input.rating ?? null,
+        consentGiven: input.consentGiven,
+        status,
+        source: input.source ?? "website",
+        approvedAt: status === "approved" ? new Date() : null,
+      })
+      .returning();
+    return t;
+  }
+
+  async getApprovedTestimonials(): Promise<Testimonial[]> {
+    return db
+      .select()
+      .from(testimonials)
+      .where(eq(testimonials.status, "approved"))
+      .orderBy(desc(testimonials.approvedAt));
+  }
+
+  async getAllTestimonials(): Promise<Testimonial[]> {
+    return db
+      .select()
+      .from(testimonials)
+      .orderBy(desc(testimonials.submittedAt));
+  }
+
+  async updateTestimonial(
+    id: number,
+    input: UpdateTestimonialInput
+  ): Promise<Testimonial | undefined> {
+    const update: Record<string, unknown> = {};
+    if (input.firstName !== undefined) update.firstName = input.firstName;
+    if (input.lastInitial !== undefined) update.lastInitial = input.lastInitial;
+    if (input.activityRole !== undefined) update.activityRole = input.activityRole;
+    if (input.quote !== undefined) update.quote = input.quote;
+    if (input.rating !== undefined) update.rating = input.rating;
+    if (input.status !== undefined) {
+      update.status = input.status;
+      if (input.status === "approved") {
+        update.approvedAt = new Date();
+      }
+    }
+    if (Object.keys(update).length === 0) {
+      const [existing] = await db
+        .select()
+        .from(testimonials)
+        .where(eq(testimonials.id, id));
+      return existing || undefined;
+    }
+    const [t] = await db
+      .update(testimonials)
+      .set(update)
+      .where(eq(testimonials.id, id))
+      .returning();
+    return t || undefined;
+  }
+
+  async deleteTestimonial(id: number): Promise<boolean> {
+    const result = await db
+      .delete(testimonials)
+      .where(eq(testimonials.id, id))
+      .returning();
+    return result.length > 0;
   }
 }
 

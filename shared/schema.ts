@@ -1,4 +1,4 @@
-import { pgTable, text, serial, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, timestamp, integer, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -67,9 +67,78 @@ export const insertGoogleReviewSchema = createInsertSchema(googleReviews).pick({
   isApproved: true,
 });
 
+export const testimonials = pgTable("testimonials", {
+  id: serial("id").primaryKey(),
+  firstName: text("first_name").notNull(),
+  lastInitial: text("last_initial"),
+  activityRole: text("activity_role"),
+  quote: text("quote").notNull(),
+  rating: integer("rating"),
+  consentGiven: boolean("consent_given").notNull().default(false),
+  status: text("status").notNull().default("pending"),
+  source: text("source").notNull().default("website"),
+  submittedAt: timestamp("submitted_at").defaultNow().notNull(),
+  approvedAt: timestamp("approved_at"),
+});
+
+export const submitTestimonialSchema = z.object({
+  firstName: z
+    .string()
+    .min(1, "First name is required")
+    .max(40, "First name is too long"),
+  lastInitial: z
+    .string()
+    .max(2, "Just a single letter please")
+    .optional()
+    .or(z.literal("")),
+  activityRole: z
+    .string()
+    .max(80, "Please keep this under 80 characters")
+    .optional()
+    .or(z.literal("")),
+  quote: z
+    .string()
+    .min(20, "Please share at least a sentence (20+ characters)")
+    .max(1500, "Please keep your testimonial under 1500 characters"),
+  rating: z
+    .number()
+    .int()
+    .min(1)
+    .max(5)
+    .optional()
+    .nullable(),
+  consentGiven: z.literal(true, {
+    errorMap: () => ({
+      message:
+        "Please confirm you authorize Dr. Kleiner to publish this on her website.",
+    }),
+  }),
+});
+
+export const adminCreateTestimonialSchema = submitTestimonialSchema.extend({
+  consentGiven: z.boolean(),
+  status: z
+    .enum(["pending", "approved", "rejected", "hidden"])
+    .optional()
+    .default("approved"),
+});
+
+export const adminUpdateTestimonialSchema = z.object({
+  firstName: z.string().min(1).max(40).optional(),
+  lastInitial: z.string().max(2).optional().nullable(),
+  activityRole: z.string().max(80).optional().nullable(),
+  quote: z.string().min(20).max(1500).optional(),
+  rating: z.number().int().min(1).max(5).optional().nullable(),
+  status: z.enum(["pending", "approved", "rejected", "hidden"]).optional(),
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type ContactSubmission = typeof contactSubmissions.$inferSelect;
 export type InsertContactSubmission = z.infer<typeof insertContactSubmissionSchema>;
 export type GoogleReview = typeof googleReviews.$inferSelect;
 export type InsertGoogleReview = z.infer<typeof insertGoogleReviewSchema>;
+export type Testimonial = typeof testimonials.$inferSelect;
+export type SubmitTestimonialInput = z.infer<typeof submitTestimonialSchema>;
+export type AdminCreateTestimonialInput = z.infer<typeof adminCreateTestimonialSchema>;
+export type AdminUpdateTestimonialInput = z.infer<typeof adminUpdateTestimonialSchema>;

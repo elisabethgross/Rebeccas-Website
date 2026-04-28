@@ -1,231 +1,197 @@
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Star, ExternalLink, MessageSquare } from "lucide-react";
+import { Star, Quote, ShieldCheck, Heart } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { getQueryFn } from "@/lib/queryClient";
+import type { Testimonial } from "@shared/schema";
+import { TestimonialSubmissionForm } from "@/components/testimonial-submission-form";
 
-export default function Testimonials() {
-  // Fetch Google reviews from API
-  const { data: googleReviews, isLoading, error } = useQuery({
-    queryKey: ['/api/reviews'],
-    queryFn: getQueryFn({ on401: "returnNull" }),
-    refetchInterval: 5 * 60 * 1000, // Refetch every 5 minutes
+interface Props {
+  testimonials?: Testimonial[];
+  isPreview?: boolean;
+}
+
+function getInitials(t: Testimonial) {
+  const first = t.firstName.charAt(0).toUpperCase();
+  const last = (t.lastInitial || "").charAt(0).toUpperCase();
+  return last ? `${first}${last}` : first;
+}
+
+function formatAttribution(t: Testimonial) {
+  const last = t.lastInitial?.trim();
+  return last ? `${t.firstName} ${last.toUpperCase()}.` : t.firstName;
+}
+
+function formatDate(d: Date | string | null) {
+  if (!d) return "";
+  const date = typeof d === "string" ? new Date(d) : d;
+  return date.toLocaleDateString(undefined, {
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function TestimonialCard({ item, index }: { item: Testimonial; index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: Math.min(index, 4) * 0.08 }}
+      viewport={{ once: true }}
+      data-testid={`testimonial-card-${item.id}`}
+    >
+      <Card className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-sage/10 h-full">
+        <CardContent className="p-7 flex flex-col h-full">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-sage/15 text-sage flex items-center justify-center font-semibold">
+                {getInitials(item)}
+              </div>
+              <div>
+                <div className="font-semibold text-charcoal leading-tight">
+                  {formatAttribution(item)}
+                </div>
+                {item.activityRole && (
+                  <div className="text-charcoal-light text-sm leading-tight">
+                    {item.activityRole}
+                  </div>
+                )}
+              </div>
+            </div>
+            <Quote className="w-6 h-6 text-sage/40 shrink-0" />
+          </div>
+
+          {item.rating ? (
+            <div
+              className="flex text-coral mb-3"
+              aria-label={`${item.rating} out of 5 stars`}
+            >
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-4 h-4 ${
+                    i < (item.rating ?? 0) ? "fill-current" : "opacity-30"
+                  }`}
+                />
+              ))}
+            </div>
+          ) : null}
+
+          <p className="text-charcoal-light leading-relaxed flex-grow">
+            {item.quote}
+          </p>
+
+          <div className="text-xs text-charcoal-light/70 mt-4">
+            {formatDate(item.approvedAt ?? item.submittedAt)}
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+}
+
+export default function Testimonials({ testimonials, isPreview }: Props) {
+  const fromApi = useQuery<Testimonial[]>({
+    queryKey: ["/api/testimonials"],
+    enabled: !testimonials,
   });
 
-  // Fallback testimonials if Google reviews are not available
-  const testimonials = [
-    {
-      name: "Michael Chen",
-      role: "Marathon Runner",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&h=100",
-      testimonial: "Dr. Kleiner didn't just fix my injury—she transformed how I move. I'm running pain-free for the first time in years and just completed my fastest marathon ever.",
-      duration: "5 months of treatment"
-    },
-    {
-      name: "Sarah Johnson",
-      role: "Yoga Instructor",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b332c589?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&h=100",
-      testimonial: "The personalized attention and expertise Dr. Kleiner provided was life-changing. She understood my goals as a yoga instructor and helped me return to teaching stronger than ever.",
-      duration: "3 months of treatment"
-    },
-    {
-      name: "David Rodriguez",
-      role: "Software Engineer",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&h=100",
-      testimonial: "After years of chronic back pain from desk work, Dr. Kleiner's comprehensive approach gave me my life back. The investment in direct-pay care was worth every penny.",
-      duration: "6 months of treatment"
-    },
-    {
-      name: "Emma Thompson",
-      role: "Tennis Player",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&h=100",
-      testimonial: "Dr. Kleiner's expertise and individual attention helped me return to competitive tennis after a shoulder injury. Her holistic approach addresses the whole person, not just the injury.",
-      duration: "4 months of treatment"
-    },
-    {
-      name: "James Wilson",
-      role: "Retiree",
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&h=100",
-      testimonial: "At 68, I thought my hiking days were over due to knee pain. Dr. Kleiner's personalized treatment plan got me back on the trails and feeling 20 years younger.",
-      duration: "8 months of treatment"
-    },
-    {
-      name: "Lisa Martinez",
-      role: "Busy Mom",
-      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&h=100",
-      testimonial: "The convenience of home visits and Dr. Kleiner's understanding of my busy schedule made all the difference. I can now keep up with my kids pain-free.",
-      duration: "5 months of treatment"
-    }
-  ];
+  const items = testimonials ?? fromApi.data ?? [];
+  const isLoading = !testimonials && fromApi.isLoading;
 
   return (
-    <section id="testimonials" className="py-20 bg-white">
+    <section id="testimonials" className="py-16 md:py-20 bg-cream/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold text-charcoal mb-6">
-            Life-Changing Results
-          </h2>
-          <p className="text-xl text-charcoal-light max-w-3xl mx-auto">
-            Hear from clients who've returned to their favorite activities with renewed confidence and pain-free movement.
-          </p>
-        </motion.div>
-
-        {/* Call to Action for Reviews */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="mb-12 text-center"
+          className="text-center mb-10 md:mb-14"
         >
-          <div className="inline-flex items-center gap-4 bg-white rounded-2xl p-6 shadow-lg">
-            <MessageSquare className="w-8 h-8 text-sage" />
-            <div className="text-left">
-              <h3 className="font-semibold text-charcoal mb-1">Have a success story to share?</h3>
-              <p className="text-charcoal-light text-sm">Help others discover quality care</p>
-            </div>
-            <Button
-              onClick={() => window.open("/api/leave-review", "_blank")}
-              className="bg-coral text-white hover:bg-coral-dark rounded-full px-6 py-2 flex items-center gap-2"
-            >
-              Leave a Review
-              <ExternalLink className="w-4 h-4" />
-            </Button>
-          </div>
+          <h2 className="text-3xl md:text-5xl font-bold text-charcoal mb-4">
+            In Their Own Words
+          </h2>
+          <p className="text-base md:text-xl text-charcoal-light max-w-2xl mx-auto">
+            Real stories from people who've moved through pain and back to the
+            things they love — shared with their permission.
+          </p>
         </motion.div>
 
-        {/* Display Reviews */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Show Google Reviews if available, otherwise show fallback testimonials */}
-          {!isLoading && Array.isArray(googleReviews) && googleReviews.length > 0 ? (
-            googleReviews.map((review: any, index: number) => (
-              <motion.div
-                key={review.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="gradient-cream rounded-2xl shadow-lg h-full">
-                  <CardContent className="p-8 flex flex-col h-full">
-                    <div className="flex items-center mb-6">
-                      {review.reviewerProfilePhotoUrl ? (
-                        <img
-                          src={review.reviewerProfilePhotoUrl}
-                          alt={`${review.reviewerName} profile photo`}
-                          className="w-16 h-16 rounded-full object-cover mr-4"
-                        />
-                      ) : (
-                        <div className="w-16 h-16 rounded-full bg-sage flex items-center justify-center mr-4">
-                          <span className="text-white font-semibold text-lg">
-                            {review.reviewerName.charAt(0).toUpperCase()}
-                          </span>
-                        </div>
-                      )}
-                      <div>
-                        <div className="font-semibold text-charcoal">{review.reviewerName}</div>
-                        <div className="text-charcoal-light text-sm">Google Review</div>
+        {isLoading ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="animate-pulse">
+                <Card className="rounded-2xl shadow-md border border-sage/10 h-full">
+                  <CardContent className="p-7 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-gray-200" />
+                      <div className="space-y-2">
+                        <div className="h-3 bg-gray-200 rounded w-24" />
+                        <div className="h-3 bg-gray-200 rounded w-16" />
                       </div>
                     </div>
-                    
-                    <div className="flex text-coral mb-4">
-                      {[...Array(parseInt(review.starRating))].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-current" />
-                      ))}
-                    </div>
-                    
-                    {review.comment && (
-                      <p className="text-charcoal-light mb-4 flex-grow">
-                        "{review.comment}"
-                      </p>
-                    )}
-                    
-                    <div className="text-sage font-semibold text-sm">
-                      {new Date(review.createTime).toLocaleDateString()}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))
-          ) : (
-            testimonials.map((testimonial, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <Card className="gradient-cream rounded-2xl shadow-lg h-full">
-                <CardContent className="p-8 flex flex-col h-full">
-                  <div className="flex items-center mb-6">
-                    <img
-                      src={testimonial.image}
-                      alt={`${testimonial.name} testimonial photo`}
-                      className="w-16 h-16 rounded-full object-cover mr-4"
-                    />
-                    <div>
-                      <div className="font-semibold text-charcoal">{testimonial.name}</div>
-                      <div className="text-charcoal-light text-sm">{testimonial.role}</div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex text-coral mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" />
-                    ))}
-                  </div>
-                  
-                  <p className="text-charcoal-light mb-4 flex-grow">
-                    "{testimonial.testimonial}"
-                  </p>
-                  
-                  <div className="text-sage font-semibold text-sm">
-                    {testimonial.duration}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))
-          )}
-        </div>
-
-        {/* Loading state */}
-        {isLoading && (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(3)].map((_, index) => (
-              <div key={index} className="animate-pulse">
-                <Card className="gradient-cream rounded-2xl shadow-lg h-full">
-                  <CardContent className="p-8">
-                    <div className="flex items-center mb-6">
-                      <div className="w-16 h-16 rounded-full bg-gray-300 mr-4"></div>
-                      <div>
-                        <div className="h-4 bg-gray-300 rounded w-24 mb-2"></div>
-                        <div className="h-3 bg-gray-300 rounded w-16"></div>
-                      </div>
-                    </div>
-                    <div className="flex mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <div key={i} className="w-4 h-4 bg-gray-300 rounded mr-1"></div>
-                      ))}
-                    </div>
-                    <div className="space-y-2">
-                      <div className="h-3 bg-gray-300 rounded"></div>
-                      <div className="h-3 bg-gray-300 rounded w-3/4"></div>
-                    </div>
+                    <div className="h-3 bg-gray-200 rounded" />
+                    <div className="h-3 bg-gray-200 rounded w-5/6" />
+                    <div className="h-3 bg-gray-200 rounded w-4/6" />
                   </CardContent>
                 </Card>
               </div>
             ))}
           </div>
+        ) : items.length > 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {items.map((item, i) => (
+              <TestimonialCard key={item.id} item={item} index={i} />
+            ))}
+          </div>
+        ) : (
+          <div className="max-w-2xl mx-auto text-center bg-white rounded-2xl shadow-sm border border-sage/15 p-10">
+            <Heart className="w-10 h-10 text-coral mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-charcoal mb-2">
+              Be among the first to share your story
+            </h3>
+            <p className="text-charcoal-light mb-6">
+              I'm just starting to collect patient stories here. If you've
+              worked with me, I'd be honored to share your experience — with
+              your permission.
+            </p>
+            <TestimonialSubmissionForm />
+          </div>
         )}
+
+        {/* Share Your Story CTA + disclosure */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="mt-10 md:mt-14"
+        >
+          <div className="max-w-3xl mx-auto bg-white rounded-2xl border border-sage/20 shadow-sm p-6 md:p-7 flex flex-col md:flex-row items-center gap-5 text-center md:text-left">
+            <div className="flex-1">
+              <h3 className="font-semibold text-charcoal mb-1">
+                Have a success story to share?
+              </h3>
+              <p className="text-charcoal-light text-sm">
+                Your words may help someone else take the first step toward
+                pain-free movement.
+              </p>
+            </div>
+            {items.length > 0 ? <TestimonialSubmissionForm /> : null}
+          </div>
+
+          <p className="mt-5 text-xs text-charcoal-light/80 text-center max-w-2xl mx-auto flex items-center justify-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-sage shrink-0" />
+            Testimonials are shared with each patient's written permission.
+            Individual results vary.
+          </p>
+
+          {isPreview && (
+            <p className="mt-3 text-center text-xs text-coral font-semibold uppercase tracking-wide">
+              Preview Mode — sample testimonials shown for design only
+            </p>
+          )}
+        </motion.div>
       </div>
     </section>
   );
