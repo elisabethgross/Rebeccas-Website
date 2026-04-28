@@ -122,7 +122,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get all contact submissions (for admin purposes)
-  app.get("/api/contact-submissions", async (req, res) => {
+  app.get("/api/contact-submissions", requireAdminAuth, async (req, res) => {
     try {
       const submissions = await storage.getAllContactSubmissions();
       res.json(submissions);

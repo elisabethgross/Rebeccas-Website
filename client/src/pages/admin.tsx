@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Eye, EyeOff, Mail, Phone, Calendar, User, MessageSquare } from "lucide-react";
+import { Eye, EyeOff, Mail, Phone, User, MessageSquare, Lock } from "lucide-react";
 import { format } from "date-fns";
+import {
+  adminFetch,
+  AdminUnauthorizedError,
+  clearAdminPassword,
+  getStoredAdminPassword,
+  storeAdminPassword,
+} from "@/lib/admin-auth";
 
 interface ContactSubmission {
   id: number;
@@ -20,34 +27,67 @@ interface ContactSubmission {
 }
 
 export default function Admin() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
+  const [authPassword, setAuthPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState("");
 
-  // Simple password check (in production, use proper authentication)
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Simple password - in production, use proper authentication
-    if (password === "admin123") {
-      setIsAuthenticated(true);
-      setAuthError("");
-    } else {
-      setAuthError("Incorrect password");
-    }
-  };
+  useEffect(() => {
+    const stored = getStoredAdminPassword();
+    if (stored) setAuthPassword(stored);
+  }, []);
+
+  const isAuthenticated = !!authPassword;
 
   const { data: submissions, isLoading } = useQuery<ContactSubmission[]>({
     queryKey: ["/api/contact-submissions"],
     enabled: isAuthenticated,
+    queryFn: async () => {
+      try {
+        return await adminFetch(authPassword, "/api/contact-submissions");
+      } catch (err) {
+        if (err instanceof AdminUnauthorizedError) {
+          clearAdminPassword();
+          setAuthPassword("");
+          throw new Error("Session expired. Please sign in again.");
+        }
+        throw err;
+      }
+    },
   });
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError("");
+    try {
+      await adminFetch(password, "/api/contact-submissions");
+      storeAdminPassword(password);
+      setAuthPassword(password);
+      setPassword("");
+    } catch (err) {
+      setAuthError(
+        err instanceof AdminUnauthorizedError
+          ? "Incorrect password"
+          : err instanceof Error
+            ? err.message
+            : "Sign in failed"
+      );
+    }
+  };
+
+  const handleLogout = () => {
+    clearAdminPassword();
+    setAuthPassword("");
+  };
 
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle className="text-center">Admin Access</CardTitle>
+            <CardTitle className="text-center flex items-center justify-center gap-2">
+              <Lock className="w-4 h-4" /> Admin Access
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
@@ -58,6 +98,7 @@ export default function Admin() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="pr-10"
+                  data-testid="input-admin-password"
                 />
                 <Button
                   type="button"
@@ -66,10 +107,16 @@ export default function Admin() {
                   className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
-              {authError && <p className="text-red-500 text-sm">{authError}</p>}
+              {authError && (
+                <p className="text-red-500 text-sm">{authError}</p>
+              )}
               <Button type="submit" className="w-full">
                 Login
               </Button>
@@ -85,10 +132,7 @@ export default function Admin() {
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-900">Client Requests</h1>
-          <Button
-            variant="outline"
-            onClick={() => setIsAuthenticated(false)}
-          >
+          <Button variant="outline" onClick={handleLogout}>
             Logout
           </Button>
         </div>
@@ -101,7 +145,8 @@ export default function Admin() {
               <>
                 <div className="bg-white p-4 rounded-lg shadow">
                   <p className="text-sm text-gray-600">
-                    Total submissions: <span className="font-semibold">{submissions.length}</span>
+                    Total submissions:{" "}
+                    <span className="font-semibold">{submissions.length}</span>
                   </p>
                 </div>
                 {submissions.map((submission) => (
@@ -113,7 +158,10 @@ export default function Admin() {
                           {submission.firstName} {submission.lastName}
                         </CardTitle>
                         <Badge variant="outline">
-                          {format(new Date(submission.createdAt), "MMM d, yyyy 'at' h:mm a")}
+                          {format(
+                            new Date(submission.createdAt),
+                            "MMM d, yyyy 'at' h:mm a"
+                          )}
                         </Badge>
                       </div>
                     </CardHeader>
@@ -122,7 +170,10 @@ export default function Admin() {
                         <div className="flex items-center gap-2">
                           <Mail className="h-4 w-4 text-gray-500" />
                           <span className="text-sm">
-                            <a href={`mailto:${submission.email}`} className="text-blue-600 hover:underline">
+                            <a
+                              href={`mailto:${submission.email}`}
+                              className="text-blue-600 hover:underline"
+                            >
                               {submission.email}
                             </a>
                           </span>
@@ -130,7 +181,10 @@ export default function Admin() {
                         <div className="flex items-center gap-2">
                           <Phone className="h-4 w-4 text-gray-500" />
                           <span className="text-sm">
-                            <a href={`tel:${submission.phone}`} className="text-blue-600 hover:underline">
+                            <a
+                              href={`tel:${submission.phone}`}
+                              className="text-blue-600 hover:underline"
+                            >
                               {submission.phone}
                             </a>
                           </span>
@@ -140,22 +194,34 @@ export default function Admin() {
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <MessageSquare className="h-4 w-4 text-gray-500" />
-                          <span className="text-sm font-medium">Preferred contact method:</span>
-                          <Badge variant="secondary">{submission.contactMethod}</Badge>
+                          <span className="text-sm font-medium">
+                            Preferred contact method:
+                          </span>
+                          <Badge variant="secondary">
+                            {submission.contactMethod}
+                          </Badge>
                         </div>
 
                         {submission.howDidYouHear && (
                           <div className="text-sm">
-                            <span className="font-medium">How they heard about us:</span>
-                            <span className="ml-2 text-gray-600">{submission.howDidYouHear}</span>
+                            <span className="font-medium">
+                              How they heard about us:
+                            </span>
+                            <span className="ml-2 text-gray-600">
+                              {submission.howDidYouHear}
+                            </span>
                           </div>
                         )}
 
                         {submission.activities && (
                           <div className="text-sm">
-                            <span className="font-medium">Activities they want to return to:</span>
+                            <span className="font-medium">
+                              Activities they want to return to:
+                            </span>
                             <div className="mt-1 p-3 bg-gray-50 rounded-lg">
-                              <p className="text-gray-700">{submission.activities}</p>
+                              <p className="text-gray-700">
+                                {submission.activities}
+                              </p>
                             </div>
                           </div>
                         )}
@@ -164,14 +230,18 @@ export default function Admin() {
                       <div className="flex gap-2 pt-2">
                         <Button
                           size="sm"
-                          onClick={() => window.open(`mailto:${submission.email}`, '_blank')}
+                          onClick={() =>
+                            window.open(`mailto:${submission.email}`, "_blank")
+                          }
                         >
                           Send Email
                         </Button>
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => window.open(`tel:${submission.phone}`, '_blank')}
+                          onClick={() =>
+                            window.open(`tel:${submission.phone}`, "_blank")
+                          }
                         >
                           Call
                         </Button>

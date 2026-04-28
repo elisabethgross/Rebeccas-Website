@@ -50,31 +50,13 @@ import {
   Pencil,
 } from "lucide-react";
 import { format } from "date-fns";
-
-const PASSWORD_KEY = "rk_admin_password";
-
-async function adminFetch(
-  password: string,
-  url: string,
-  options: RequestInit = {}
-) {
-  const res = await fetch(url, {
-    ...options,
-    headers: {
-      ...(options.headers || {}),
-      "x-admin-password": password,
-      ...(options.body ? { "Content-Type": "application/json" } : {}),
-    },
-  });
-  if (res.status === 401) {
-    throw new Error("UNAUTHORIZED");
-  }
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || `Request failed: ${res.status}`);
-  }
-  return res.json();
-}
+import {
+  adminFetch,
+  AdminUnauthorizedError,
+  clearAdminPassword,
+  getStoredAdminPassword,
+  storeAdminPassword,
+} from "@/lib/admin-auth";
 
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
@@ -98,7 +80,7 @@ export default function AdminTestimonials() {
   const [editing, setEditing] = useState<Testimonial | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem(PASSWORD_KEY);
+    const stored = getStoredAdminPassword();
     if (stored) setAuthPassword(stored);
   }, []);
 
@@ -111,8 +93,8 @@ export default function AdminTestimonials() {
       try {
         return await adminFetch(authPassword, "/api/admin/testimonials");
       } catch (err: any) {
-        if (err?.message === "UNAUTHORIZED") {
-          localStorage.removeItem(PASSWORD_KEY);
+        if (err instanceof AdminUnauthorizedError) {
+          clearAdminPassword();
           setAuthPassword("");
           throw new Error("Session expired. Please sign in again.");
         }
@@ -270,12 +252,12 @@ export default function AdminTestimonials() {
     setAuthError("");
     try {
       await adminFetch(password, "/api/admin/testimonials");
-      localStorage.setItem(PASSWORD_KEY, password);
+      storeAdminPassword(password);
       setAuthPassword(password);
       setPassword("");
     } catch (err: any) {
       setAuthError(
-        err?.message === "UNAUTHORIZED"
+        err instanceof AdminUnauthorizedError
           ? "Incorrect password"
           : err?.message || "Sign in failed"
       );
@@ -283,7 +265,7 @@ export default function AdminTestimonials() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem(PASSWORD_KEY);
+    clearAdminPassword();
     setAuthPassword("");
   };
 
