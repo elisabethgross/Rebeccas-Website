@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { UserCheck, HandHeart, Activity, ArrowRight, Star, Clock, CheckCircle, Video } from "lucide-react";
+import { Stethoscope, Dumbbell, Activity, ArrowRight, Clock, Video, Monitor } from "lucide-react";
 import { scrollToSectionId } from "@/lib/utils";
 
 export default function Services() {
@@ -9,44 +9,49 @@ export default function Services() {
 
   const coreServices = [
     {
-      icon: UserCheck,
-      title: "Comprehensive Assessment",
-      description: "Initial evaluation to understand your unique movement patterns, pain points, and goals. We'll create a personalized treatment plan just for you.",
-      duration: "60 minutes",
-      color: "blue",
+      icon: Stethoscope,
+      title: "Physical Therapy",
+      description: "One-on-one care focused on restoring function, reducing pain, and optimizing movement. Includes pre- and post-surgical rehabilitation, return-to-sport training, gait training, transfer training, and improving mobility and independence. Collaboration with your healthcare team and family members as needed.",
+      price: "$250",
+      duration: "per session",
       borderColor: "border-blue",
       iconBg: "bg-blue",
+      priceColor: "text-blue",
       buttonClass: "bg-blue hover:bg-blue-dark"
     },
     {
-      icon: HandHeart,
-      title: "Wellness Session",
-      description: "Hands-on manual therapy, movement re-education, and personalized exercise prescription. Dedicated one-on-one attention focused on your goals.",
-      duration: "60 minutes",
-      color: "orange",
+      icon: Dumbbell,
+      title: "Personal Training",
+      description: "Targeted strength and movement programming focused on injury prevention, performance, and long-term physical resilience. Strength and flexibility training tailored to your goals.",
+      price: "$250",
+      duration: "per session",
       borderColor: "border-orange",
       iconBg: "bg-orange",
+      priceColor: "text-orange",
       buttonClass: "bg-orange hover:bg-orange-dark"
     },
     {
       icon: Activity,
-      title: "Movement Coaching",
-      description: "Learn proper movement patterns and preventive strategies to maintain your progress and prevent future injuries.",
-      duration: "60 minutes",
-      color: "blue-light",
+      title: "Wellness & Movement Coaching",
+      description: "Ongoing guidance for mobility, posture, strength, and sustainable movement habits.",
+      price: "$250",
+      duration: "per session",
       borderColor: "border-blue-light",
       iconBg: "bg-blue-light",
+      priceColor: "text-blue-light",
       buttonClass: "bg-blue-light hover:bg-blue"
+    },
+    {
+      icon: Monitor,
+      title: "Ergonomic Workstation Assessment",
+      description: "In-person or virtual evaluations to optimize your workspace, reduce strain, and prevent potential injury.",
+      price: "$250",
+      duration: "per session",
+      borderColor: "border-sage",
+      iconBg: "bg-sage",
+      priceColor: "text-sage",
+      buttonClass: "bg-sage hover:bg-sage/90"
     }
-  ];
-
-  const whatYouGet = [
-    "Highly personalized care tailored to YOUR unique needs",
-    "Treatment plans designed specifically for your goals",
-    "Unrestricted time - no insurance-dictated session limits",
-    "Convenient care in your home, gym, or my clinic",
-    "Exceptional customer service and direct therapist access",
-    "Patient-centered approach focused on what YOU need"
   ];
 
   return (
@@ -62,8 +67,11 @@ export default function Services() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-charcoal mb-4 md:mb-6">
             What I Offer
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-charcoal-light max-w-3xl mx-auto leading-relaxed px-2">
-            Premium physical therapy services designed to get you back to your best self. No insurance limitations, no rushed appointments—just personalized care that works.
+          <p className="text-base sm:text-lg md:text-xl text-charcoal-light max-w-3xl mx-auto leading-relaxed px-2 mb-4">
+            I provide a comprehensive, one-on-one model of care designed to support you through every stage of movement health, from recovery to long-term strength and resilience. Care is available in-person and virtually.
+          </p>
+          <p className="text-sm sm:text-base md:text-lg text-charcoal-light max-w-3xl mx-auto leading-relaxed px-2">
+            Many clients begin with Physical Therapy and continue into Personal Training or Wellness Coaching for ongoing maintenance, strength, and performance.
           </p>
         </motion.div>
 
@@ -89,9 +97,9 @@ export default function Services() {
                     <h3 className="text-xl font-bold text-charcoal mb-3">{service.title}</h3>
                     <p className="text-sm text-charcoal-light mb-4 leading-relaxed flex-grow">{service.description}</p>
                     
-                    <div className="text-xs text-charcoal-light flex items-center mb-4">
-                      <Clock className="w-4 h-4 mr-2" />
-                      {service.duration}
+                    <div className="flex items-baseline gap-2 mb-4">
+                      <span className={`text-2xl font-bold ${service.priceColor}`}>{service.price}</span>
+                      <span className="text-xs text-charcoal-light">{service.duration}</span>
                     </div>
                     
                     <Button 
@@ -109,7 +117,7 @@ export default function Services() {
           </div>
 
           {/* Desktop Grid */}
-          <div className="hidden sm:grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+          <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8">
             {coreServices.map((service, index) => (
               <motion.div
                 key={index}
@@ -127,9 +135,9 @@ export default function Services() {
                     <h3 className="text-xl md:text-2xl font-bold text-charcoal mb-3 md:mb-4">{service.title}</h3>
                     <p className="text-sm md:text-base text-charcoal-light mb-4 md:mb-6 leading-relaxed flex-grow">{service.description}</p>
                     
-                    <div className="text-xs md:text-sm text-charcoal-light flex items-center mb-4 md:mb-6">
-                      <Clock className="w-4 h-4 md:w-5 md:h-5 mr-2" />
-                      {service.duration}
+                    <div className="flex items-baseline gap-2 mb-4 md:mb-6">
+                      <span className={`text-3xl md:text-4xl font-bold ${service.priceColor}`}>{service.price}</span>
+                      <span className="text-sm text-charcoal-light">{service.duration}</span>
                     </div>
                     
                     <Button 
@@ -153,17 +161,6 @@ export default function Services() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center bg-gradient-to-r from-blue/10 to-sage/10 rounded-xl md:rounded-2xl p-6 md:p-8 mb-10 sm:mb-12 md:mb-16 border-2 border-blue/20"
-        >
-          <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue mb-2">$250</div>
-          <div className="text-base sm:text-lg md:text-xl text-charcoal-light font-medium">All Sessions / 60 Minutes</div>
-        </motion.div>
-
-        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -181,10 +178,10 @@ export default function Services() {
 
                 <div className="flex-grow text-center md:text-left">
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-charcoal mb-2 md:mb-3">
-                    Medical Imaging Review
+                    Medical Imaging Review <span className="text-base sm:text-lg md:text-xl font-medium text-charcoal-light">(Virtual)</span>
                   </h3>
                   <p className="text-sm sm:text-base text-charcoal-light leading-relaxed mb-3">
-                    A virtual video or phone call to discuss and review your medical imaging so you can better understand your results and what your next steps should be.
+                    Remote sessions to review and interpret medical imaging or reports, and discuss findings and next steps.
                   </p>
                   <div className="text-xs sm:text-sm text-charcoal-light flex items-center justify-center md:justify-start">
                     <Clock className="w-4 h-4 mr-2" />
