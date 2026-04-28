@@ -10,9 +10,7 @@ export function scrollToSectionId(sectionId: string) {
   if (!element) return;
 
   const navHeight = 80; // Fixed nav bar height
-  // Land the top of the section in the top quarter of the viewport.
-  // Ensure the offset still clears the fixed nav bar with some breathing room.
-  const topQuarterOffset = Math.max(window.innerHeight / 4, navHeight + 16);
+  const breathingRoom = 20; // Land the section a little below the nav for visual comfort
 
   const elementTop =
     element.getBoundingClientRect().top + (window.scrollY || window.pageYOffset);
@@ -21,7 +19,7 @@ export function scrollToSectionId(sectionId: string) {
     document.documentElement.scrollHeight - window.innerHeight
   );
   const target = Math.min(
-    Math.max(0, elementTop - topQuarterOffset),
+    Math.max(0, elementTop - navHeight - breathingRoom),
     maxScroll
   );
 

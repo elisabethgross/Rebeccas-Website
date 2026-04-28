@@ -45,12 +45,12 @@ export default function Hero() {
               </p>
               
               <div
-                className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 sm:max-w-xl mx-auto lg:mx-0"
+                className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 justify-center lg:justify-start"
                 data-testid="hero-cta-buttons"
               >
                 <Button
                   onClick={() => scrollToSection("contact")}
-                  className="bg-blue text-white hover:bg-blue/90 px-5 md:px-6 py-3 md:py-4 text-base md:text-lg font-semibold group w-full justify-center"
+                  className="bg-blue text-white hover:bg-blue/90 px-5 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold group w-full sm:w-auto justify-center"
                   data-testid="button-schedule-assessment"
                 >
                   <span className="hidden sm:inline">Schedule Your Assessment</span>
@@ -60,7 +60,7 @@ export default function Hero() {
                 <Button
                   onClick={() => scrollToSection("about")}
                   variant="outline"
-                  className="border-blue text-blue hover:bg-blue hover:text-white px-5 md:px-6 py-3 md:py-4 text-base md:text-lg font-semibold group w-full justify-center"
+                  className="border-blue text-blue hover:bg-blue hover:text-white px-5 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold group w-full sm:w-auto justify-center"
                   data-testid="button-learn-approach"
                 >
                   <Play className="mr-2 h-4 w-4 md:h-5 md:w-5" />
