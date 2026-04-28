@@ -18,10 +18,12 @@ export default function Navigation() {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
-    // Close the mobile menu first, then defer the scroll a tick so any
-    // layout/animation settles before computing the target position.
+    // Close the mobile menu first, then wait for the collapse animation
+    // to finish so the scroll target is computed against the final layout.
+    const wasMobileMenuOpen = isMobileMenuOpen;
     setIsMobileMenuOpen(false);
-    requestAnimationFrame(() => scrollToSectionId(sectionId));
+    const delay = wasMobileMenuOpen ? 320 : 0;
+    window.setTimeout(() => scrollToSectionId(sectionId), delay);
   };
 
   return (
