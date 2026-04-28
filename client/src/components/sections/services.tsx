@@ -14,6 +14,7 @@ export default function Services() {
       description: "One-on-one care focused on restoring function, reducing pain, and optimizing movement. Includes pre- and post-surgical rehabilitation, return-to-sport training, gait training, transfer training, and improving mobility and independence. Collaboration with your healthcare team and family members as needed.",
       price: "$250",
       duration: "per session",
+      length: "60 minutes",
       borderColor: "border-blue",
       iconBg: "bg-blue",
       priceColor: "text-blue",
@@ -25,6 +26,7 @@ export default function Services() {
       description: "Targeted strength and movement programming focused on injury prevention, performance, and long-term physical resilience. Strength and flexibility training tailored to your goals.",
       price: "$250",
       duration: "per session",
+      length: "60 minutes",
       borderColor: "border-orange",
       iconBg: "bg-orange",
       priceColor: "text-orange",
@@ -36,6 +38,7 @@ export default function Services() {
       description: "Ongoing guidance for mobility, posture, strength, and sustainable movement habits.",
       price: "$250",
       duration: "per session",
+      length: "60 minutes",
       borderColor: "border-blue-light",
       iconBg: "bg-blue-light",
       priceColor: "text-blue-light",
@@ -47,6 +50,7 @@ export default function Services() {
       description: "In-person or virtual evaluations to optimize your workspace, reduce strain, and prevent potential injury.",
       price: "$250",
       duration: "per session",
+      length: "60 minutes",
       borderColor: "border-sage",
       iconBg: "bg-sage",
       priceColor: "text-sage",
@@ -97,9 +101,14 @@ export default function Services() {
                     <h3 className="text-xl font-bold text-charcoal mb-3">{service.title}</h3>
                     <p className="text-sm text-charcoal-light mb-4 leading-relaxed flex-grow">{service.description}</p>
                     
-                    <div className="flex items-baseline gap-2 mb-4">
+                    <div className="flex items-baseline gap-2 mb-2">
                       <span className={`text-2xl font-bold ${service.priceColor}`}>{service.price}</span>
                       <span className="text-xs text-charcoal-light">{service.duration}</span>
+                    </div>
+
+                    <div className="text-xs text-charcoal-light flex items-center mb-4">
+                      <Clock className="w-4 h-4 mr-2" />
+                      {service.length}
                     </div>
                     
                     <Button 
@@ -135,9 +144,14 @@ export default function Services() {
                     <h3 className="text-xl md:text-2xl font-bold text-charcoal mb-3 md:mb-4">{service.title}</h3>
                     <p className="text-sm md:text-base text-charcoal-light mb-4 md:mb-6 leading-relaxed flex-grow">{service.description}</p>
                     
-                    <div className="flex items-baseline gap-2 mb-4 md:mb-6">
+                    <div className="flex items-baseline gap-2 mb-2 md:mb-3">
                       <span className={`text-3xl md:text-4xl font-bold ${service.priceColor}`}>{service.price}</span>
                       <span className="text-sm text-charcoal-light">{service.duration}</span>
+                    </div>
+
+                    <div className="text-xs md:text-sm text-charcoal-light flex items-center mb-4 md:mb-6">
+                      <Clock className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+                      {service.length}
                     </div>
                     
                     <Button 
