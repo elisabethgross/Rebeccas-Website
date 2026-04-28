@@ -22,11 +22,20 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
 import {
   adminCreateTestimonialSchema,
+  adminUpdateTestimonialSchema,
   type AdminCreateTestimonialInput,
+  type AdminUpdateTestimonialInput,
   type Testimonial,
 } from "@shared/schema";
 import {
@@ -38,6 +47,7 @@ import {
   Eye,
   Plus,
   Lock,
+  Pencil,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -85,6 +95,7 @@ export default function AdminTestimonials() {
   const [password, setPassword] = useState<string>("");
   const [authPassword, setAuthPassword] = useState<string>("");
   const [authError, setAuthError] = useState<string>("");
+  const [editing, setEditing] = useState<Testimonial | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem(PASSWORD_KEY);
@@ -124,6 +135,64 @@ export default function AdminTestimonials() {
     onError: (err: any) => {
       toast({
         title: "Update failed",
+        description: err?.message || "Try again",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const editForm = useForm<AdminUpdateTestimonialInput>({
+    resolver: zodResolver(adminUpdateTestimonialSchema),
+    defaultValues: {
+      firstName: "",
+      lastInitial: "",
+      activityRole: "",
+      quote: "",
+      rating: undefined,
+    },
+  });
+
+  useEffect(() => {
+    if (editing) {
+      editForm.reset({
+        firstName: editing.firstName,
+        lastInitial: editing.lastInitial ?? "",
+        activityRole: editing.activityRole ?? "",
+        quote: editing.quote,
+        rating: editing.rating ?? undefined,
+      });
+    }
+  }, [editing, editForm]);
+
+  const editMutation = useMutation({
+    mutationFn: async (args: {
+      id: number;
+      data: AdminUpdateTestimonialInput;
+    }) =>
+      adminFetch(authPassword, `/api/admin/testimonials/${args.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          ...args.data,
+          lastInitial:
+            args.data.lastInitial && args.data.lastInitial.trim() !== ""
+              ? args.data.lastInitial.trim()
+              : null,
+          activityRole:
+            args.data.activityRole && args.data.activityRole.trim() !== ""
+              ? args.data.activityRole.trim()
+              : null,
+          rating: args.data.rating ?? null,
+        }),
+      }),
+    onSuccess: () => {
+      toast({ title: "Saved" });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/testimonials"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/testimonials"] });
+      setEditing(null);
+    },
+    onError: (err: any) => {
+      toast({
+        title: "Save failed",
         description: err?.message || "Try again",
         variant: "destructive",
       });
@@ -299,6 +368,14 @@ export default function AdminTestimonials() {
         </p>
 
         <div className="flex flex-wrap gap-2 pt-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setEditing(t)}
+            data-testid={`button-edit-${t.id}`}
+          >
+            <Pencil className="w-4 h-4 mr-1" /> Edit
+          </Button>
           {t.status !== "approved" && (
             <Button
               size="sm"
@@ -578,6 +655,166 @@ export default function AdminTestimonials() {
             </Card>
           </TabsContent>
         </Tabs>
+
+        <Dialog
+          open={!!editing}
+          onOpenChange={(open) => {
+            if (!open) setEditing(null);
+          }}
+        >
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Edit testimonial</DialogTitle>
+            </DialogHeader>
+            {editing && (
+              <Form {...editForm}>
+                <form
+                  onSubmit={editForm.handleSubmit((data) =>
+                    editMutation.mutate({ id: editing.id, data })
+                  )}
+                  className="space-y-4"
+                  data-testid="form-edit-testimonial"
+                >
+                  <div className="grid grid-cols-3 gap-3">
+                    <FormField
+                      control={editForm.control}
+                      name="firstName"
+                      render={({ field }) => (
+                        <FormItem className="col-span-2">
+                          <FormLabel>First name</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              value={field.value ?? ""}
+                              data-testid="input-edit-first-name"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={editForm.control}
+                      name="lastInitial"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Last initial</FormLabel>
+                          <FormControl>
+                            <Input
+                              maxLength={2}
+                              {...field}
+                              value={field.value ?? ""}
+                              data-testid="input-edit-last-initial"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <FormField
+                    control={editForm.control}
+                    name="activityRole"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Activity / role</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            value={field.value ?? ""}
+                            data-testid="input-edit-activity-role"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={editForm.control}
+                    name="quote"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Testimonial</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            rows={5}
+                            {...field}
+                            value={field.value ?? ""}
+                            data-testid="input-edit-quote"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={editForm.control}
+                    name="rating"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Rating</FormLabel>
+                        <div className="flex gap-1">
+                          {[1, 2, 3, 4, 5].map((s) => {
+                            const active = (field.value ?? 0) >= s;
+                            return (
+                              <button
+                                key={s}
+                                type="button"
+                                onClick={() =>
+                                  field.onChange(
+                                    field.value === s ? undefined : s
+                                  )
+                                }
+                                className="p-1"
+                                aria-label={`${s} stars`}
+                              >
+                                <Star
+                                  className={`w-6 h-6 ${
+                                    active
+                                      ? "fill-coral text-coral"
+                                      : "text-gray-300"
+                                  }`}
+                                />
+                              </button>
+                            );
+                          })}
+                          {field.value ? (
+                            <button
+                              type="button"
+                              onClick={() => field.onChange(undefined)}
+                              className="ml-2 text-xs text-charcoal-light underline"
+                            >
+                              clear
+                            </button>
+                          ) : null}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <DialogFooter>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setEditing(null)}
+                      disabled={editMutation.isPending}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={editMutation.isPending}
+                      className="bg-sage text-white hover:bg-sage-dark"
+                      data-testid="button-save-edit"
+                    >
+                      {editMutation.isPending ? "Saving…" : "Save changes"}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </Form>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

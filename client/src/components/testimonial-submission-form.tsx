@@ -45,7 +45,7 @@ export function TestimonialSubmissionForm({ trigger }: Props) {
       activityRole: "",
       quote: "",
       rating: undefined,
-      consentGiven: false as unknown as true,
+      consentGiven: false,
     },
   });
 

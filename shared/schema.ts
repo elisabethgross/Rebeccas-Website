@@ -107,21 +107,23 @@ export const submitTestimonialSchema = z.object({
     .max(5)
     .optional()
     .nullable(),
-  consentGiven: z.literal(true, {
-    errorMap: () => ({
+  consentGiven: z
+    .boolean()
+    .refine((v) => v === true, {
       message:
         "Please confirm you authorize Dr. Kleiner to publish this on her website.",
     }),
-  }),
 });
 
-export const adminCreateTestimonialSchema = submitTestimonialSchema.extend({
-  consentGiven: z.boolean(),
-  status: z
-    .enum(["pending", "approved", "rejected", "hidden"])
-    .optional()
-    .default("approved"),
-});
+export const adminCreateTestimonialSchema = submitTestimonialSchema
+  .omit({ consentGiven: true })
+  .extend({
+    consentGiven: z.boolean(),
+    status: z
+      .enum(["pending", "approved", "rejected", "hidden"])
+      .optional()
+      .default("approved"),
+  });
 
 export const adminUpdateTestimonialSchema = z.object({
   firstName: z.string().min(1).max(40).optional(),

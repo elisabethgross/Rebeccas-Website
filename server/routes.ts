@@ -12,8 +12,19 @@ import nodemailer from "nodemailer";
 import { googleReviewsService } from "./google-reviews";
 
 function requireAdminAuth(req: Request, res: Response, next: NextFunction) {
+  const expected = process.env.ADMIN_PASSWORD;
+  if (!expected) {
+    console.error(
+      "[admin] ADMIN_PASSWORD is not set; refusing admin request to",
+      req.path
+    );
+    return res.status(503).json({
+      success: false,
+      message:
+        "Admin actions are disabled because ADMIN_PASSWORD is not configured on the server.",
+    });
+  }
   const provided = (req.headers["x-admin-password"] as string) || "";
-  const expected = process.env.ADMIN_PASSWORD || "admin123";
   if (!provided || provided !== expected) {
     return res
       .status(401)
