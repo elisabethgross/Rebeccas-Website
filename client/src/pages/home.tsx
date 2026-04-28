@@ -12,17 +12,31 @@ import { Calendar } from "lucide-react";
 import { scrollToSectionId } from "@/lib/utils";
 
 export default function Home() {
-  const [showStickyCTA, setShowStickyCTA] = useState(false);
+  const [scrolledPastHero, setScrolledPastHero] = useState(false);
+  const [contactInView, setContactInView] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show sticky CTA after scrolling past hero section (roughly 800px)
-      setShowStickyCTA(window.scrollY > 800);
+      setScrolledPastHero(window.scrollY > 800);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const contactEl = document.getElementById('contact');
+    if (!contactEl) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setContactInView(entry.isIntersecting),
+      { rootMargin: '0px 0px -20% 0px', threshold: 0 }
+    );
+    observer.observe(contactEl);
+    return () => observer.disconnect();
+  }, []);
+
+  const showStickyCTA = scrolledPastHero && !contactInView;
 
   const scrollToContact = () => scrollToSectionId('contact');
 
