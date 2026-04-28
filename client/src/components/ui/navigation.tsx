@@ -20,8 +20,9 @@ export default function Navigation() {
     const element = document.getElementById(sectionId);
     if (element) {
       const navHeight = 80; // Account for fixed nav bar height
+      const verticalCenterOffset = window.innerHeight * 0.2; // Push section lower so it sits closer to middle
       const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - navHeight;
+      const offsetPosition = elementPosition - navHeight - verticalCenterOffset;
 
       window.scrollTo({
         top: offsetPosition,

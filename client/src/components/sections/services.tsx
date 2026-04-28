@@ -1,15 +1,16 @@
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { UserCheck, HandHeart, Activity, ArrowRight, Star, Clock, CheckCircle } from "lucide-react";
+import { UserCheck, HandHeart, Activity, ArrowRight, Star, Clock, CheckCircle, Video } from "lucide-react";
 
 export default function Services() {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       const navHeight = 80; // Account for fixed nav bar height
+      const verticalCenterOffset = window.innerHeight * 0.2; // Push section lower so it sits closer to middle
       const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - navHeight;
+      const offsetPosition = elementPosition - navHeight - verticalCenterOffset;
 
       window.scrollTo({
         top: offsetPosition,
@@ -23,7 +24,7 @@ export default function Services() {
       icon: UserCheck,
       title: "Comprehensive Assessment",
       description: "Initial evaluation to understand your unique movement patterns, pain points, and goals. We'll create a personalized treatment plan just for you.",
-      duration: "50 minutes",
+      duration: "60 minutes",
       color: "blue",
       borderColor: "border-blue",
       iconBg: "bg-blue",
@@ -33,7 +34,7 @@ export default function Services() {
       icon: HandHeart,
       title: "Wellness Session",
       description: "Hands-on manual therapy, movement re-education, and personalized exercise prescription. Dedicated one-on-one attention focused on your goals.",
-      duration: "50 minutes",
+      duration: "60 minutes",
       color: "orange",
       borderColor: "border-orange",
       iconBg: "bg-orange",
@@ -43,7 +44,7 @@ export default function Services() {
       icon: Activity,
       title: "Movement Coaching",
       description: "Learn proper movement patterns and preventive strategies to maintain your progress and prevent future injuries.",
-      duration: "50 minutes",
+      duration: "60 minutes",
       color: "blue-light",
       borderColor: "border-blue-light",
       iconBg: "bg-blue-light",
@@ -171,7 +172,52 @@ export default function Services() {
           className="text-center bg-gradient-to-r from-blue/10 to-sage/10 rounded-xl md:rounded-2xl p-6 md:p-8 mb-10 sm:mb-12 md:mb-16 border-2 border-blue/20"
         >
           <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue mb-2">$250</div>
-          <div className="text-base sm:text-lg md:text-xl text-charcoal-light font-medium">All Sessions / 50 Minutes</div>
+          <div className="text-base sm:text-lg md:text-xl text-charcoal-light font-medium">All Sessions / 60 Minutes</div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="mb-10 sm:mb-12 md:mb-16"
+        >
+          <Card className="border-2 border-sage shadow-xl overflow-hidden" data-testid="card-imaging-review">
+            <CardContent className="p-6 sm:p-8 md:p-10">
+              <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-8">
+                <div className="flex-shrink-0">
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-sage rounded-2xl flex items-center justify-center shadow-lg mx-auto md:mx-0">
+                    <Video className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                  </div>
+                </div>
+
+                <div className="flex-grow text-center md:text-left">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-charcoal mb-2 md:mb-3">
+                    Medical Imaging Review
+                  </h3>
+                  <p className="text-sm sm:text-base text-charcoal-light leading-relaxed mb-3">
+                    A virtual video or phone call to discuss and review your medical imaging so you can better understand your results and what your next steps should be.
+                  </p>
+                  <div className="text-xs sm:text-sm text-charcoal-light flex items-center justify-center md:justify-start">
+                    <Clock className="w-4 h-4 mr-2" />
+                    15 minutes
+                  </div>
+                </div>
+
+                <div className="flex-shrink-0 flex flex-col items-center md:items-end gap-3">
+                  <div className="text-3xl md:text-4xl font-bold text-sage">$75</div>
+                  <Button
+                    onClick={() => scrollToSection("contact")}
+                    className="bg-sage hover:bg-sage/90 text-white shadow-lg w-full md:w-auto"
+                    data-testid="button-book-imaging-review"
+                  >
+                    Book This Service
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </motion.div>
 
         <motion.div
