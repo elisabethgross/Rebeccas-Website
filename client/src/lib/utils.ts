@@ -10,10 +10,9 @@ export function scrollToSectionId(sectionId: string) {
   if (!element) return;
 
   const navHeight = 80; // Fixed nav bar height
-  // Land the top of the section roughly one third of the viewport height
-  // from the top of the screen (i.e. in the upper third of the page).
-  // Ensure the offset still clears the fixed nav bar.
-  const topThirdOffset = Math.max(window.innerHeight / 3, navHeight + 16);
+  // Land the top of the section in the top quarter of the viewport.
+  // Ensure the offset still clears the fixed nav bar with some breathing room.
+  const topQuarterOffset = Math.max(window.innerHeight / 4, navHeight + 16);
 
   const elementTop =
     element.getBoundingClientRect().top + (window.scrollY || window.pageYOffset);
@@ -22,7 +21,7 @@ export function scrollToSectionId(sectionId: string) {
     document.documentElement.scrollHeight - window.innerHeight
   );
   const target = Math.min(
-    Math.max(0, elementTop - topThirdOffset),
+    Math.max(0, elementTop - topQuarterOffset),
     maxScroll
   );
 
