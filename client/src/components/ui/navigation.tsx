@@ -18,11 +18,9 @@ export default function Navigation() {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
-    // Close the mobile menu first, then wait for the collapse animation
-    // to finish so the scroll target is computed against the final layout.
     const wasMobileMenuOpen = isMobileMenuOpen;
     setIsMobileMenuOpen(false);
-    const delay = wasMobileMenuOpen ? 320 : 0;
+    const delay = wasMobileMenuOpen ? 180 : 0;
     window.setTimeout(() => scrollToSectionId(sectionId), delay);
   };
 
@@ -94,7 +92,8 @@ export default function Navigation() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-b border-sage/20"
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className="md:hidden bg-white border-b border-sage/20 overflow-hidden"
           >
             <div className="px-4 py-3 space-y-3">
               <button

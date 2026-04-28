@@ -9,8 +9,8 @@ export function scrollToSectionId(sectionId: string) {
   const element = document.getElementById(sectionId);
   if (!element) return;
 
-  const navHeight = 80; // Fixed nav bar height
-  const breathingRoom = 20; // Land the section a little below the nav for visual comfort
+  const navHeight = 64; // Fixed nav bar height (h-14 mobile / h-16 desktop)
+  const breathingRoom = 8; // Land the section just under the nav for visual comfort
 
   const elementTop =
     element.getBoundingClientRect().top + (window.scrollY || window.pageYOffset);
