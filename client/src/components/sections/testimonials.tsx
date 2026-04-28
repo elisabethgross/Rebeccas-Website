@@ -30,62 +30,95 @@ function formatDate(d: Date | string | null) {
   });
 }
 
-function TestimonialCard({ item, index }: { item: Testimonial; index: number }) {
+function TestimonialCard({ item }: { item: Testimonial }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: Math.min(index, 4) * 0.08 }}
-      viewport={{ once: true }}
+    <Card
+      className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-sage/10 h-full"
       data-testid={`testimonial-card-${item.id}`}
     >
-      <Card className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow border border-sage/10 h-full">
-        <CardContent className="p-7 flex flex-col h-full">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-sage/15 text-sage flex items-center justify-center font-semibold">
-                {getInitials(item)}
+      <CardContent className="p-7 flex flex-col h-full">
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-sage/15 text-sage flex items-center justify-center font-semibold">
+              {getInitials(item)}
+            </div>
+            <div>
+              <div className="font-semibold text-charcoal leading-tight">
+                {formatAttribution(item)}
               </div>
-              <div>
-                <div className="font-semibold text-charcoal leading-tight">
-                  {formatAttribution(item)}
+              {item.activityRole && (
+                <div className="text-charcoal-light text-sm leading-tight">
+                  {item.activityRole}
                 </div>
-                {item.activityRole && (
-                  <div className="text-charcoal-light text-sm leading-tight">
-                    {item.activityRole}
-                  </div>
-                )}
-              </div>
+              )}
             </div>
-            <Quote className="w-6 h-6 text-sage/40 shrink-0" />
           </div>
+          <Quote className="w-6 h-6 text-sage/40 shrink-0" />
+        </div>
 
-          {item.rating ? (
-            <div
-              className="flex text-coral mb-3"
-              aria-label={`${item.rating} out of 5 stars`}
-            >
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-4 h-4 ${
-                    i < (item.rating ?? 0) ? "fill-current" : "opacity-30"
-                  }`}
-                />
-              ))}
-            </div>
-          ) : null}
-
-          <p className="text-charcoal-light leading-relaxed flex-grow">
-            {item.quote}
-          </p>
-
-          <div className="text-xs text-charcoal-light/70 mt-4">
-            {formatDate(item.approvedAt ?? item.submittedAt)}
+        {item.rating ? (
+          <div
+            className="flex text-coral mb-3"
+            aria-label={`${item.rating} out of 5 stars`}
+          >
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={`w-4 h-4 ${
+                  i < (item.rating ?? 0) ? "fill-current" : "opacity-30"
+                }`}
+              />
+            ))}
           </div>
-        </CardContent>
-      </Card>
-    </motion.div>
+        ) : null}
+
+        <p className="text-charcoal-light leading-relaxed flex-grow">
+          {item.quote}
+        </p>
+
+        <div className="text-xs text-charcoal-light/70 mt-4">
+          {formatDate(item.approvedAt ?? item.submittedAt)}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function TestimonialMarquee({ items }: { items: Testimonial[] }) {
+  // Duplicate the list once so a translate of -50% loops seamlessly.
+  // If the source list is short, repeat it enough times to fill the viewport
+  // before duplicating, so the strip is wide enough on large screens.
+  const minTrackItems = 8;
+  const repeatCount = Math.max(1, Math.ceil(minTrackItems / items.length));
+  const filled = Array.from({ length: repeatCount }, () => items).flat();
+  const track = [...filled, ...filled];
+
+  // Slow the animation down as the strip gets longer so the perceived speed
+  // stays roughly constant.
+  const durationSec = Math.max(40, filled.length * 6);
+
+  return (
+    <div className="marquee-pause relative overflow-hidden">
+      <div
+        className="flex gap-6 w-max animate-marquee py-2"
+        style={{ ["--marquee-duration" as string]: `${durationSec}s` }}
+        aria-label="Patient testimonials, auto-scrolling"
+      >
+        {track.map((item, i) => (
+          <div
+            key={`${item.id}-${i}`}
+            className="w-[300px] sm:w-[340px] md:w-[380px] shrink-0"
+            aria-hidden={i >= filled.length ? true : undefined}
+          >
+            <TestimonialCard item={item} />
+          </div>
+        ))}
+      </div>
+
+      {/* Edge fade masks so cards fade in/out at the ends */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-20 bg-gradient-to-r from-cream/60 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-20 bg-gradient-to-l from-cream/60 to-transparent" />
+    </div>
   );
 }
 
@@ -118,9 +151,12 @@ export default function Testimonials({ testimonials, isPreview }: Props) {
         </motion.div>
 
         {isLoading ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="flex gap-6 overflow-hidden">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="animate-pulse">
+              <div
+                key={i}
+                className="w-[300px] sm:w-[340px] md:w-[380px] shrink-0 animate-pulse"
+              >
                 <Card className="rounded-2xl shadow-md border border-sage/10 h-full">
                   <CardContent className="p-7 space-y-4">
                     <div className="flex items-center gap-3">
@@ -139,11 +175,7 @@ export default function Testimonials({ testimonials, isPreview }: Props) {
             ))}
           </div>
         ) : items.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {items.map((item, i) => (
-              <TestimonialCard key={item.id} item={item} index={i} />
-            ))}
-          </div>
+          <TestimonialMarquee items={items} />
         ) : (
           <div className="max-w-2xl mx-auto text-center bg-white rounded-2xl shadow-sm border border-sage/15 p-10">
             <Heart className="w-10 h-10 text-coral mx-auto mb-4" />
