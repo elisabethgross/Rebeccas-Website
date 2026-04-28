@@ -1,22 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
+import { scrollToSectionId } from "@/lib/utils";
 
 export default function Hero() {
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const navHeight = 80; // Account for fixed nav bar height
-      const verticalCenterOffset = window.innerHeight * 0.2; // Push section lower so it sits closer to middle
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - navHeight - verticalCenterOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-    }
-  };
+  const scrollToSection = (sectionId: string) => scrollToSectionId(sectionId);
 
   return (
     <section className="relative min-h-screen flex items-center bg-white overflow-hidden">
@@ -59,7 +47,7 @@ export default function Hero() {
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center lg:justify-start" data-testid="hero-cta-buttons">
                 <Button
                   onClick={() => scrollToSection("contact")}
-                  className="bg-blue text-white hover:bg-blue/90 px-5 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold group w-full sm:w-auto"
+                  className="bg-blue text-white hover:bg-blue/90 px-5 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold group w-full sm:w-auto sm:min-w-[280px] md:min-w-[300px] justify-center"
                   data-testid="button-schedule-assessment"
                 >
                   <span className="hidden sm:inline">Schedule Your Assessment</span>
@@ -69,7 +57,7 @@ export default function Hero() {
                 <Button
                   onClick={() => scrollToSection("about")}
                   variant="outline"
-                  className="border-blue text-blue hover:bg-blue hover:text-white px-5 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold group w-full sm:w-auto"
+                  className="border-blue text-blue hover:bg-blue hover:text-white px-5 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold group w-full sm:w-auto sm:min-w-[280px] md:min-w-[300px] justify-center"
                   data-testid="button-learn-approach"
                 >
                   <Play className="mr-2 h-4 w-4 md:h-5 md:w-5" />

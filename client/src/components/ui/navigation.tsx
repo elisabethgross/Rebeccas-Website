@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { scrollToSectionId } from "@/lib/utils";
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -17,19 +18,10 @@ export default function Navigation() {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const navHeight = 80; // Account for fixed nav bar height
-      const verticalCenterOffset = window.innerHeight * 0.2; // Push section lower so it sits closer to middle
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - navHeight - verticalCenterOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-    }
+    // Close the mobile menu first, then defer the scroll a tick so any
+    // layout/animation settles before computing the target position.
     setIsMobileMenuOpen(false);
+    requestAnimationFrame(() => scrollToSectionId(sectionId));
   };
 
   return (

@@ -9,6 +9,7 @@ import Contact from "@/components/sections/contact";
 import Footer from "@/components/sections/footer";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "lucide-react";
+import { scrollToSectionId } from "@/lib/utils";
 
 export default function Home() {
   const [showStickyCTA, setShowStickyCTA] = useState(false);
@@ -23,20 +24,7 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToContact = () => {
-    const element = document.getElementById('contact');
-    if (element) {
-      const navHeight = 80; // Account for fixed nav bar height
-      const verticalCenterOffset = window.innerHeight * 0.2; // Push section lower so it sits closer to middle
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - navHeight - verticalCenterOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
-  };
+  const scrollToContact = () => scrollToSectionId('contact');
 
   return (
     <div className="min-h-screen">

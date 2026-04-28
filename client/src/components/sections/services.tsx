@@ -2,22 +2,10 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UserCheck, HandHeart, Activity, ArrowRight, Star, Clock, CheckCircle, Video } from "lucide-react";
+import { scrollToSectionId } from "@/lib/utils";
 
 export default function Services() {
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const navHeight = 80; // Account for fixed nav bar height
-      const verticalCenterOffset = window.innerHeight * 0.2; // Push section lower so it sits closer to middle
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - navHeight - verticalCenterOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-    }
-  };
+  const scrollToSection = (sectionId: string) => scrollToSectionId(sectionId);
 
   const coreServices = [
     {

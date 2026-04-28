@@ -62,7 +62,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             <p>Dear ${validatedData.firstName},</p>
             <p>Thank you for your interest in premium physical therapy services. I have received your consultation request and will contact you within 24 hours to schedule your comprehensive evaluation.</p>
             <p>I look forward to helping you return to the activities you love!</p>
-            <p>Best regards,<br>Dr. Rebecca Kleiner, PT</p>
+            <p>Best regards,<br>Dr. Rebecca Kleiner, PT, DPT</p>
             <hr>
             <p><small>This is an automated confirmation. Please do not reply to this email.</small></p>
           `,

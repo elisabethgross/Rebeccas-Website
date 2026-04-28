@@ -34,7 +34,7 @@ export default function About() {
               <img
                 src={rebeccaImage}
                 alt="Dr. Rebecca Kleiner, Physical Therapist"
-                className="rounded-2xl shadow-xl w-full h-[300px] sm:h-[400px] md:h-[450px] lg:h-[500px] object-cover"
+                className="rounded-2xl shadow-xl w-full h-[300px] sm:h-[400px] md:h-[450px] lg:h-[500px] object-cover object-top"
                 data-testid="img-about-rebecca"
               />
             </div>
