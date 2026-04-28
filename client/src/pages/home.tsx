@@ -4,7 +4,7 @@ import Hero from "@/components/sections/hero";
 import About from "@/components/sections/about";
 import DirectPayBenefits from "@/components/sections/direct-pay-benefits";
 import Services from "@/components/sections/services";
-// import Testimonials from "@/components/sections/testimonials";
+import Testimonials from "@/components/sections/testimonials";
 import Contact from "@/components/sections/contact";
 import Footer from "@/components/sections/footer";
 import { Button } from "@/components/ui/button";
@@ -47,7 +47,7 @@ export default function Home() {
       <About />
       <DirectPayBenefits />
       <Services />
-      {/* <Testimonials /> */}
+      <Testimonials />
       <Contact />
       <Footer />
 

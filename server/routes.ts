@@ -251,6 +251,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
         status: "pending",
         source: "website",
       });
+
+      // Notify Rebecca that a new testimonial is awaiting review.
+      try {
+        const transporter = createTransporter();
+        const fullName = created.lastInitial
+          ? `${created.firstName} ${created.lastInitial.toUpperCase()}.`
+          : created.firstName;
+        const adminUrl = `${req.protocol}://${req.get("host")}/admin/testimonials`;
+        await transporter.sendMail({
+          from: `"Rebecca Kleiner Website" <${process.env.SMTP_USER || process.env.EMAIL_USER}>`,
+          to: "kleinerDPT@gmail.com",
+          subject: `New testimonial pending review — ${fullName}`,
+          html: `
+            <h2>New testimonial awaiting your review</h2>
+            <p><strong>From:</strong> ${fullName}${
+              created.activityRole ? ` (${created.activityRole})` : ""
+            }</p>
+            ${created.rating ? `<p><strong>Rating:</strong> ${created.rating} / 5</p>` : ""}
+            <p><strong>Quote:</strong></p>
+            <blockquote style="border-left:3px solid #ccc;padding-left:12px;margin:8px 0;color:#444;">
+              ${created.quote.replace(/\n/g, "<br>")}
+            </blockquote>
+            <p><strong>Consent given:</strong> ${created.consentGiven ? "Yes" : "No"}</p>
+            <p><strong>Submitted:</strong> ${new Date(created.submittedAt).toLocaleString()}</p>
+            <p>
+              <a href="${adminUrl}" style="background:#5a8a78;color:#fff;padding:10px 16px;text-decoration:none;border-radius:6px;display:inline-block;">
+                Review in admin panel
+              </a>
+            </p>
+            <p style="color:#888;font-size:12px;">
+              This testimonial is currently <strong>pending</strong> and will not appear on the
+              public site until you approve it.
+            </p>
+          `,
+        });
+      } catch (emailError) {
+        // Don't fail the submission if email fails; log it for follow-up.
+        console.error(
+          "[testimonials] Notification email failed:",
+          emailError
+        );
+      }
+
       res.json({
         success: true,
         message:

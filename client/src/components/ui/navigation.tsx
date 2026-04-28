@@ -55,12 +55,13 @@ export default function Navigation() {
             >
               Services
             </button>
-            {/* <button
+            <button
               onClick={() => scrollToSection("testimonials")}
-              className="text-charcoal hover:text-sage transition-colors duration-200"
+              className="text-sm lg:text-base text-charcoal hover:text-sage transition-colors duration-200"
+              data-testid="link-testimonials"
             >
               Testimonials
-            </button> */}
+            </button>
             <Button
               onClick={() => scrollToSection("contact")}
               className="bg-sage text-white hover:bg-sage-dark rounded-full px-4 py-2 text-sm lg:px-6 lg:text-base"
@@ -110,12 +111,13 @@ export default function Navigation() {
               >
                 Services
               </button>
-              {/* <button
+              <button
                 onClick={() => scrollToSection("testimonials")}
-                className="block w-full text-left text-charcoal hover:text-sage transition-colors duration-200"
+                className="block w-full text-left text-charcoal hover:text-sage transition-colors duration-200 py-2"
+                data-testid="link-mobile-testimonials"
               >
                 Testimonials
-              </button> */}
+              </button>
               <Button
                 onClick={() => scrollToSection("contact")}
                 className="w-full bg-sage text-white hover:bg-sage-dark rounded-full py-2.5"
