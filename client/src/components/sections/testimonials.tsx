@@ -229,7 +229,10 @@ export default function Testimonials({ testimonials, isPreview }: Props) {
             ))}
           </div>
         ) : items.length > 0 ? (
-          <TestimonialMarquee items={items} />
+          <>
+            <TestimonialSwipeMobile items={items} />
+            <TestimonialMarquee items={items} />
+          </>
         ) : (
           <div className="max-w-2xl mx-auto text-center bg-white rounded-2xl shadow-sm border border-sage/15 p-10">
             <Heart className="w-10 h-10 text-coral mx-auto mb-4" />
