@@ -414,6 +414,8 @@ function SubmissionCard({
         recipientName={`${submission.firstName} ${submission.lastName}`.trim()}
         recipientFirstName={submission.firstName}
         recipientLastName={submission.lastName}
+        recipientActivities={submission.activities}
+        recipientReferral={submission.howDidYouHear}
       />
     </Card>
   );

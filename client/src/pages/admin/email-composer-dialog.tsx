@@ -56,6 +56,8 @@ interface Props {
   recipientName: string;
   recipientFirstName?: string;
   recipientLastName?: string;
+  recipientActivities?: string | null;
+  recipientReferral?: string | null;
 }
 
 export function EmailComposerDialog({
@@ -68,6 +70,8 @@ export function EmailComposerDialog({
   recipientName,
   recipientFirstName,
   recipientLastName,
+  recipientActivities,
+  recipientReferral,
 }: Props) {
   const { toast } = useToast();
 
@@ -94,8 +98,10 @@ export function EmailComposerDialog({
     () => ({
       firstName: recipientFirstName,
       lastName: recipientLastName,
+      activities: recipientActivities,
+      referral: recipientReferral,
     }),
-    [recipientFirstName, recipientLastName],
+    [recipientFirstName, recipientLastName, recipientActivities, recipientReferral],
   );
 
   const applyTemplate = (template: ReplyTemplate | null) => {
