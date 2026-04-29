@@ -125,16 +125,21 @@ export const adminCreateTestimonialSchema = submitTestimonialSchema
       .default("approved"),
   });
 
-// Admin updates intentionally exclude `quote` — patient words must not be
-// rewritten. To correct or remove a quote, contact the patient and re-collect,
-// or delete and re-add the entry. Status changes go through the dedicated
-// approve/reject/hide actions.
+// Admin can edit every field on a testimonial directly from the dashboard.
+// Status changes also flow through the dedicated approve/reject/hide actions.
 export const adminUpdateTestimonialSchema = z.object({
   firstName: z.string().min(1).max(40).optional(),
   lastInitial: z.string().max(2).optional().nullable(),
   activityRole: z.string().max(80).optional().nullable(),
+  quote: z
+    .string()
+    .min(20, "Please share at least a sentence (20+ characters)")
+    .max(1500, "Please keep this under 1500 characters")
+    .optional(),
   rating: z.number().int().min(1).max(5).optional().nullable(),
   status: z.enum(["pending", "approved", "rejected", "hidden"]).optional(),
+  submittedAt: z.coerce.date().optional(),
+  approvedAt: z.coerce.date().optional().nullable(),
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;

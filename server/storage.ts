@@ -29,8 +29,11 @@ export type UpdateTestimonialInput = {
   firstName?: string;
   lastInitial?: string | null;
   activityRole?: string | null;
+  quote?: string;
   rating?: number | null;
   status?: string;
+  submittedAt?: Date;
+  approvedAt?: Date | null;
 };
 
 export interface IStorage {
@@ -204,10 +207,15 @@ export class DatabaseStorage implements IStorage {
     if (input.firstName !== undefined) update.firstName = input.firstName;
     if (input.lastInitial !== undefined) update.lastInitial = input.lastInitial;
     if (input.activityRole !== undefined) update.activityRole = input.activityRole;
+    if (input.quote !== undefined) update.quote = input.quote;
     if (input.rating !== undefined) update.rating = input.rating;
+    if (input.submittedAt !== undefined) update.submittedAt = input.submittedAt;
+    if (input.approvedAt !== undefined) update.approvedAt = input.approvedAt;
     if (input.status !== undefined) {
       update.status = input.status;
-      if (input.status === "approved") {
+      // Only auto-stamp approvedAt on approval if the caller didn't already
+      // set it explicitly in this same request.
+      if (input.status === "approved" && input.approvedAt === undefined) {
         update.approvedAt = new Date();
       }
     }

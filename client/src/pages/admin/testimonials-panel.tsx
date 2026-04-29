@@ -33,9 +33,7 @@ import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
 import {
   adminCreateTestimonialSchema,
-  adminUpdateTestimonialSchema,
   type AdminCreateTestimonialInput,
-  type AdminUpdateTestimonialInput,
   type Testimonial,
 } from "@shared/schema";
 import {
@@ -54,6 +52,29 @@ import { adminFetch, AdminUnauthorizedError } from "@/lib/admin-auth";
 interface Props {
   authPassword: string;
   onUnauthorized: () => void;
+}
+
+function pad(n: number) {
+  return n.toString().padStart(2, "0");
+}
+
+// Format a Date (or ISO string) into the local "YYYY-MM-DDTHH:mm" string
+// expected by <input type="datetime-local">. Returns "" for null/undefined.
+function toDateTimeLocal(d: Date | string | null | undefined): string {
+  if (!d) return "";
+  const date = typeof d === "string" ? new Date(d) : d;
+  if (Number.isNaN(date.getTime())) return "";
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+    date.getDate()
+  )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+// Parse the local datetime string from <input type="datetime-local">. Treats
+// the value as local time. Returns null for empty/invalid input.
+function fromDateTimeLocal(value: string | undefined): Date | null {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -110,13 +131,25 @@ export function TestimonialsPanel({ authPassword, onUnauthorized }: Props) {
     },
   });
 
-  const editForm = useForm<AdminUpdateTestimonialInput>({
-    resolver: zodResolver(adminUpdateTestimonialSchema),
+  type EditFormValues = {
+    firstName: string;
+    lastInitial: string;
+    activityRole: string;
+    quote: string;
+    rating: number | undefined;
+    submittedAt: string;
+    approvedAt: string;
+  };
+
+  const editForm = useForm<EditFormValues>({
     defaultValues: {
       firstName: "",
       lastInitial: "",
       activityRole: "",
+      quote: "",
       rating: undefined,
+      submittedAt: "",
+      approvedAt: "",
     },
   });
 
@@ -126,31 +159,48 @@ export function TestimonialsPanel({ authPassword, onUnauthorized }: Props) {
         firstName: editing.firstName,
         lastInitial: editing.lastInitial ?? "",
         activityRole: editing.activityRole ?? "",
+        quote: editing.quote,
         rating: editing.rating ?? undefined,
+        submittedAt: toDateTimeLocal(editing.submittedAt),
+        approvedAt: toDateTimeLocal(editing.approvedAt),
       });
     }
   }, [editing, editForm]);
 
   const editMutation = useMutation({
-    mutationFn: async (args: {
-      id: number;
-      data: AdminUpdateTestimonialInput;
-    }) =>
-      adminFetch(authPassword, `/api/admin/testimonials/${args.id}`, {
+    mutationFn: async (args: { id: number; data: EditFormValues }) => {
+      const trimmedQuote = args.data.quote.trim();
+      if (trimmedQuote.length < 20) {
+        throw new Error("Testimonial must be at least 20 characters.");
+      }
+      if (trimmedQuote.length > 1500) {
+        throw new Error("Testimonial must be under 1500 characters.");
+      }
+      const submittedDate = fromDateTimeLocal(args.data.submittedAt);
+      if (!submittedDate) {
+        throw new Error("Submitted date is required.");
+      }
+      const approvedDate = fromDateTimeLocal(args.data.approvedAt);
+      const payload: Record<string, unknown> = {
+        firstName: args.data.firstName.trim(),
+        lastInitial:
+          args.data.lastInitial && args.data.lastInitial.trim() !== ""
+            ? args.data.lastInitial.trim()
+            : null,
+        activityRole:
+          args.data.activityRole && args.data.activityRole.trim() !== ""
+            ? args.data.activityRole.trim()
+            : null,
+        quote: trimmedQuote,
+        rating: args.data.rating ?? null,
+        submittedAt: submittedDate.toISOString(),
+        approvedAt: approvedDate ? approvedDate.toISOString() : null,
+      };
+      return adminFetch(authPassword, `/api/admin/testimonials/${args.id}`, {
         method: "PATCH",
-        body: JSON.stringify({
-          ...args.data,
-          lastInitial:
-            args.data.lastInitial && args.data.lastInitial.trim() !== ""
-              ? args.data.lastInitial.trim()
-              : null,
-          activityRole:
-            args.data.activityRole && args.data.activityRole.trim() !== ""
-              ? args.data.activityRole.trim()
-              : null,
-          rating: args.data.rating ?? null,
-        }),
-      }),
+        body: JSON.stringify(payload),
+      });
+    },
     onSuccess: () => {
       toast({ title: "Saved" });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/testimonials"] });
@@ -626,19 +676,29 @@ export function TestimonialsPanel({ authPassword, onUnauthorized }: Props) {
                     </FormItem>
                   )}
                 />
-                <div className="rounded-md bg-amber-50 border border-amber-200 p-3 space-y-2">
-                  <p className="text-xs font-semibold text-amber-900 uppercase tracking-wide">
-                    Patient's words — read-only
-                  </p>
-                  <p className="text-sm text-amber-950 whitespace-pre-wrap leading-relaxed">
-                    {editing.quote}
-                  </p>
-                  <p className="text-xs text-amber-800">
-                    To change wording, contact the patient and have them
-                    re-submit, or delete this entry and add a new one. We
-                    don't edit a patient's words on their behalf.
-                  </p>
-                </div>
+                <FormField
+                  control={editForm.control}
+                  name="quote"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Testimonial</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          rows={6}
+                          {...field}
+                          value={field.value ?? ""}
+                          data-testid="input-edit-quote"
+                        />
+                      </FormControl>
+                      <p className="text-xs text-charcoal-light">
+                        Heads up: this is a patient's quote. Edit lightly
+                        (typos, formatting) and only with their permission for
+                        anything more substantive.
+                      </p>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={editForm.control}
                   name="rating"
@@ -684,6 +744,58 @@ export function TestimonialsPanel({ authPassword, onUnauthorized }: Props) {
                     </FormItem>
                   )}
                 />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <FormField
+                    control={editForm.control}
+                    name="submittedAt"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Submitted</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="datetime-local"
+                            {...field}
+                            value={field.value ?? ""}
+                            data-testid="input-edit-submitted-at"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={editForm.control}
+                    name="approvedAt"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Approved</FormLabel>
+                        <div className="flex gap-2 items-center">
+                          <FormControl>
+                            <Input
+                              type="datetime-local"
+                              {...field}
+                              value={field.value ?? ""}
+                              data-testid="input-edit-approved-at"
+                            />
+                          </FormControl>
+                          {field.value ? (
+                            <button
+                              type="button"
+                              onClick={() => field.onChange("")}
+                              className="text-xs text-charcoal-light underline shrink-0"
+                            >
+                              clear
+                            </button>
+                          ) : null}
+                        </div>
+                        <p className="text-xs text-charcoal-light">
+                          Leave blank if this testimonial isn't approved.
+                        </p>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <DialogFooter>
                   <Button
                     type="button"

@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  /* Prevent rogue horizontal scrolling on the page itself. Internal
+     horizontal carousels (like the mobile testimonials swipe) still scroll;
+     this just stops a touch swipe inside them from dragging the whole page
+     sideways like a curtain. */
+  html,
+  body {
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+}
+
 :root {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(210, 11%, 21%);

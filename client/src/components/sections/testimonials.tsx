@@ -118,7 +118,7 @@ function TestimonialSwipeMobile({ items }: { items: Testimonial[] }) {
         onTouchStart={stop}
         onPointerDown={stop}
         onWheel={stop}
-        className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth px-4 pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        className="flex gap-4 overflow-x-auto overscroll-x-contain touch-pan-x snap-x snap-mandatory scroll-smooth px-4 pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         aria-label="Patient testimonials, swipe to navigate"
       >
         {items.map((item) => (
