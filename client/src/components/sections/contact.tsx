@@ -123,8 +123,8 @@ export default function Contact() {
                 className="group flex items-center gap-4 p-4 md:p-5 bg-white rounded-2xl border-2 border-green-sage/20 shadow-sm hover:shadow-xl hover:border-green-sage hover:-translate-y-0.5 transition-all duration-300"
                 data-testid="link-contact-phone"
               >
-                <div className="w-12 h-12 md:w-14 md:h-14 bg-green-sage rounded-xl flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
-                  <Phone className="text-charcoal w-5 h-5 md:w-6 md:h-6" />
+                <div className="w-12 h-12 md:w-14 md:h-14 bg-charcoal rounded-xl flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
+                  <Phone className="text-white w-5 h-5 md:w-6 md:h-6" />
                 </div>
                 <div className="flex-grow min-w-0">
                   <div className="font-semibold text-charcoal text-sm md:text-base">Call or Text</div>
