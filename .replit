@@ -42,3 +42,7 @@ integrations = ["javascript_database:1.0.0"]
 
 [userenv.development]
 VITE_ENABLE_TESTIMONIALS_PREVIEW = "true"
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 20000
