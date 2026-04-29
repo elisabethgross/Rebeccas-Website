@@ -36,29 +36,28 @@ interface Props {
   onUnauthorized: () => void;
 }
 
-const ADMIN_GMAIL_ACCOUNT = "kleinerdpt@gmail.com";
+function mailtoUrl(toEmail: string): string {
+  return `mailto:${toEmail}`;
+}
 
-function gmailComposeUrl(toEmail: string): string {
-  const params = new URLSearchParams({
-    authuser: ADMIN_GMAIL_ACCOUNT,
-    view: "cm",
-    fs: "1",
-    to: toEmail,
-  });
-  return `https://mail.google.com/mail/?${params.toString()}`;
+function normalizeToE164(phone: string): string {
+  const digits = (phone || "").replace(/\D/g, "");
+  if (digits.length === 11 && digits.startsWith("1")) return `+${digits}`;
+  if (digits.length === 10) return `+1${digits}`;
+  if (digits.length > 0) return `+${digits}`;
+  return "";
+}
+
+function isMobileUserAgent(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || "");
 }
 
 function googleVoiceCallUrl(phone: string): string {
-  const digits = (phone || "").replace(/\D/g, "");
-  let e164 = "";
-  if (digits.length === 11 && digits.startsWith("1")) {
-    e164 = `+${digits}`;
-  } else if (digits.length === 10) {
-    e164 = `+1${digits}`;
-  } else if (digits.length > 0) {
-    e164 = `+${digits}`;
-  }
+  const e164 = normalizeToE164(phone);
   if (!e164) return "https://voice.google.com/u/0/calls";
+  // Same universal-link URL works for both desktop web and the Google Voice
+  // mobile app — on iOS/Android the OS routes it to the installed app.
   return `https://voice.google.com/u/0/calls?a=nc,${encodeURIComponent(e164)}`;
 }
 
@@ -273,10 +272,9 @@ export function InquiriesPanel({ authPassword, onUnauthorized }: Props) {
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-gray-500" />
                 <a
-                  href={gmailComposeUrl(submission.email)}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={mailtoUrl(submission.email)}
                   className="text-blue-600 hover:underline text-sm"
+                  data-testid={`link-email-${submission.id}`}
                 >
                   {submission.email}
                 </a>
@@ -285,9 +283,11 @@ export function InquiriesPanel({ authPassword, onUnauthorized }: Props) {
                 <Phone className="h-4 w-4 text-gray-500" />
                 <a
                   href={googleVoiceCallUrl(submission.phone)}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...(isMobileUserAgent()
+                    ? {}
+                    : { target: "_blank", rel: "noopener noreferrer" })}
                   className="text-blue-600 hover:underline text-sm"
+                  data-testid={`link-call-${submission.id}`}
                 >
                   {submission.phone}
                 </a>
@@ -327,30 +327,24 @@ export function InquiriesPanel({ authPassword, onUnauthorized }: Props) {
             </div>
 
             <div className="flex gap-2 pt-2">
-              <Button
-                size="sm"
-                onClick={() =>
-                  window.open(
-                    gmailComposeUrl(submission.email),
-                    "_blank",
-                    "noopener,noreferrer",
-                  )
-                }
-              >
-                Send Email
+              <Button size="sm" asChild>
+                <a
+                  href={mailtoUrl(submission.email)}
+                  data-testid={`button-send-email-${submission.id}`}
+                >
+                  Send Email
+                </a>
               </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() =>
-                  window.open(
-                    googleVoiceCallUrl(submission.phone),
-                    "_blank",
-                    "noopener,noreferrer",
-                  )
-                }
-              >
-                Call
+              <Button size="sm" variant="outline" asChild>
+                <a
+                  href={googleVoiceCallUrl(submission.phone)}
+                  {...(isMobileUserAgent()
+                    ? {}
+                    : { target: "_blank", rel: "noopener noreferrer" })}
+                  data-testid={`button-call-${submission.id}`}
+                >
+                  Call
+                </a>
               </Button>
             </div>
           </CardContent>

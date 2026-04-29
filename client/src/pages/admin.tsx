@@ -85,6 +85,31 @@ export default function Admin() {
       // Validate the password against any admin endpoint.
       await adminFetch(password, "/api/contact-submissions");
       storeAdminPassword(password);
+
+      // Explicitly tell supporting browsers (Chrome/Edge) to save the
+      // credential via the Credential Management API. Safari ignores this and
+      // relies on the form-shape heuristics (real action, discoverable
+      // username field) instead.
+      try {
+        const w = window as unknown as {
+          PasswordCredential?: new (data: {
+            id: string;
+            password: string;
+            name?: string;
+          }) => Credential;
+        };
+        if (w.PasswordCredential && navigator.credentials?.store) {
+          const cred = new w.PasswordCredential({
+            id: "kleinerdpt@gmail.com",
+            password,
+            name: "Admin",
+          });
+          await navigator.credentials.store(cred);
+        }
+      } catch {
+        // No-op: credential storage is best-effort.
+      }
+
       setAuthPassword(password);
       setPassword("");
     } catch (err) {
@@ -129,12 +154,17 @@ export default function Admin() {
               onSubmit={handleLogin}
               className="space-y-4"
               method="post"
-              action="#admin-login"
+              action="/admin"
               autoComplete="on"
             >
               <label htmlFor="admin-username" className="sr-only">
                 Email
               </label>
+              {/*
+                Off-screen (rather than `hidden`) so password managers — Safari
+                Keychain especially — still see this as the username half of a
+                credential pair.
+              */}
               <input
                 id="admin-username"
                 name="username"
@@ -142,9 +172,16 @@ export default function Admin() {
                 autoComplete="username"
                 defaultValue="kleinerdpt@gmail.com"
                 readOnly
-                hidden
                 aria-hidden="true"
                 tabIndex={-1}
+                style={{
+                  position: "absolute",
+                  left: "-9999px",
+                  width: "1px",
+                  height: "1px",
+                  opacity: 0,
+                  pointerEvents: "none",
+                }}
               />
               <label htmlFor="admin-password" className="sr-only">
                 Admin password

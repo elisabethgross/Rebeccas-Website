@@ -45,6 +45,15 @@ The brand uses **blue + orange** for accents and a deep **charcoal/near-black** 
 - **Submission notification**: `POST /api/testimonials` sends an HTML email to `kleinerDPT@gmail.com` for every new pending submission, with the quote, attribution, rating, and a one-click "Review in admin panel" button linking to `/admin/testimonials`. Email failures are logged but do not block the submission.
 - **Disclosure**: every render of the section includes the line "Testimonials are shared with each patient's written permission. Individual results vary."
 
+### Admin inquiries — email & call handoff
+- **Email links** in the Inquiries panel use plain `mailto:` (no `target="_blank"`, no `window.open`) so the OS opens the user's default email app instead of routing through Gmail web. The "From" account is controlled by the user's email client — for the email to send from `kleinerdpt@gmail.com`, that account must be set as the default sending account in Apple Mail (or whatever client she uses).
+- **Call links** point at the Google Voice universal link (`https://voice.google.com/u/0/calls?a=nc,<e164>`). On mobile (iOS/Android, detected via `navigator.userAgent`) the link is rendered without `target="_blank"`/`rel="noopener"` so the OS can hand the universal link off to the installed Google Voice app; if the app isn't installed, the same URL loads in the mobile browser as a graceful fallback. On desktop the link still opens in a new tab and uses the Voice web client (no behavior change there).
+
+### Admin login — password manager friendliness
+- The sign-in form posts to `action="/admin"` (a real path) rather than `#admin-login` so password managers — Safari Keychain in particular — recognize it as a credential-saving form.
+- The username field is rendered off-screen with `position: absolute; left: -9999px` (instead of the `hidden` attribute) so it stays in the DOM as a discoverable username input paired with the password input.
+- After a successful login, the form calls `navigator.credentials.store(new PasswordCredential(...))` when available (Chrome/Edge) to explicitly request that the credential be saved. The call is feature-checked and best-effort; Safari ignores it but is covered by the form-shape changes above.
+
 ## Data Flow
 
 1. **User Journey**: Landing page → About → Services → Testimonials → Contact
@@ -119,6 +128,7 @@ Changelog:
 - July 30, 2025. Removed philosophy section and replaced all Dr Mitchell references with Dr Kleiner throughout codebase
 - July 30, 2025. Enhanced "Schedule Your Assessment" button prominence with larger size, gradient styling, and hover effects
 - April 28, 2026. Built ethical patient testimonials feature: consent-gated submission form, password-protected /admin/testimonials curation panel, and /preview/testimonials design preview using local mock data. Section intentionally hidden on the live home page until real approved entries exist.
+- April 29, 2026. Admin inquiries: email button now opens default mail client via mailto: (no Gmail web tab), call button deep-links into the Google Voice mobile app on iOS/Android and stays on Voice web on desktop. Admin login form now reliably triggers password-manager save via real form action, off-screen username field, and Credential Management API.
 ```
 
 ## User Preferences
