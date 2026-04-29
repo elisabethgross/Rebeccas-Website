@@ -51,10 +51,10 @@ export default function Services() {
       price: "$250",
       duration: "per session",
       length: "60 minutes",
-      borderColor: "border-sage",
-      iconBg: "bg-sage",
-      priceColor: "text-sage",
-      buttonClass: "bg-sage hover:bg-sage/90"
+      borderColor: "border-blue-light",
+      iconBg: "bg-blue-light",
+      priceColor: "text-blue-light",
+      buttonClass: "bg-blue-light hover:bg-blue"
     }
   ];
 
@@ -181,11 +181,11 @@ export default function Services() {
           viewport={{ once: true }}
           className="mb-10 sm:mb-12 md:mb-16"
         >
-          <Card className="border-2 border-sage shadow-xl overflow-hidden" data-testid="card-imaging-review">
+          <Card className="border-2 border-orange shadow-xl overflow-hidden" data-testid="card-imaging-review">
             <CardContent className="p-6 sm:p-8 md:p-10">
               <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-8">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 md:w-20 md:h-20 bg-sage rounded-2xl flex items-center justify-center shadow-lg mx-auto md:mx-0">
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-orange rounded-2xl flex items-center justify-center shadow-lg mx-auto md:mx-0">
                     <Video className="w-8 h-8 md:w-10 md:h-10 text-white" />
                   </div>
                 </div>
@@ -204,10 +204,10 @@ export default function Services() {
                 </div>
 
                 <div className="flex-shrink-0 flex flex-col items-center md:items-end gap-3">
-                  <div className="text-3xl md:text-4xl font-bold text-sage">$75</div>
+                  <div className="text-3xl md:text-4xl font-bold text-orange">$75</div>
                   <Button
                     onClick={() => scrollToSection("contact")}
-                    className="bg-sage hover:bg-sage/90 text-white shadow-lg w-full md:w-auto"
+                    className="bg-orange hover:bg-orange-dark text-white shadow-lg w-full md:w-auto"
                     data-testid="button-book-imaging-review"
                   >
                     Book This Service
