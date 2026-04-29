@@ -14,6 +14,7 @@ import {
 import { Mail, Phone, User, MessageSquare, Search, X } from "lucide-react";
 import { format } from "date-fns";
 import { adminFetch, AdminUnauthorizedError } from "@/lib/admin-auth";
+import { EmailComposerDialog } from "./email-composer-dialog";
 
 type SortKey = "newest" | "oldest" | "name";
 type ContactFilter = "all" | "email" | "phone";
@@ -36,8 +37,25 @@ interface Props {
   onUnauthorized: () => void;
 }
 
-function mailtoUrl(toEmail: string): string {
-  return `mailto:${toEmail}`;
+function defaultReplySubject(firstName: string): string {
+  const name = (firstName || "").trim();
+  return name
+    ? `Following up from Dr. Kleiner, ${name}`
+    : "Following up from Dr. Kleiner";
+}
+
+// Mobile (iOS/Android) deep-links into the Gmail app via Gmail's compose URL
+// scheme; desktop falls back to the user's default mail client.
+function gmailComposeHandoffUrl(
+  toEmail: string,
+  subject: string,
+  isMobile: boolean
+): string {
+  const subj = encodeURIComponent(subject);
+  if (isMobile) {
+    return `googlegmail:///co?to=${encodeURIComponent(toEmail)}&subject=${subj}`;
+  }
+  return `mailto:${toEmail}?subject=${subj}`;
 }
 
 function normalizeToE164(phone: string): string {
@@ -252,104 +270,149 @@ export function InquiriesPanel({ authPassword, onUnauthorized }: Props) {
       ) : null}
 
       {visible.map((submission) => (
-        <Card key={submission.id} className="w-full">
-          <CardHeader className="pb-3">
-            <div className="flex justify-between items-start gap-3 flex-wrap">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <User className="h-5 w-5" />
-                {submission.firstName} {submission.lastName}
-              </CardTitle>
-              <Badge variant="outline">
-                {format(
-                  new Date(submission.createdAt),
-                  "MMM d, yyyy 'at' h:mm a"
-                )}
-              </Badge>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-gray-500" />
-                <a
-                  href={mailtoUrl(submission.email)}
-                  className="text-blue-600 hover:underline text-sm"
-                  data-testid={`link-email-${submission.id}`}
-                >
-                  {submission.email}
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-gray-500" />
-                <a
-                  href={googleVoiceCallUrl(submission.phone)}
-                  {...(isMobileUserAgent()
-                    ? {}
-                    : { target: "_blank", rel: "noopener noreferrer" })}
-                  className="text-blue-600 hover:underline text-sm"
-                  data-testid={`link-call-${submission.id}`}
-                >
-                  {submission.phone}
-                </a>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <MessageSquare className="h-4 w-4 text-gray-500" />
-                <span className="text-sm font-medium">
-                  Preferred contact method:
-                </span>
-                <Badge variant="secondary">{submission.contactMethod}</Badge>
-              </div>
-
-              {submission.howDidYouHear && (
-                <div className="text-sm">
-                  <span className="font-medium">How they heard about us:</span>
-                  <span className="ml-2 text-charcoal-light">
-                    {submission.howDidYouHear}
-                  </span>
-                </div>
-              )}
-
-              {submission.activities && (
-                <div className="text-sm">
-                  <span className="font-medium">
-                    Activities they want to return to:
-                  </span>
-                  <div className="mt-1 p-3 bg-gray-50 rounded-lg">
-                    <p className="text-charcoal-light">
-                      {submission.activities}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="flex gap-2 pt-2">
-              <Button size="sm" asChild>
-                <a
-                  href={mailtoUrl(submission.email)}
-                  data-testid={`button-send-email-${submission.id}`}
-                >
-                  Send Email
-                </a>
-              </Button>
-              <Button size="sm" variant="outline" asChild>
-                <a
-                  href={googleVoiceCallUrl(submission.phone)}
-                  {...(isMobileUserAgent()
-                    ? {}
-                    : { target: "_blank", rel: "noopener noreferrer" })}
-                  data-testid={`button-call-${submission.id}`}
-                >
-                  Call
-                </a>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        <SubmissionCard
+          key={submission.id}
+          submission={submission}
+          authPassword={authPassword}
+          onUnauthorized={onUnauthorized}
+        />
       ))}
     </div>
+  );
+}
+
+interface SubmissionCardProps {
+  submission: ContactSubmission;
+  authPassword: string;
+  onUnauthorized: () => void;
+}
+
+function SubmissionCard({
+  submission,
+  authPassword,
+  onUnauthorized,
+}: SubmissionCardProps) {
+  const [composerOpen, setComposerOpen] = useState(false);
+  const isMobile = isMobileUserAgent();
+  const defaultSubject = defaultReplySubject(submission.firstName);
+  const handoffHref = gmailComposeHandoffUrl(
+    submission.email,
+    defaultSubject,
+    isMobile
+  );
+
+  return (
+    <Card className="w-full">
+      <CardHeader className="pb-3">
+        <div className="flex justify-between items-start gap-3 flex-wrap">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <User className="h-5 w-5" />
+            {submission.firstName} {submission.lastName}
+          </CardTitle>
+          <Badge variant="outline">
+            {format(
+              new Date(submission.createdAt),
+              "MMM d, yyyy 'at' h:mm a"
+            )}
+          </Badge>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="flex items-center gap-2">
+            <Mail className="h-4 w-4 text-gray-500" />
+            <a
+              href={handoffHref}
+              className="text-blue-600 hover:underline text-sm break-all"
+              data-testid={`link-email-${submission.id}`}
+            >
+              {submission.email}
+            </a>
+          </div>
+          <div className="flex items-center gap-2">
+            <Phone className="h-4 w-4 text-gray-500" />
+            <a
+              href={googleVoiceCallUrl(submission.phone)}
+              {...(isMobile
+                ? {}
+                : { target: "_blank", rel: "noopener noreferrer" })}
+              className="text-blue-600 hover:underline text-sm"
+              data-testid={`link-call-${submission.id}`}
+            >
+              {submission.phone}
+            </a>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <MessageSquare className="h-4 w-4 text-gray-500" />
+            <span className="text-sm font-medium">
+              Preferred contact method:
+            </span>
+            <Badge variant="secondary">{submission.contactMethod}</Badge>
+          </div>
+
+          {submission.howDidYouHear && (
+            <div className="text-sm">
+              <span className="font-medium">How they heard about us:</span>
+              <span className="ml-2 text-charcoal-light">
+                {submission.howDidYouHear}
+              </span>
+            </div>
+          )}
+
+          {submission.activities && (
+            <div className="text-sm">
+              <span className="font-medium">
+                Activities they want to return to:
+              </span>
+              <div className="mt-1 p-3 bg-gray-50 rounded-lg">
+                <p className="text-charcoal-light">{submission.activities}</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 pt-2">
+          <Button
+            size="sm"
+            onClick={() => setComposerOpen(true)}
+            data-testid={`button-send-email-${submission.id}`}
+          >
+            Send Email
+          </Button>
+          <Button size="sm" variant="outline" asChild>
+            <a
+              href={googleVoiceCallUrl(submission.phone)}
+              {...(isMobile
+                ? {}
+                : { target: "_blank", rel: "noopener noreferrer" })}
+              data-testid={`button-call-${submission.id}`}
+            >
+              Call
+            </a>
+          </Button>
+        </div>
+
+        <a
+          href={handoffHref}
+          className="inline-block text-xs text-charcoal-light hover:text-charcoal hover:underline"
+          data-testid={`link-open-in-gmail-${submission.id}`}
+        >
+          Open in Gmail app
+        </a>
+      </CardContent>
+
+      <EmailComposerDialog
+        open={composerOpen}
+        onOpenChange={setComposerOpen}
+        authPassword={authPassword}
+        onUnauthorized={onUnauthorized}
+        toEmail={submission.email}
+        defaultSubject={defaultSubject}
+        recipientName={`${submission.firstName} ${submission.lastName}`.trim()}
+      />
+    </Card>
   );
 }
