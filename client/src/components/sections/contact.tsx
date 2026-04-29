@@ -94,9 +94,7 @@ export default function Contact() {
           </div>
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 md:mb-6 leading-tight">
             <span className="text-charcoal">How to </span>
-            <span className="bg-gradient-to-r from-blue to-blue-dark bg-clip-text text-transparent">
-              Contact
-            </span>
+            <span className="text-blue">Contact</span>
             <span className="text-charcoal"> Me</span>
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-charcoal-light max-w-3xl mx-auto leading-relaxed px-2">
@@ -113,9 +111,7 @@ export default function Contact() {
           >
             <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-charcoal mb-4 md:mb-6 leading-tight">
               Ready to Transform Your{" "}
-              <span className="italic bg-gradient-to-r from-orange to-orange-dark bg-clip-text text-transparent">
-                Movement?
-              </span>
+              <span className="italic text-orange">Movement?</span>
             </h3>
             <p className="text-base sm:text-lg md:text-xl text-charcoal-light mb-6 md:mb-8 leading-relaxed">
               Take the first step toward pain-free living. Schedule your comprehensive consultation and discover how personalized care can get you back to the activities you love.
