@@ -181,11 +181,11 @@ export default function Services() {
           viewport={{ once: true }}
           className="mb-10 sm:mb-12 md:mb-16"
         >
-          <Card className="border-2 border-blue shadow-xl overflow-hidden" data-testid="card-imaging-review">
+          <Card className="border-2 border-sage shadow-xl overflow-hidden" data-testid="card-imaging-review">
             <CardContent className="p-6 sm:p-8 md:p-10">
               <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-8">
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 md:w-20 md:h-20 bg-blue rounded-2xl flex items-center justify-center shadow-lg mx-auto md:mx-0">
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-sage rounded-2xl flex items-center justify-center shadow-lg mx-auto md:mx-0">
                     <Video className="w-8 h-8 md:w-10 md:h-10 text-white" />
                   </div>
                 </div>
