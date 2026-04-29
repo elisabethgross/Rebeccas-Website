@@ -235,7 +235,7 @@ export default function Services() {
           
           <Button 
             onClick={() => scrollToSection("contact")}
-            className="bg-green-sage hover:bg-green-sage-dark text-white px-6 sm:px-8 md:px-12 py-3 sm:py-4 md:py-5 lg:py-6 text-base sm:text-lg md:text-xl lg:text-2xl font-bold rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-full sm:w-auto"
+            className="bg-orange hover:bg-orange-dark text-white px-6 sm:px-8 md:px-12 py-3 sm:py-4 md:py-5 lg:py-6 text-base sm:text-lg md:text-xl lg:text-2xl font-bold rounded-xl md:rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 w-full sm:w-auto"
             data-testid="button-schedule-cta"
           >
             <span className="hidden sm:inline">Schedule Your Assessment Now</span>
