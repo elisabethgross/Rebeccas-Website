@@ -8,8 +8,23 @@ import {
   adminUpdateTestimonialSchema,
 } from "@shared/schema";
 import { z } from "zod";
-import nodemailer from "nodemailer";
+import { sendEmail } from "./lib/email";
 import { googleReviewsService } from "./google-reviews";
+
+const ADMIN_FROM_ADDRESS = '"Dr. Rebecca Kleiner" <kleinerdpt@gmail.com>';
+
+const adminSendEmailSchema = z.object({
+  to: z.string().trim().email("A valid recipient email is required"),
+  subject: z
+    .string()
+    .trim()
+    .min(1, "Subject is required")
+    .max(200, "Subject must be 200 characters or fewer"),
+  body: z
+    .string()
+    .min(1, "Body is required")
+    .max(10000, "Body must be 10,000 characters or fewer"),
+});
 
 function requireAdminAuth(req: Request, res: Response, next: NextFunction) {
   const expected = process.env.ADMIN_PASSWORD;
@@ -33,19 +48,6 @@ function requireAdminAuth(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
-// Create transporter for sending emails
-const createTransporter = () => {
-  return nodemailer.createTransport({
-    host: process.env.SMTP_HOST || "smtp.gmail.com",
-    port: parseInt(process.env.SMTP_PORT || "587"),
-    secure: false,
-    auth: {
-      user: process.env.SMTP_USER || process.env.EMAIL_USER,
-      pass: process.env.SMTP_PASS || process.env.EMAIL_PASS,
-    },
-  });
-};
-
 export async function registerRoutes(app: Express): Promise<Server> {
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {
@@ -58,10 +60,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Send email notification
       try {
-        const transporter = createTransporter();
-        
-        const mailOptions = {
-          from: `"Rebecca Kleiner" <${process.env.SMTP_USER || process.env.EMAIL_USER}>`,
+        const fromAddress = `"Rebecca Kleiner" <${process.env.SMTP_USER || process.env.EMAIL_USER}>`;
+
+        await sendEmail({
+          from: fromAddress,
           to: "kleinerDPT@gmail.com",
           subject: `New Consultation Request from ${validatedData.firstName} ${validatedData.lastName}`,
           html: `
@@ -75,13 +77,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
             <p><strong>Preferred contact method:</strong> ${validatedData.contactMethod}</p>
             <p><strong>Submitted at:</strong> ${new Date().toLocaleString()}</p>
           `,
-        };
-        
-        await transporter.sendMail(mailOptions);
-        
+        });
+
         // Send confirmation email to client
-        const clientMailOptions = {
-          from: `"Rebecca Kleiner" <${process.env.SMTP_USER || process.env.EMAIL_USER}>`,
+        await sendEmail({
+          from: fromAddress,
           to: validatedData.email,
           subject: "Thank you for your consultation request - Dr. Rebecca Kleiner PT",
           html: `
@@ -92,10 +92,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             <hr>
             <p><small>This is an automated confirmation. Please do not reply to this email.</small></p>
           `,
-        };
-        
-        await transporter.sendMail(clientMailOptions);
-        
+        });
+
       } catch (emailError) {
         console.error("Email sending failed:", emailError);
         // Don't fail the request if email fails - still return success
@@ -222,6 +220,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin: send a custom email to a patient from kleinerdpt@gmail.com.
+  // Used by the in-admin email composer so messages always come from
+  // Rebecca's clinical inbox regardless of which device the admin is on.
+  app.post(
+    "/api/admin/send-inquiry-email",
+    requireAdminAuth,
+    async (req, res) => {
+      let payload: z.infer<typeof adminSendEmailSchema>;
+      try {
+        payload = adminSendEmailSchema.parse(req.body);
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          return res.status(400).json({
+            success: false,
+            message: "Invalid email request",
+            errors: error.errors,
+          });
+        }
+        throw error;
+      }
+
+      try {
+        await sendEmail({
+          from: ADMIN_FROM_ADDRESS,
+          to: payload.to,
+          subject: payload.subject,
+          text: payload.body,
+        });
+        return res.json({ success: true });
+      } catch (error) {
+        console.error("[admin] send-inquiry-email failed:", error);
+        return res.status(500).json({
+          success: false,
+          message: "Failed to send email. Please try again.",
+        });
+      }
+    }
+  );
+
   // ===== Patient testimonials =====
 
   // Public: list approved testimonials
@@ -254,12 +291,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Notify Rebecca that a new testimonial is awaiting review.
       try {
-        const transporter = createTransporter();
         const fullName = created.lastInitial
           ? `${created.firstName} ${created.lastInitial.toUpperCase()}.`
           : created.firstName;
         const adminUrl = `${req.protocol}://${req.get("host")}/admin/testimonials`;
-        await transporter.sendMail({
+        await sendEmail({
           from: `"Rebecca Kleiner Website" <${process.env.SMTP_USER || process.env.EMAIL_USER}>`,
           to: "kleinerDPT@gmail.com",
           subject: `New testimonial pending review — ${fullName}`,

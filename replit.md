@@ -129,6 +129,7 @@ Changelog:
 - July 30, 2025. Enhanced "Schedule Your Assessment" button prominence with larger size, gradient styling, and hover effects
 - April 28, 2026. Built ethical patient testimonials feature: consent-gated submission form, password-protected /admin/testimonials curation panel, and /preview/testimonials design preview using local mock data. Section intentionally hidden on the live home page until real approved entries exist.
 - April 29, 2026. Admin inquiries: email button now opens default mail client via mailto: (no Gmail web tab), call button deep-links into the Google Voice mobile app on iOS/Android and stays on Voice web on desktop. Admin login form now reliably triggers password-manager save via real form action, off-screen username field, and Credential Management API.
+- April 29, 2026. Extracted Gmail SMTP transport into server/lib/email.ts (createTransporter + sendEmail helper); refactored contact-form and testimonial notifications to use it with no behavior change. Added admin-only POST /api/admin/send-inquiry-email (Zod-validated to/subject/body, requireAdminAuth, plain-text only) that sends From "Dr. Rebecca Kleiner" <kleinerdpt@gmail.com>. Gmail SMTP submission automatically files a copy of every sent message in the kleinerdpt@gmail.com Sent folder; for the From header to actually land as kleinerdpt@gmail.com, SMTP_USER must be that account (Gmail rewrites the From to the authenticated user otherwise).
 ```
 
 ## User Preferences
