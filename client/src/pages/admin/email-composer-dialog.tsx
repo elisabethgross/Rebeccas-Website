@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -25,6 +25,11 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { adminFetch, AdminUnauthorizedError } from "@/lib/admin-auth";
 import { useToast } from "@/hooks/use-toast";
+import {
+  REPLY_TEMPLATES,
+  interpolateTemplate,
+  type ReplyTemplate,
+} from "@/lib/reply-templates";
 
 const composerSchema = z.object({
   to: z.string().email(),
@@ -49,6 +54,8 @@ interface Props {
   toEmail: string;
   defaultSubject: string;
   recipientName: string;
+  recipientFirstName?: string;
+  recipientLastName?: string;
 }
 
 export function EmailComposerDialog({
@@ -59,6 +66,8 @@ export function EmailComposerDialog({
   toEmail,
   defaultSubject,
   recipientName,
+  recipientFirstName,
+  recipientLastName,
 }: Props) {
   const { toast } = useToast();
 
@@ -80,6 +89,39 @@ export function EmailComposerDialog({
       });
     }
   }, [open, toEmail, defaultSubject, form]);
+
+  const interpolationContext = useMemo(
+    () => ({
+      firstName: recipientFirstName,
+      lastName: recipientLastName,
+    }),
+    [recipientFirstName, recipientLastName],
+  );
+
+  const applyTemplate = (template: ReplyTemplate | null) => {
+    const currentBody = form.getValues("body") ?? "";
+    if (currentBody.trim().length > 10) {
+      const ok = window.confirm(
+        "Replace your draft with this template?",
+      );
+      if (!ok) return;
+    }
+    if (template === null) {
+      form.setValue("subject", defaultSubject, { shouldDirty: true });
+      form.setValue("body", "", { shouldDirty: true });
+      return;
+    }
+    form.setValue(
+      "subject",
+      interpolateTemplate(template.subject, interpolationContext),
+      { shouldDirty: true },
+    );
+    form.setValue(
+      "body",
+      interpolateTemplate(template.body, interpolationContext),
+      { shouldDirty: true },
+    );
+  };
 
   const sendMutation = useMutation({
     mutationFn: async (values: ComposerValues) => {
@@ -163,6 +205,38 @@ export function EmailComposerDialog({
                   </FormItem>
                 )}
               />
+
+              <div className="space-y-1.5">
+                <FormLabel className="block">Quick reply</FormLabel>
+                <div
+                  className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 sm:mx-0 sm:flex-wrap sm:px-0 sm:overflow-visible"
+                  data-testid="row-template-picker"
+                >
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="shrink-0 rounded-full"
+                    onClick={() => applyTemplate(null)}
+                    data-testid="button-template-blank"
+                  >
+                    Blank
+                  </Button>
+                  {REPLY_TEMPLATES.map((template) => (
+                    <Button
+                      key={template.id}
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="shrink-0 rounded-full"
+                      onClick={() => applyTemplate(template)}
+                      data-testid={`button-template-${template.id}`}
+                    >
+                      {template.label}
+                    </Button>
+                  ))}
+                </div>
+              </div>
 
               <FormField
                 control={form.control}

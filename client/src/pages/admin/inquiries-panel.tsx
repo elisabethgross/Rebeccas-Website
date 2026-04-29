@@ -412,6 +412,8 @@ function SubmissionCard({
         toEmail={submission.email}
         defaultSubject={defaultSubject}
         recipientName={`${submission.firstName} ${submission.lastName}`.trim()}
+        recipientFirstName={submission.firstName}
+        recipientLastName={submission.lastName}
       />
     </Card>
   );
