@@ -39,10 +39,10 @@ export default function Services() {
       price: "$250",
       duration: "per session",
       length: "60 minutes",
-      borderColor: "border-orange",
-      iconBg: "bg-orange",
-      priceColor: "text-orange",
-      buttonClass: "bg-orange hover:bg-orange-dark"
+      borderColor: "border-blue",
+      iconBg: "bg-blue",
+      priceColor: "text-blue",
+      buttonClass: "bg-blue hover:bg-blue-dark"
     },
     {
       icon: Monitor,
@@ -51,10 +51,10 @@ export default function Services() {
       price: "$250",
       duration: "per session",
       length: "60 minutes",
-      borderColor: "border-blue",
-      iconBg: "bg-blue",
-      priceColor: "text-blue",
-      buttonClass: "bg-blue hover:bg-blue-dark"
+      borderColor: "border-orange",
+      iconBg: "bg-orange",
+      priceColor: "text-orange",
+      buttonClass: "bg-orange hover:bg-orange-dark"
     }
   ];
 
