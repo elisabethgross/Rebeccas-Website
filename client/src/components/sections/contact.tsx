@@ -77,7 +77,7 @@ export default function Contact() {
           viewport={{ once: true }}
           className="text-center mb-10 sm:mb-12 md:mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-charcoal mb-4 md:mb-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue mb-4 md:mb-6">
             How to Contact Me
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-charcoal-light max-w-3xl mx-auto leading-relaxed px-2">
