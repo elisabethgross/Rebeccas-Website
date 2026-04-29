@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Dialog,
   DialogContent,
@@ -26,7 +26,6 @@ import { Loader2 } from "lucide-react";
 import { adminFetch, AdminUnauthorizedError } from "@/lib/admin-auth";
 import { useToast } from "@/hooks/use-toast";
 import {
-  REPLY_TEMPLATES,
   interpolateTemplate,
   type ReplyTemplate,
 } from "@/lib/reply-templates";
@@ -103,6 +102,29 @@ export function EmailComposerDialog({
     }),
     [recipientFirstName, recipientLastName, recipientActivities, recipientReferral],
   );
+
+  // Live template list managed from /admin/templates. We disable the query
+  // until the dialog is open so closed cards in long inquiry lists don't
+  // each fetch on mount; React Query dedupes by queryKey across cards anyway,
+  // but this keeps the network panel quiet when nothing is open. We always
+  // refetch when the dialog opens so newly saved edits show up immediately.
+  const { data: templates = [], isLoading: templatesLoading } = useQuery<
+    ReplyTemplate[]
+  >({
+    queryKey: ["/api/admin/reply-templates"],
+    enabled: open && !!authPassword,
+    queryFn: async () => {
+      try {
+        return await adminFetch(authPassword, "/api/admin/reply-templates");
+      } catch (err) {
+        if (err instanceof AdminUnauthorizedError) {
+          onUnauthorized();
+          throw new Error("Session expired. Please sign in again.");
+        }
+        throw err;
+      }
+    },
+  });
 
   const applyTemplate = (template: ReplyTemplate | null) => {
     const currentBody = form.getValues("body") ?? "";
@@ -228,19 +250,35 @@ export function EmailComposerDialog({
                   >
                     Blank
                   </Button>
-                  {REPLY_TEMPLATES.map((template) => (
-                    <Button
-                      key={template.id}
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="shrink-0 rounded-full"
-                      onClick={() => applyTemplate(template)}
-                      data-testid={`button-template-${template.id}`}
+                  {templatesLoading && templates.length === 0 ? (
+                    <span
+                      className="self-center text-xs text-charcoal-light"
+                      data-testid="text-templates-loading"
                     >
-                      {template.label}
-                    </Button>
-                  ))}
+                      Loading templates…
+                    </span>
+                  ) : templates.length === 0 ? (
+                    <span
+                      className="self-center text-xs text-charcoal-light"
+                      data-testid="text-templates-empty"
+                    >
+                      No templates yet — add some in Templates.
+                    </span>
+                  ) : (
+                    templates.map((template) => (
+                      <Button
+                        key={template.id}
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="shrink-0 rounded-full"
+                        onClick={() => applyTemplate(template)}
+                        data-testid={`button-template-${template.id}`}
+                      >
+                        {template.label}
+                      </Button>
+                    ))
+                  )}
                 </div>
               </div>
 

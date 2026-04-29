@@ -9,7 +9,14 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { Eye, EyeOff, Lock, Inbox, MessageSquareQuote } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Lock,
+  Inbox,
+  MessageSquareQuote,
+  FileText,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   adminFetch,
@@ -21,11 +28,14 @@ import {
 } from "@/lib/admin-auth";
 import { InquiriesPanel } from "@/pages/admin/inquiries-panel";
 import { TestimonialsPanel } from "@/pages/admin/testimonials-panel";
+import { TemplatesPanel } from "@/pages/admin/templates-panel";
 
-type TabValue = "inquiries" | "testimonials";
+type TabValue = "inquiries" | "testimonials" | "templates";
 
 function tabFromPath(path: string): TabValue {
-  return path.startsWith("/admin/testimonials") ? "testimonials" : "inquiries";
+  if (path.startsWith("/admin/testimonials")) return "testimonials";
+  if (path.startsWith("/admin/templates")) return "templates";
+  return "inquiries";
 }
 
 export default function Admin() {
@@ -136,7 +146,12 @@ export default function Admin() {
   const handleTabChange = (value: string) => {
     const v = value as TabValue;
     setActiveTab(v);
-    const target = v === "testimonials" ? "/admin/testimonials" : "/admin";
+    const target =
+      v === "testimonials"
+        ? "/admin/testimonials"
+        : v === "templates"
+          ? "/admin/templates"
+          : "/admin";
     if (location !== target) setLocation(target);
   };
 
@@ -252,6 +267,9 @@ export default function Admin() {
             <TabsTrigger value="testimonials" data-testid="tab-testimonials">
               <MessageSquareQuote className="w-4 h-4 mr-1.5" /> Testimonials
             </TabsTrigger>
+            <TabsTrigger value="templates" data-testid="tab-templates">
+              <FileText className="w-4 h-4 mr-1.5" /> Templates
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="inquiries" className="mt-4">
@@ -263,6 +281,13 @@ export default function Admin() {
 
           <TabsContent value="testimonials" className="mt-4">
             <TestimonialsPanel
+              authPassword={authPassword}
+              onUnauthorized={handleUnauthorized}
+            />
+          </TabsContent>
+
+          <TabsContent value="templates" className="mt-4">
+            <TemplatesPanel
               authPassword={authPassword}
               onUnauthorized={handleUnauthorized}
             />

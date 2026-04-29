@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { seedLaunchTestimonialsIfEmpty } from "./seed-testimonials";
+import { seedReplyTemplatesIfEmpty } from "./seed-reply-templates";
 
 const app = express();
 app.use(express.json());
@@ -70,5 +71,8 @@ app.use((req, res, next) => {
     // Seed initial testimonials in the background (idempotent — only runs
     // when the testimonials table is completely empty).
     seedLaunchTestimonialsIfEmpty();
+    // Same idempotent pattern: only inserts the four starter templates the
+    // first time the table is empty, so admin edits aren't overwritten.
+    seedReplyTemplatesIfEmpty();
   });
 })();

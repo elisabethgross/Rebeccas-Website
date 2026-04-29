@@ -6,6 +6,9 @@ import {
   submitTestimonialSchema,
   adminCreateTestimonialSchema,
   adminUpdateTestimonialSchema,
+  insertReplyTemplateSchema,
+  updateReplyTemplateSchema,
+  reorderReplyTemplatesSchema,
 } from "@shared/schema";
 import { z } from "zod";
 import { sendEmail } from "./lib/email";
@@ -449,6 +452,144 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .json({ success: false, message: "Failed to delete testimonial" });
     }
   });
+
+  // ===== Reply templates (admin-managed quick replies) =====
+
+  // Public-but-admin-only: list templates in display order. Used by both
+  // the /admin/templates editor and the email composer's pill row.
+  app.get(
+    "/api/admin/reply-templates",
+    requireAdminAuth,
+    async (_req, res) => {
+      try {
+        const templates = await storage.listReplyTemplates();
+        res.json(templates);
+      } catch (error) {
+        console.error("[admin] list reply templates failed:", error);
+        res.status(500).json({
+          success: false,
+          message: "Failed to load reply templates",
+        });
+      }
+    }
+  );
+
+  app.post(
+    "/api/admin/reply-templates",
+    requireAdminAuth,
+    async (req, res) => {
+      try {
+        const data = insertReplyTemplateSchema.parse(req.body);
+        const created = await storage.createReplyTemplate(data);
+        res.json({ success: true, template: created });
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          return res.status(400).json({
+            success: false,
+            message: "Invalid template",
+            errors: error.errors,
+          });
+        }
+        console.error("[admin] create reply template failed:", error);
+        res.status(500).json({
+          success: false,
+          message: "Failed to create reply template",
+        });
+      }
+    }
+  );
+
+  app.patch(
+    "/api/admin/reply-templates/:id",
+    requireAdminAuth,
+    async (req, res) => {
+      try {
+        const id = parseInt(req.params.id, 10);
+        if (Number.isNaN(id)) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Invalid id" });
+        }
+        const data = updateReplyTemplateSchema.parse(req.body);
+        const updated = await storage.updateReplyTemplate(id, data);
+        if (!updated) {
+          return res
+            .status(404)
+            .json({ success: false, message: "Template not found" });
+        }
+        res.json({ success: true, template: updated });
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          return res.status(400).json({
+            success: false,
+            message: "Invalid update",
+            errors: error.errors,
+          });
+        }
+        console.error("[admin] update reply template failed:", error);
+        res.status(500).json({
+          success: false,
+          message: "Failed to update reply template",
+        });
+      }
+    }
+  );
+
+  app.delete(
+    "/api/admin/reply-templates/:id",
+    requireAdminAuth,
+    async (req, res) => {
+      try {
+        const id = parseInt(req.params.id, 10);
+        if (Number.isNaN(id)) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Invalid id" });
+        }
+        const ok = await storage.deleteReplyTemplate(id);
+        if (!ok) {
+          return res
+            .status(404)
+            .json({ success: false, message: "Template not found" });
+        }
+        res.json({ success: true });
+      } catch (error) {
+        console.error("[admin] delete reply template failed:", error);
+        res.status(500).json({
+          success: false,
+          message: "Failed to delete reply template",
+        });
+      }
+    }
+  );
+
+  app.post(
+    "/api/admin/reply-templates/reorder",
+    requireAdminAuth,
+    async (req, res) => {
+      try {
+        const { ids } = reorderReplyTemplatesSchema.parse(req.body);
+        const templates = await storage.reorderReplyTemplates(ids);
+        res.json({ success: true, templates });
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          return res.status(400).json({
+            success: false,
+            message: "Invalid reorder request",
+            errors: error.errors,
+          });
+        }
+        console.error("[admin] reorder reply templates failed:", error);
+        res.status(500).json({
+          success: false,
+          message:
+            error instanceof Error
+              ? error.message
+              : "Failed to reorder reply templates",
+        });
+      }
+    }
+  );
 
   const httpServer = createServer(app);
   return httpServer;
