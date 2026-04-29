@@ -14,7 +14,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useToast } from "@/hooks/use-toast";
 import { insertContactSubmissionSchema } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
-import { Phone, Mail, MapPin, CheckCircle } from "lucide-react";
+import { Phone, Mail, MapPin, CheckCircle, ArrowRight, Clock } from "lucide-react";
 
 export default function Contact() {
   const { toast } = useToast();
@@ -68,17 +68,36 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="py-12 sm:py-16 md:py-20 bg-blue/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section
+      id="contact"
+      className="relative overflow-hidden py-14 sm:py-20 md:py-24 bg-gradient-to-br from-blue/[0.06] via-white to-orange/[0.06]"
+    >
+      {/* Decorative blurred accent blobs */}
+      <div className="pointer-events-none absolute -top-32 -left-32 h-80 w-80 rounded-full bg-blue/15 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-32 -right-32 h-80 w-80 rounded-full bg-orange/15 blur-3xl" />
+      <div className="pointer-events-none absolute top-1/2 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-sage/[0.06] blur-3xl" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-10 sm:mb-12 md:mb-16"
+          className="text-center mb-10 sm:mb-14 md:mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue mb-4 md:mb-6">
-            How to Contact Me
+          <div className="inline-flex items-center gap-3 mb-4 md:mb-5">
+            <span className="h-px w-8 bg-green-sage" />
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-[0.25em] text-green-sage">
+              Get In Touch
+            </span>
+            <span className="h-px w-8 bg-green-sage" />
+          </div>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 md:mb-6 leading-tight">
+            <span className="text-charcoal">How to </span>
+            <span className="bg-gradient-to-r from-blue to-blue-dark bg-clip-text text-transparent">
+              Contact
+            </span>
+            <span className="text-charcoal"> Me</span>
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-charcoal-light max-w-3xl mx-auto leading-relaxed px-2">
             Ready to start your journey to better movement and pain-free living? I'm here to help you take the first step.
@@ -92,54 +111,69 @@ export default function Contact() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-charcoal mb-4 md:mb-6">
-              Ready to Transform Your Movement?
-            </h2>
+            <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-charcoal mb-4 md:mb-6 leading-tight">
+              Ready to Transform Your{" "}
+              <span className="italic bg-gradient-to-r from-orange to-orange-dark bg-clip-text text-transparent">
+                Movement?
+              </span>
+            </h3>
             <p className="text-base sm:text-lg md:text-xl text-charcoal-light mb-6 md:mb-8 leading-relaxed">
               Take the first step toward pain-free living. Schedule your comprehensive consultation and discover how personalized care can get you back to the activities you love.
             </p>
-            
-            <div className="space-y-4 md:space-y-6 mb-6 md:mb-8">
-              <div className="flex items-center space-x-3 md:space-x-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-green-sage rounded-full flex items-center justify-center flex-shrink-0">
-                  <Phone className="text-white w-4 h-4 md:w-5 md:h-5" />
+
+            <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
+              <a
+                href="tel:646-600-8599"
+                className="group flex items-center gap-4 p-4 md:p-5 bg-white rounded-2xl border-2 border-green-sage/20 shadow-sm hover:shadow-xl hover:border-green-sage hover:-translate-y-0.5 transition-all duration-300"
+                data-testid="link-contact-phone"
+              >
+                <div className="w-12 h-12 md:w-14 md:h-14 bg-green-sage rounded-xl flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
+                  <Phone className="text-white w-5 h-5 md:w-6 md:h-6" />
                 </div>
-                <div>
+                <div className="flex-grow min-w-0">
                   <div className="font-semibold text-charcoal text-sm md:text-base">Call or Text</div>
-                  <div className="text-charcoal-light text-sm md:text-base">646-600-8599</div>
+                  <div className="text-charcoal-light text-sm md:text-base font-medium">646-600-8599</div>
                 </div>
-              </div>
-              
-              <div className="flex items-center space-x-3 md:space-x-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-green-sage rounded-full flex items-center justify-center flex-shrink-0">
-                  <Mail className="text-white w-4 h-4 md:w-5 md:h-5" />
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-green-sage opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+              </a>
+
+              <a
+                href="mailto:kleinerDPT@gmail.com"
+                className="group flex items-center gap-4 p-4 md:p-5 bg-white rounded-2xl border-2 border-blue/20 shadow-sm hover:shadow-xl hover:border-blue hover:-translate-y-0.5 transition-all duration-300"
+                data-testid="link-contact-email"
+              >
+                <div className="w-12 h-12 md:w-14 md:h-14 bg-blue rounded-xl flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
+                  <Mail className="text-white w-5 h-5 md:w-6 md:h-6" />
                 </div>
-                <div className="break-all">
+                <div className="flex-grow min-w-0 break-all">
                   <div className="font-semibold text-charcoal text-sm md:text-base">Email</div>
-                  <div className="text-charcoal-light text-sm md:text-base">kleinerDPT@gmail.com</div>
+                  <div className="text-charcoal-light text-sm md:text-base font-medium">kleinerDPT@gmail.com</div>
                 </div>
-              </div>
-              
-              <div className="flex items-center space-x-3 md:space-x-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-green-sage rounded-full flex items-center justify-center flex-shrink-0">
-                  <MapPin className="text-white w-4 h-4 md:w-5 md:h-5" />
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-blue opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all flex-shrink-0" />
+              </a>
+
+              <div
+                className="flex items-center gap-4 p-4 md:p-5 bg-white rounded-2xl border-2 border-orange/20 shadow-sm"
+                data-testid="info-contact-location"
+              >
+                <div className="w-12 h-12 md:w-14 md:h-14 bg-orange rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
+                  <MapPin className="text-white w-5 h-5 md:w-6 md:h-6" />
                 </div>
                 <div>
                   <div className="font-semibold text-charcoal text-sm md:text-base">Location</div>
-                  <div className="text-charcoal-light text-sm md:text-base">
-                    New York, NY
-                  </div>
+                  <div className="text-charcoal-light text-sm md:text-base font-medium">New York, NY</div>
                 </div>
               </div>
             </div>
 
-            <Card className="bg-white rounded-xl md:rounded-2xl shadow-lg">
+            <Card className="bg-white rounded-2xl shadow-lg overflow-hidden border-0">
+              <div className="h-1.5 bg-gradient-to-r from-blue via-green-sage to-orange" />
               <CardContent className="p-5 md:p-6">
                 <h3 className="text-lg md:text-xl font-bold text-charcoal mb-3 md:mb-4">What to Expect</h3>
                 <ul className="space-y-2 md:space-y-3 text-charcoal-light">
                   {expectations.map((expectation, index) => (
                     <li key={index} className="flex items-start space-x-2 md:space-x-3">
-                      <CheckCircle className="w-4 h-4 md:w-5 md:h-5 text-coral mt-0.5 flex-shrink-0" />
+                      <CheckCircle className="w-5 h-5 text-orange mt-0.5 flex-shrink-0" />
                       <span className="text-sm md:text-base">{expectation}</span>
                     </li>
                   ))}
@@ -154,9 +188,10 @@ export default function Contact() {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <Card className="bg-white rounded-xl md:rounded-2xl shadow-2xl">
+            <Card className="bg-white rounded-2xl shadow-2xl overflow-hidden border-0">
+              <div className="h-2 bg-gradient-to-r from-blue via-green-sage to-orange" />
               <CardContent className="p-5 sm:p-6 md:p-8">
-                <h3 className="text-xl sm:text-2xl font-bold text-charcoal mb-4 md:mb-6">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-charcoal mb-4 md:mb-6">
                   Schedule Your Consultation
                 </h3>
                 
@@ -327,12 +362,26 @@ export default function Contact() {
                       <Button
                         type="submit"
                         disabled={contactMutation.isPending}
-                        className="w-full bg-green-sage text-white hover:bg-green-sage-dark rounded-xl py-3 md:py-4 font-semibold text-base md:text-lg"
+                        className="w-full bg-green-sage text-white hover:bg-green-sage-dark rounded-xl py-4 md:py-5 font-semibold text-base md:text-lg shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] disabled:hover:scale-100 disabled:opacity-70"
                         data-testid="button-submit-contact"
                       >
-                        {contactMutation.isPending ? "Sending..." : "Schedule My Consultation"}
+                        {contactMutation.isPending ? (
+                          "Sending..."
+                        ) : (
+                          <span className="inline-flex items-center justify-center">
+                            Schedule My Consultation
+                            <ArrowRight className="w-5 h-5 ml-2" />
+                          </span>
+                        )}
                       </Button>
-                      
+
+                      <div className="flex justify-center">
+                        <span className="inline-flex items-center gap-2 bg-orange/10 text-charcoal text-xs sm:text-sm font-medium px-3 py-1.5 rounded-full">
+                          <Clock className="w-3.5 h-3.5 text-orange" />
+                          Usually responds within 24 hours
+                        </span>
+                      </div>
+
                       <p className="text-xs sm:text-sm text-charcoal-light text-center">
                         By submitting this form, you agree to receive communication from Dr. Kleiner's office regarding your appointment and treatment.
                       </p>
