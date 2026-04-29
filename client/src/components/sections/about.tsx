@@ -48,7 +48,7 @@ export default function About() {
           >
             <div className="space-y-6 md:space-y-8">
               <div>
-                <h3 className="text-lg md:text-xl font-bold text-blue mb-2 md:mb-3 flex items-center">
+                <h3 className="text-lg md:text-xl font-bold text-orange mb-2 md:mb-3 flex items-center">
                   <GraduationCap className="w-4 h-4 md:w-5 md:h-5 mr-2 flex-shrink-0" />
                   My Education
                 </h3>
@@ -68,7 +68,7 @@ export default function About() {
               </div>
 
               <div>
-                <h3 className="text-lg md:text-xl font-bold text-blue mb-2 md:mb-3 flex items-center">
+                <h3 className="text-lg md:text-xl font-bold text-orange mb-2 md:mb-3 flex items-center">
                   <Clock className="w-4 h-4 md:w-5 md:h-5 mr-2 flex-shrink-0" />
                   My Approach
                 </h3>
