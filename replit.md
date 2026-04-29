@@ -6,6 +6,9 @@ This is a premium physical therapy practice website for Dr. Rebecca Kleiner, bui
 
 ## System Architecture
 
+### Color palette
+The brand uses **blue + orange** for accents and a deep **charcoal/near-black** for primary actions (the "black pill with white text" look). The legacy `--sage*` CSS variables in `client/src/index.css` and the matching `bg-sage` / `text-sage` / `border-sage` utility classes are retained for backward compatibility but their values now resolve to the dark charcoal palette — there is intentionally no green anywhere in the design. If you ever need to tweak the primary action color, change `--sage`, `--sage-light`, `--sage-dark`, and `--primary` together in `index.css` and every CTA/badge/border/icon updates automatically.
+
 ### Frontend Architecture
 - **Framework**: React 18 with TypeScript
 - **Routing**: Wouter for client-side routing

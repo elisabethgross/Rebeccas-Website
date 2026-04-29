@@ -25,7 +25,7 @@
   --card-foreground: hsl(210, 11%, 21%);
   --border: hsl(60, 9%, 89%);
   --input: hsl(60, 9%, 89%);
-  --primary: hsl(120, 25%, 56%);
+  --primary: hsl(210, 11%, 14%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(60, 9%, 96%);
   --secondary-foreground: hsl(210, 11%, 21%);
@@ -43,9 +43,12 @@
   --orange: hsl(25, 100%, 55%);
   --orange-light: hsl(25, 100%, 65%);
   --orange-dark: hsl(25, 100%, 45%);
-  --sage: hsl(150, 35%, 45%);
-  --sage-light: hsl(150, 35%, 55%);
-  --sage-dark: hsl(150, 35%, 35%);
+  /* Sage tokens are kept for backward compatibility but now resolve to a
+     deep charcoal/black palette so every element previously colored green
+     becomes a black "pill" with white text or a subtle dark accent. */
+  --sage: hsl(210, 11%, 14%);
+  --sage-light: hsl(210, 11%, 28%);
+  --sage-dark: hsl(210, 11%, 6%);
   --cream: hsl(60, 56%, 91%);
   --cream-light: hsl(60, 67%, 97%);
   --charcoal: hsl(210, 11%, 21%);
@@ -65,8 +68,8 @@
   --card-foreground: hsl(0, 0%, 98%);
   --border: hsl(210, 11%, 11%);
   --input: hsl(210, 11%, 11%);
-  --primary: hsl(120, 25%, 56%);
-  --primary-foreground: hsl(0, 0%, 100%);
+  --primary: hsl(0, 0%, 95%);
+  --primary-foreground: hsl(210, 11%, 14%);
   --secondary: hsl(210, 11%, 11%);
   --secondary-foreground: hsl(0, 0%, 98%);
   --accent: hsl(210, 11%, 11%);
