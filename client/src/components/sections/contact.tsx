@@ -101,7 +101,7 @@ export default function Contact() {
             
             <div className="space-y-4 md:space-y-6 mb-6 md:mb-8">
               <div className="flex items-center space-x-3 md:space-x-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-sage rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-green-sage rounded-full flex items-center justify-center flex-shrink-0">
                   <Phone className="text-white w-4 h-4 md:w-5 md:h-5" />
                 </div>
                 <div>
@@ -111,7 +111,7 @@ export default function Contact() {
               </div>
               
               <div className="flex items-center space-x-3 md:space-x-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-sage rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-green-sage rounded-full flex items-center justify-center flex-shrink-0">
                   <Mail className="text-white w-4 h-4 md:w-5 md:h-5" />
                 </div>
                 <div className="break-all">
@@ -121,7 +121,7 @@ export default function Contact() {
               </div>
               
               <div className="flex items-center space-x-3 md:space-x-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-sage rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-green-sage rounded-full flex items-center justify-center flex-shrink-0">
                   <MapPin className="text-white w-4 h-4 md:w-5 md:h-5" />
                 </div>
                 <div>
@@ -162,7 +162,7 @@ export default function Contact() {
                 
                 {isSubmitted ? (
                   <div className="text-center py-6 md:py-8">
-                    <CheckCircle className="w-12 h-12 md:w-16 md:h-16 text-sage mx-auto mb-3 md:mb-4" />
+                    <CheckCircle className="w-12 h-12 md:w-16 md:h-16 text-green-sage mx-auto mb-3 md:mb-4" />
                     <h4 className="text-lg md:text-xl font-semibold text-charcoal mb-2">
                       Thank you for your message!
                     </h4>
@@ -183,7 +183,7 @@ export default function Contact() {
                               <FormControl>
                                 <Input
                                   placeholder="Enter your first name"
-                                  className="border-gray-300 focus:border-sage focus:ring-sage"
+                                  className="border-gray-300 focus:border-green-sage focus:ring-green-sage"
                                   {...field}
                                 />
                               </FormControl>
@@ -201,7 +201,7 @@ export default function Contact() {
                               <FormControl>
                                 <Input
                                   placeholder="Enter your last name"
-                                  className="border-gray-300 focus:border-sage focus:ring-sage"
+                                  className="border-gray-300 focus:border-green-sage focus:ring-green-sage"
                                   {...field}
                                 />
                               </FormControl>
@@ -221,7 +221,7 @@ export default function Contact() {
                               <Input
                                 type="email"
                                 placeholder="Enter your email"
-                                className="border-gray-300 focus:border-sage focus:ring-sage"
+                                className="border-gray-300 focus:border-green-sage focus:ring-green-sage"
                                 {...field}
                               />
                             </FormControl>
@@ -240,7 +240,7 @@ export default function Contact() {
                               <Input
                                 type="tel"
                                 placeholder="Enter your phone number"
-                                className="border-gray-300 focus:border-sage focus:ring-sage"
+                                className="border-gray-300 focus:border-green-sage focus:ring-green-sage"
                                 {...field}
                               />
                             </FormControl>
@@ -257,7 +257,7 @@ export default function Contact() {
                             <FormLabel className="text-charcoal font-medium">How did you hear about us?</FormLabel>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                               <FormControl>
-                                <SelectTrigger className="border-gray-300 focus:border-sage focus:ring-sage">
+                                <SelectTrigger className="border-gray-300 focus:border-green-sage focus:ring-green-sage">
                                   <SelectValue placeholder="Please select" />
                                 </SelectTrigger>
                               </FormControl>
@@ -283,7 +283,7 @@ export default function Contact() {
                             <FormControl>
                               <Textarea
                                 placeholder="Tell me about your goals and what you'd like to achieve..."
-                                className="border-gray-300 focus:border-sage focus:ring-sage resize-none"
+                                className="border-gray-300 focus:border-green-sage focus:ring-green-sage resize-none"
                                 rows={4}
                                 {...field}
                               />
@@ -327,7 +327,7 @@ export default function Contact() {
                       <Button
                         type="submit"
                         disabled={contactMutation.isPending}
-                        className="w-full bg-sage text-white hover:bg-sage-dark rounded-xl py-3 md:py-4 font-semibold text-base md:text-lg"
+                        className="w-full bg-green-sage text-white hover:bg-green-sage-dark rounded-xl py-3 md:py-4 font-semibold text-base md:text-lg"
                         data-testid="button-submit-contact"
                       >
                         {contactMutation.isPending ? "Sending..." : "Schedule My Consultation"}

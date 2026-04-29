@@ -49,6 +49,11 @@
   --sage: hsl(210, 11%, 14%);
   --sage-light: hsl(210, 11%, 28%);
   --sage-dark: hsl(210, 11%, 6%);
+  /* Original sage-green palette, preserved for the Contact section so it
+     keeps its earlier green look while the rest of the site stays black. */
+  --green-sage: hsl(150, 35%, 45%);
+  --green-sage-light: hsl(150, 35%, 55%);
+  --green-sage-dark: hsl(150, 35%, 35%);
   --cream: hsl(60, 56%, 91%);
   --cream-light: hsl(60, 67%, 97%);
   --charcoal: hsl(210, 11%, 21%);
@@ -157,6 +162,29 @@
   }
   .border-sage {
     border-color: var(--sage);
+  }
+
+  /* Original-green sage utilities, scoped to the Contact section. */
+  .bg-green-sage {
+    background-color: var(--green-sage);
+  }
+  .bg-green-sage-dark {
+    background-color: var(--green-sage-dark);
+  }
+  .text-green-sage {
+    color: var(--green-sage);
+  }
+  .border-green-sage {
+    border-color: var(--green-sage);
+  }
+  .hover\:bg-green-sage-dark:hover {
+    background-color: var(--green-sage-dark);
+  }
+  .focus\:border-green-sage:focus {
+    border-color: var(--green-sage);
+  }
+  .focus\:ring-green-sage:focus {
+    --tw-ring-color: var(--green-sage);
   }
   
   /* Legacy coral classes mapped to orange */
