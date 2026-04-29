@@ -86,11 +86,11 @@ export default function Contact() {
           className="text-center mb-10 sm:mb-14 md:mb-16"
         >
           <div className="inline-flex items-center gap-3 mb-4 md:mb-5">
-            <span className="h-px w-8 bg-green-sage" />
-            <span className="text-xs sm:text-sm font-semibold uppercase tracking-[0.25em] text-green-sage">
+            <span className="h-px w-8 bg-orange" />
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-[0.25em] text-orange">
               Get In Touch
             </span>
-            <span className="h-px w-8 bg-green-sage" />
+            <span className="h-px w-8 bg-orange" />
           </div>
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 md:mb-6 leading-tight">
             <span className="text-charcoal">How to </span>
