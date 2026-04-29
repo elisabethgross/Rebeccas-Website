@@ -39,10 +39,10 @@ export default function Services() {
       price: "$250",
       duration: "per session",
       length: "60 minutes",
-      borderColor: "border-blue",
-      iconBg: "bg-blue",
-      priceColor: "text-blue",
-      buttonClass: "bg-blue hover:bg-blue-dark"
+      borderColor: "border-orange",
+      iconBg: "bg-orange",
+      priceColor: "text-orange",
+      buttonClass: "bg-orange hover:bg-orange-dark"
     },
     {
       icon: Monitor,
@@ -51,11 +51,28 @@ export default function Services() {
       price: "$250",
       duration: "per session",
       length: "60 minutes",
+      borderColor: "border-blue",
+      iconBg: "bg-blue",
+      priceColor: "text-blue",
+      buttonClass: "bg-blue hover:bg-blue-dark"
+    }
+  ];
+
+  // On mobile (horizontal scroll), force the cards to alternate
+  // blue / orange / blue / orange regardless of the desktop diagonal palette.
+  const mobilePalettes = [
+    {
+      borderColor: "border-blue",
+      iconBg: "bg-blue",
+      priceColor: "text-blue",
+      buttonClass: "bg-blue hover:bg-blue-dark",
+    },
+    {
       borderColor: "border-orange",
       iconBg: "bg-orange",
       priceColor: "text-orange",
-      buttonClass: "bg-orange hover:bg-orange-dark"
-    }
+      buttonClass: "bg-orange hover:bg-orange-dark",
+    },
   ];
 
   return (
@@ -83,46 +100,49 @@ export default function Services() {
         <div className="mb-8 sm:mb-10 md:mb-12">
           {/* Mobile Horizontal Scroll */}
           <div className="sm:hidden flex overflow-x-auto gap-4 pb-4 px-4 -mx-4 snap-x snap-mandatory scrollbar-hide">
-            {coreServices.map((service, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="flex-shrink-0 w-[300px] snap-center"
-              >
-                <Card className={`relative h-full border-2 ${service.borderColor} shadow-xl`} data-testid={`card-service-${index}`}>
-                  <CardContent className="p-5 flex flex-col h-full">
-                    <div className={`w-14 h-14 ${service.iconBg} rounded-2xl flex items-center justify-center mb-4 shadow-lg`}>
-                      <service.icon className="w-7 h-7 text-white" />
-                    </div>
-                    
-                    <h3 className="text-xl font-bold text-charcoal mb-3">{service.title}</h3>
-                    <p className="text-sm text-charcoal-light mb-4 leading-relaxed flex-grow">{service.description}</p>
-                    
-                    <div className="flex items-baseline gap-2 mb-2">
-                      <span className={`text-2xl font-bold ${service.priceColor}`}>{service.price}</span>
-                      <span className="text-xs text-charcoal-light">{service.duration}</span>
-                    </div>
+            {coreServices.map((service, index) => {
+              const palette = mobilePalettes[index % mobilePalettes.length];
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="flex-shrink-0 w-[300px] snap-center"
+                >
+                  <Card className={`relative h-full border-2 ${palette.borderColor} shadow-xl`} data-testid={`card-service-${index}`}>
+                    <CardContent className="p-5 flex flex-col h-full">
+                      <div className={`w-14 h-14 ${palette.iconBg} rounded-2xl flex items-center justify-center mb-4 shadow-lg`}>
+                        <service.icon className="w-7 h-7 text-white" />
+                      </div>
 
-                    <div className="text-xs text-charcoal-light flex items-center mb-4">
-                      <Clock className="w-4 h-4 mr-2" />
-                      {service.length}
-                    </div>
-                    
-                    <Button 
-                      onClick={() => scrollToSection("contact")}
-                      className={`w-full text-sm ${service.buttonClass} text-white shadow-lg`}
-                      data-testid={`button-book-service-${index}`}
-                    >
-                      Book This Service
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+                      <h3 className="text-xl font-bold text-charcoal mb-3">{service.title}</h3>
+                      <p className="text-sm text-charcoal-light mb-4 leading-relaxed flex-grow">{service.description}</p>
+
+                      <div className="flex items-baseline gap-2 mb-2">
+                        <span className={`text-2xl font-bold ${palette.priceColor}`}>{service.price}</span>
+                        <span className="text-xs text-charcoal-light">{service.duration}</span>
+                      </div>
+
+                      <div className="text-xs text-charcoal-light flex items-center mb-4">
+                        <Clock className="w-4 h-4 mr-2" />
+                        {service.length}
+                      </div>
+
+                      <Button
+                        onClick={() => scrollToSection("contact")}
+                        className={`w-full text-sm ${palette.buttonClass} text-white shadow-lg`}
+                        data-testid={`button-book-service-${index}`}
+                      >
+                        Book This Service
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </div>
 
           {/* Desktop Grid */}
