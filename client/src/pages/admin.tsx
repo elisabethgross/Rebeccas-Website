@@ -10,10 +10,12 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { Eye, EyeOff, Lock, Inbox, MessageSquareQuote } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import {
   adminFetch,
   AdminUnauthorizedError,
   clearAdminPassword,
+  getAdminSessionExpiry,
   getStoredAdminPassword,
   storeAdminPassword,
 } from "@/lib/admin-auth";
@@ -27,6 +29,7 @@ function tabFromPath(path: string): TabValue {
 }
 
 export default function Admin() {
+  const { toast } = useToast();
   const [location, setLocation] = useLocation();
   const [password, setPassword] = useState("");
   const [authPassword, setAuthPassword] = useState("");
@@ -44,6 +47,34 @@ export default function Admin() {
   useEffect(() => {
     setActiveTab(tabFromPath(location));
   }, [location]);
+
+  // Auto-logout when the 24-hour session expires while the page stays open.
+  // Uses the absolute expiry stored alongside the password so reloads don't
+  // reset the clock.
+  useEffect(() => {
+    if (!authPassword) return;
+    const expiry = getAdminSessionExpiry();
+    if (!expiry) {
+      clearAdminPassword();
+      setAuthPassword("");
+      return;
+    }
+    const ms = expiry - Date.now();
+    if (ms <= 0) {
+      clearAdminPassword();
+      setAuthPassword("");
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      clearAdminPassword();
+      setAuthPassword("");
+      toast({
+        title: "Session expired",
+        description: "Please sign in again to continue.",
+      });
+    }, ms);
+    return () => window.clearTimeout(timer);
+  }, [authPassword, toast]);
 
   const isAuthenticated = !!authPassword;
 
