@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Quote, ShieldCheck, Heart } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import type { Testimonial } from "@shared/schema";
 import { TestimonialSubmissionForm } from "@/components/testimonial-submission-form";
 
@@ -84,6 +85,59 @@ function TestimonialCard({ item }: { item: Testimonial }) {
   );
 }
 
+function TestimonialSwipeMobile({ items }: { items: Testimonial[] }) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [autoplay, setAutoplay] = useState(true);
+
+  // Auto-advance one card every 4.5s until the user touches the strip,
+  // then leave control entirely to native scroll-snap.
+  useEffect(() => {
+    if (!autoplay) return;
+    const el = trackRef.current;
+    if (!el) return;
+    const interval = window.setInterval(() => {
+      if (!el.isConnected) return;
+      const card = el.querySelector<HTMLElement>("[data-swipe-card]");
+      const step = (card?.offsetWidth ?? el.clientWidth * 0.85) + 16;
+      const max = el.scrollWidth - el.clientWidth;
+      if (el.scrollLeft >= max - 4) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        el.scrollBy({ left: step, behavior: "smooth" });
+      }
+    }, 4500);
+    return () => window.clearInterval(interval);
+  }, [autoplay]);
+
+  const stop = () => setAutoplay(false);
+
+  return (
+    <div className="md:hidden relative -mx-4">
+      <div
+        ref={trackRef}
+        onTouchStart={stop}
+        onPointerDown={stop}
+        onWheel={stop}
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth px-4 pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        aria-label="Patient testimonials, swipe to navigate"
+      >
+        {items.map((item) => (
+          <div
+            key={item.id}
+            data-swipe-card
+            className="snap-center shrink-0 w-[85%] max-w-[340px]"
+          >
+            <TestimonialCard item={item} />
+          </div>
+        ))}
+        <div className="shrink-0 w-2" aria-hidden />
+      </div>
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-cream/60 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-cream/60 to-transparent" />
+    </div>
+  );
+}
+
 function TestimonialMarquee({ items }: { items: Testimonial[] }) {
   // Duplicate the list once so a translate of -50% loops seamlessly.
   // If the source list is short, repeat it enough times to fill the viewport
@@ -98,7 +152,7 @@ function TestimonialMarquee({ items }: { items: Testimonial[] }) {
   const durationSec = Math.max(40, filled.length * 6);
 
   return (
-    <div className="marquee-pause relative overflow-hidden">
+    <div className="marquee-pause relative overflow-hidden hidden md:block">
       <div
         className="flex gap-6 w-max animate-marquee py-2"
         style={{ ["--marquee-duration" as string]: `${durationSec}s` }}
