@@ -36,6 +36,32 @@ interface Props {
   onUnauthorized: () => void;
 }
 
+const ADMIN_GMAIL_ACCOUNT = "kleinerdpt@gmail.com";
+
+function gmailComposeUrl(toEmail: string): string {
+  const params = new URLSearchParams({
+    authuser: ADMIN_GMAIL_ACCOUNT,
+    view: "cm",
+    fs: "1",
+    to: toEmail,
+  });
+  return `https://mail.google.com/mail/?${params.toString()}`;
+}
+
+function googleVoiceCallUrl(phone: string): string {
+  const digits = (phone || "").replace(/\D/g, "");
+  let e164 = "";
+  if (digits.length === 11 && digits.startsWith("1")) {
+    e164 = `+${digits}`;
+  } else if (digits.length === 10) {
+    e164 = `+1${digits}`;
+  } else if (digits.length > 0) {
+    e164 = `+${digits}`;
+  }
+  if (!e164) return "https://voice.google.com/u/0/calls";
+  return `https://voice.google.com/u/0/calls?a=nc,${encodeURIComponent(e164)}`;
+}
+
 export function InquiriesPanel({ authPassword, onUnauthorized }: Props) {
   const [search, setSearch] = useState("");
   const [contactFilter, setContactFilter] = useState<ContactFilter>("all");
@@ -247,7 +273,9 @@ export function InquiriesPanel({ authPassword, onUnauthorized }: Props) {
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-gray-500" />
                 <a
-                  href={`mailto:${submission.email}`}
+                  href={gmailComposeUrl(submission.email)}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-blue-600 hover:underline text-sm"
                 >
                   {submission.email}
@@ -256,7 +284,9 @@ export function InquiriesPanel({ authPassword, onUnauthorized }: Props) {
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-gray-500" />
                 <a
-                  href={`tel:${submission.phone}`}
+                  href={googleVoiceCallUrl(submission.phone)}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-blue-600 hover:underline text-sm"
                 >
                   {submission.phone}
@@ -300,7 +330,11 @@ export function InquiriesPanel({ authPassword, onUnauthorized }: Props) {
               <Button
                 size="sm"
                 onClick={() =>
-                  window.open(`mailto:${submission.email}`, "_blank")
+                  window.open(
+                    gmailComposeUrl(submission.email),
+                    "_blank",
+                    "noopener,noreferrer",
+                  )
                 }
               >
                 Send Email
@@ -309,7 +343,11 @@ export function InquiriesPanel({ authPassword, onUnauthorized }: Props) {
                 size="sm"
                 variant="outline"
                 onClick={() =>
-                  window.open(`tel:${submission.phone}`, "_blank")
+                  window.open(
+                    googleVoiceCallUrl(submission.phone),
+                    "_blank",
+                    "noopener,noreferrer",
+                  )
                 }
               >
                 Call

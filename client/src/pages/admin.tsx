@@ -125,10 +125,36 @@ export default function Admin() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form
+              onSubmit={handleLogin}
+              className="space-y-4"
+              method="post"
+              action="#admin-login"
+              autoComplete="on"
+            >
+              <label htmlFor="admin-username" className="sr-only">
+                Email
+              </label>
+              <input
+                id="admin-username"
+                name="username"
+                type="email"
+                autoComplete="username"
+                defaultValue="kleinerdpt@gmail.com"
+                readOnly
+                hidden
+                aria-hidden="true"
+                tabIndex={-1}
+              />
+              <label htmlFor="admin-password" className="sr-only">
+                Admin password
+              </label>
               <div className="relative">
                 <Input
+                  id="admin-password"
+                  name="password"
                   type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
                   placeholder="Enter admin password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -141,6 +167,8 @@ export default function Admin() {
                   size="sm"
                   className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4" />
