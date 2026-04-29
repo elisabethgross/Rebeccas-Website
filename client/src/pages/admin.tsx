@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Eye, EyeOff, Mail, Phone, User, MessageSquare, Lock } from "lucide-react";
-import { format } from "date-fns";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+import { Eye, EyeOff, Lock, Inbox, MessageSquareQuote } from "lucide-react";
 import {
   adminFetch,
   AdminUnauthorizedError,
@@ -13,53 +17,41 @@ import {
   getStoredAdminPassword,
   storeAdminPassword,
 } from "@/lib/admin-auth";
+import { InquiriesPanel } from "@/pages/admin/inquiries-panel";
+import { TestimonialsPanel } from "@/pages/admin/testimonials-panel";
 
-interface ContactSubmission {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  howDidYouHear: string | null;
-  activities: string | null;
-  contactMethod: string;
-  createdAt: string;
+type TabValue = "inquiries" | "testimonials";
+
+function tabFromPath(path: string): TabValue {
+  return path.startsWith("/admin/testimonials") ? "testimonials" : "inquiries";
 }
 
 export default function Admin() {
+  const [location, setLocation] = useLocation();
   const [password, setPassword] = useState("");
   const [authPassword, setAuthPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState("");
+  const [activeTab, setActiveTab] = useState<TabValue>(tabFromPath(location));
 
   useEffect(() => {
     const stored = getStoredAdminPassword();
     if (stored) setAuthPassword(stored);
   }, []);
 
-  const isAuthenticated = !!authPassword;
+  // Keep the active tab in sync with URL changes (back/forward buttons,
+  // direct deep-links from email notifications, etc.).
+  useEffect(() => {
+    setActiveTab(tabFromPath(location));
+  }, [location]);
 
-  const { data: submissions, isLoading } = useQuery<ContactSubmission[]>({
-    queryKey: ["/api/contact-submissions"],
-    enabled: isAuthenticated,
-    queryFn: async () => {
-      try {
-        return await adminFetch(authPassword, "/api/contact-submissions");
-      } catch (err) {
-        if (err instanceof AdminUnauthorizedError) {
-          clearAdminPassword();
-          setAuthPassword("");
-          throw new Error("Session expired. Please sign in again.");
-        }
-        throw err;
-      }
-    },
-  });
+  const isAuthenticated = !!authPassword;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError("");
     try {
+      // Validate the password against any admin endpoint.
       await adminFetch(password, "/api/contact-submissions");
       storeAdminPassword(password);
       setAuthPassword(password);
@@ -78,6 +70,18 @@ export default function Admin() {
   const handleLogout = () => {
     clearAdminPassword();
     setAuthPassword("");
+  };
+
+  const handleUnauthorized = () => {
+    clearAdminPassword();
+    setAuthPassword("");
+  };
+
+  const handleTabChange = (value: string) => {
+    const v = value as TabValue;
+    setActiveTab(v);
+    const target = v === "testimonials" ? "/admin/testimonials" : "/admin";
+    if (location !== target) setLocation(target);
   };
 
   if (!isAuthenticated) {
@@ -118,7 +122,7 @@ export default function Admin() {
                 <p className="text-red-500 text-sm">{authError}</p>
               )}
               <Button type="submit" className="w-full">
-                Login
+                Sign in
               </Button>
             </form>
           </CardContent>
@@ -128,137 +132,46 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Client Requests</h1>
+        <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-charcoal">
+              Admin Dashboard
+            </h1>
+            <p className="text-sm text-charcoal-light">
+              Patient inquiries and testimonial moderation, in one place.
+            </p>
+          </div>
           <Button variant="outline" onClick={handleLogout}>
-            Logout
+            Log out
           </Button>
         </div>
 
-        {isLoading ? (
-          <div className="text-center py-8">Loading...</div>
-        ) : (
-          <div className="space-y-4">
-            {submissions && submissions.length > 0 ? (
-              <>
-                <div className="bg-white p-4 rounded-lg shadow">
-                  <p className="text-sm text-gray-600">
-                    Total submissions:{" "}
-                    <span className="font-semibold">{submissions.length}</span>
-                  </p>
-                </div>
-                {submissions.map((submission) => (
-                  <Card key={submission.id} className="w-full">
-                    <CardHeader className="pb-3">
-                      <div className="flex justify-between items-start">
-                        <CardTitle className="text-lg flex items-center gap-2">
-                          <User className="h-5 w-5" />
-                          {submission.firstName} {submission.lastName}
-                        </CardTitle>
-                        <Badge variant="outline">
-                          {format(
-                            new Date(submission.createdAt),
-                            "MMM d, yyyy 'at' h:mm a"
-                          )}
-                        </Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div className="flex items-center gap-2">
-                          <Mail className="h-4 w-4 text-gray-500" />
-                          <span className="text-sm">
-                            <a
-                              href={`mailto:${submission.email}`}
-                              className="text-blue-600 hover:underline"
-                            >
-                              {submission.email}
-                            </a>
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Phone className="h-4 w-4 text-gray-500" />
-                          <span className="text-sm">
-                            <a
-                              href={`tel:${submission.phone}`}
-                              className="text-blue-600 hover:underline"
-                            >
-                              {submission.phone}
-                            </a>
-                          </span>
-                        </div>
-                      </div>
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
+          <TabsList className="mb-2">
+            <TabsTrigger value="inquiries" data-testid="tab-inquiries">
+              <Inbox className="w-4 h-4 mr-1.5" /> Inquiries
+            </TabsTrigger>
+            <TabsTrigger value="testimonials" data-testid="tab-testimonials">
+              <MessageSquareQuote className="w-4 h-4 mr-1.5" /> Testimonials
+            </TabsTrigger>
+          </TabsList>
 
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <MessageSquare className="h-4 w-4 text-gray-500" />
-                          <span className="text-sm font-medium">
-                            Preferred contact method:
-                          </span>
-                          <Badge variant="secondary">
-                            {submission.contactMethod}
-                          </Badge>
-                        </div>
+          <TabsContent value="inquiries" className="mt-4">
+            <InquiriesPanel
+              authPassword={authPassword}
+              onUnauthorized={handleUnauthorized}
+            />
+          </TabsContent>
 
-                        {submission.howDidYouHear && (
-                          <div className="text-sm">
-                            <span className="font-medium">
-                              How they heard about us:
-                            </span>
-                            <span className="ml-2 text-gray-600">
-                              {submission.howDidYouHear}
-                            </span>
-                          </div>
-                        )}
-
-                        {submission.activities && (
-                          <div className="text-sm">
-                            <span className="font-medium">
-                              Activities they want to return to:
-                            </span>
-                            <div className="mt-1 p-3 bg-gray-50 rounded-lg">
-                              <p className="text-gray-700">
-                                {submission.activities}
-                              </p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex gap-2 pt-2">
-                        <Button
-                          size="sm"
-                          onClick={() =>
-                            window.open(`mailto:${submission.email}`, "_blank")
-                          }
-                        >
-                          Send Email
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() =>
-                            window.open(`tel:${submission.phone}`, "_blank")
-                          }
-                        >
-                          Call
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </>
-            ) : (
-              <Card>
-                <CardContent className="text-center py-8">
-                  <p className="text-gray-500">No client requests yet.</p>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        )}
+          <TabsContent value="testimonials" className="mt-4">
+            <TestimonialsPanel
+              authPassword={authPassword}
+              onUnauthorized={handleUnauthorized}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
