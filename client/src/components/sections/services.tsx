@@ -204,10 +204,10 @@ export default function Services() {
                 </div>
 
                 <div className="flex-shrink-0 flex flex-col items-center md:items-end gap-3">
-                  <div className="text-3xl md:text-4xl font-bold text-orange">$75</div>
+                  <div className="text-3xl md:text-4xl font-bold text-sage">$75</div>
                   <Button
                     onClick={() => scrollToSection("contact")}
-                    className="bg-orange hover:bg-orange-dark text-white shadow-lg w-full md:w-auto"
+                    className="bg-sage hover:bg-sage-dark text-white shadow-lg w-full md:w-auto"
                     data-testid="button-book-imaging-review"
                   >
                     Book This Service
