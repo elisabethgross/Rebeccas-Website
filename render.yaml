@@ -7,7 +7,9 @@ services:
     branch: main
     buildCommand: npm install --include=dev && npm run build
     startCommand: npm start
-    healthCheckPath: /api/testimonials
+    # Must not query the database: frequent health checks would keep the Neon
+    # free-tier compute awake 24/7 and exhaust its monthly compute hours.
+    healthCheckPath: /
     autoDeploy: true
     envVars:
       - key: NODE_VERSION
