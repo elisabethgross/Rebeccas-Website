@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: rkleinerpt
+    runtime: node
+    plan: free
+    region: ohio
+    branch: main
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/testimonials
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # server/index.ts always listens on port 5000.
+      - key: PORT
+        value: "5000"
+      - key: EMAIL_FROM_ADDRESS
+        value: hello@rkleinerpt.com
+      # Secrets: Render asks for these values when the Blueprint is created.
+      - key: DATABASE_URL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
